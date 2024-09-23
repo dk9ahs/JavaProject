@@ -1,0 +1,49 @@
+package com.project.springboot;
+
+import java.util.List;
+
+import javax.xml.crypto.Data;
+
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+
+@Controller
+public class MyController {
+	
+    @RequestMapping("/")	
+    public String main() {
+        return "guest/main";       
+    }
+    
+    @GetMapping("/show-data")
+    public String showData(Model model) {
+        RestTemplate restTemplate = new RestTemplate();
+        
+        // API 기본 URL 설정
+        String apiUrl = " https://openapi.gg.go.kr/Poplitloanbook";
+        
+        // 인증키 및 호출 형식 파라미터를 URL에 포함
+        String urlWithParams = apiUrl + "?KEY=1cdd3717a40d452d956e4863206df118&Type=json";  // Type을 xml로 바꾸면 xml 포맷으로 호출
+
+        // API 호출
+        ResponseEntity<List<Data>> response = restTemplate.exchange(
+                urlWithParams,
+                HttpMethod.GET,
+                new ParameterizedTypeReference<List<Data>>() {}
+        );
+
+        List<Data> dataList = response.getBody();
+        model.addAttribute("dataList", dataList);  // JSP에 전달할 데이터 설정
+
+        return "showData";  // showData.jsp로 이동
+    }
+    
+}
