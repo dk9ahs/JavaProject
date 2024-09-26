@@ -89,6 +89,8 @@
 		<item key="WizardProjectsImportPage.STORE_CLOSE_CREATED_PROJECTS_ID" value="false"/>
 		<item key="WizardProjectsImportPage.STORE_HIDE_CONFLICTING_PROJECTS_ID" value="false"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="C:\FrontEnd\new\SpringBootProject_01"/>
+			<item value="C:\FrontEnd\new2\BookProject"/>
 			<item value="C:\FrontEnd\Springboot2\springboot02-master\Ex37_SpringJpa04"/>
 			<item value="C:\FrontEnd\Springboot2\springboot02-master\Ex33_JPA04"/>
 			<item value="C:\Users\java\Desktop\JAVA"/>
@@ -122,6 +124,8 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\FrontEnd\new"/>
+			<item value="/Users/leechangkyun/BookProject/BookProject"/>
 			<item value="C:\FrontEnd\Springboot2\springboot02-master"/>
 			<item value="C:\Users\java\Desktop\T class"/>
 			<item value="C:\Users\java\Desktop\T class\JAVA"/>
@@ -132,7 +136,7 @@
 		<section name="SmartImportWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="214"/>
 			<item key="DIALOG_Y_ORIGIN" value="137"/>
-			<item key="DIALOG_WIDTH" value="938"/>
+			<item key="DIALOG_WIDTH" value="1054"/>
 			<item key="DIALOG_HEIGHT" value="726"/>
 			<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
 		</section>
