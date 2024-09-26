@@ -1,78 +1,77 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Book List</title>
-    <style>
-        .book-list-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        .book-list-table th, .book-list-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-        .book-list-table th {
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .book-list-table td {
-            vertical-align: top;
-        }
-        .book-image {
-            width: 150px;
-            height: auto;
-            margin-right: 10px;
-        }
-        .price {
-            color: red;
-            font-weight: bold;
-        }
-        .book-info {
-            display: flex;
-            gap: 10px;
-        }
-        .book-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .book-actions {
-            display: flex; /* Set the buttons to display in a row */
-            gap: 5px; /* Space between the buttons */
-            justify-content: center; /* Center the buttons horizontally */
-        }
-        .button {
-            background-color: #ff6f61;
-            color: white;
-            padding: 5px 8px;
-            border: none;
-            cursor: pointer;
-            border-radius: 3px;
-            font-size: 12px;
-        }
-        .button:hover {
-            background-color: #ff4c3b;
-        }
-        .remarks {
-            width: 100px; 
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <table class="book-list-table">
-        <thead>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Book List</title>
+        <style>
+            .book-list-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            .book-list-table th, .book-list-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+            .book-list-table th {
+                background-color: #f4f4f4;
+                text-align: center;
+            }
+            .book-list-table td {
+                vertical-align: top;
+            }
+            .book-image {
+                width: 150px;
+                height: auto;
+                margin-right: 10px;
+            }
+            .price {
+                color: red;
+                font-weight: bold;
+            }
+            .book-info {
+                display: flex;
+                gap: 10px;
+            }
+            .book-details {
+                display: flex;
+                flex-direction: column;
+            }
+            .book-actions {
+                display: flex; /* Set the buttons to display in a row */
+                gap: 5px; /* Space between the buttons */
+                justify-content: center; /* Center the buttons horizontally */
+            }
+            .button {
+                background-color: #ff6f61;
+                color: white;
+                padding: 5px 8px;
+                border: none;
+                cursor: pointer;
+                border-radius: 3px;
+                font-size: 12px;
+            }
+            .button:hover {
+                background-color: #ff4c3b;
+            }
+            .remarks {
+                width: 100px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="book-list-table">
+            <thead>
             <tr>
                 <th>번호</th>
                 <th>도서 정보</th>
                 <th>가격</th>
                 <th class="remarks">비고</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <!-- Repeat this block for each book -->
             <tr>
                 <td>1</td>
@@ -117,7 +116,7 @@
                 </td>
             </tr>
             <!-- Repeat block ends -->
-        </tbody>
-    </table>
-</body>
+            </tbody>
+        </table>
+    </body>
 </html>
