@@ -1,0 +1,93 @@
+/* 기본 전역 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.header .logo a {
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.header .search-bar {
+    display: flex;
+    position: relative;
+    width: 50%;
+    margin-left: 30px;
+}
+
+.header .search-bar input[type="text"] {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
+}
+
+.header .search-bar a {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+}
+
+.header .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-menu .login {
+    background-color: limegreen;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
+.menu a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    padding: 10px 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .menu {
+        display: none;
+    }
+    .menu-bar-icon {
+        display: block;
+        cursor: pointer;
+        font-size: 20px;
+    }
+}
