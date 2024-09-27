@@ -16,10 +16,10 @@
             display: flex; /* 페이지 중앙 정렬을 위해 flexbox 사용 */
             justify-content: center; /* 가로 중앙 정렬 */
             align-items: flex-start; /* 세로 상단 정렬 */
-            height: 100vh; /* 화면 전체 높이 */
+            min-height: 100vh; /* 최소 높이를 100vh로 설정 */
+            height: auto; /* 높이는 자동으로 설정 */
             background-color: #f8f9fa; /* 배경색 추가 */
         }
-
         .container {
             width: 80%; /* 테이블이 포함된 컨테이너 크기 */
             max-width: 900px; /* 최대 너비를 제한 */
@@ -102,6 +102,7 @@
 </head>
     <body>
         <div class="container">
+            <div><h2>도서 판매 게시판</h2></div>
             <div>
                 <form>
                     <div class="input-group ms-auto" style="width: 400px;">
@@ -109,11 +110,12 @@
                             <option value="">최신순</option>
                             <option value="">좋아요순</option>
                             <option value="">조회순</option>
+                            <option value="">가격순</option>
                         </select>
                         <select name="keyField" class="form-control">
                             <option value="">제목</option>
-                            <option value="">작성자</option>
-                            <option value="">내용</option>
+                            <option value="">지은이</option>
+                            <option value="">출판사</option>
                         </select>
                         <input type="text" name="keyString" class="form-control" style="width: 100px;"/>
                         <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search" style='font-size:15px'></i></button>
@@ -139,10 +141,12 @@
                                     <p><strong>이중 하나는 거짓말</strong></p>
                                     <p>김예현 | 문학동네 | 2024년 8월 13일</p>
                                     <p>닉네임</p>
-                                    <p style=" text-align: right;">♥ 10 조회수 10</p>
+                                    <br/><br/><br/>
+                                    <div style="text-align:right;width:100%;">
+                                        <i class="bi bi-eye"></i> 조회수 11<i class="bi bi-suit-heart"></i> 좋아요 5
+                                    </div>
                                 </div>
                             </div>
-
                         </td>
                         <td class="price" style="vertical-align: middle;">14,400원</td>
                         <td class="remarks" style="vertical-align: middle;">

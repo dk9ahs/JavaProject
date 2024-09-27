@@ -10,19 +10,20 @@ public class MyController {
     public String main() {
         return "guest/main";
     }
-    @RequestMapping("/book")	
-    public String book() {
-        return "guest/bookboard";       
-    }
-    
+
     @RequestMapping("/board")
     public String book2() {
     	return "guest/board";
     }
 
-    @RequestMapping("/book3")
-    public String book3() {
-        return "/guest/book";
+    @RequestMapping("/board2")
+    public String board2() {
+        return "guest/board2";
     }
-    
+
+    @RequestMapping("/boardView")
+    public String boardView() {
+        return "guest/boardView";
+    }
+
 }
