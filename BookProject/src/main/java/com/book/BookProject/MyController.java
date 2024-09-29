@@ -11,6 +11,11 @@ public class MyController {
         return "guest/main";
     }
 
+    @RequestMapping("/main")
+    public String main2() {
+        return "guest/Front/MainBody";
+    }
+
     @RequestMapping("/board")
     public String book2() {
     	return "guest/board";
