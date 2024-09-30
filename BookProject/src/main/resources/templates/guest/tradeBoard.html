@@ -106,75 +106,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
+                        <tr th:if="${tradeBoardPost == null} or ${tradeBoardPost.size() == 0}">
+                            <td colspan="8" align="center">
+                                등록된 게시물이 없습니다^^*
+                            </td>
                         </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-center">교환</td>
-                            <td class="text-center">경기도</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
+                        <tr th:each="post : ${tradeBoardPost}">
+                            <td th:text="${post.tidx}" class="text-center"></td>
+                            <td th:text="${post.classification}" class="text-center"></td>
+                            <td th:text="${post.region}" class="text-center"></td>
+                            <td th:text="${post.title}" class="text-left"></td>
+                            <td th:text="${post.nick}" class="text-center"></td>
+                            <td th:text="${post.createDate}" class="text-center"></td>
+                            <td th:text="${post.viewCount}" class="text-center"></td>
+                            <td th:text="${post.likeCount}" class="text-center"></td>
                         </tr>
                     </tbody>
                 </table>

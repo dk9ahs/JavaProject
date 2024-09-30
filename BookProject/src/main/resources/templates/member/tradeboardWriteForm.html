@@ -60,26 +60,26 @@
                         style="vertical-align:middle;">작성자</th>
                     <td colspan="3">
                         <input type="text" class="form-control"
-                               style="width:100px;" name="id" value="닉네임" disabled/>
+                               style="width:100px;" name="nick" />
                     </td>
                 </tr>
                 <tr>
                     <th class="text-center"
                         style="vertical-align:middle;">분류</th>
                     <td>
-                        <select name="grade" class="form-select">
-                            <option value="ele">교환</option>
-                            <option value="mid">나눔</option>
-                            <option value="high" selected>구해요</option>
-                            <option value="high">거래중</option>
+                        <select name="classification" class="form-select">
+                            <option value="trade">교환</option>
+                            <option value="sharing">나눔</option>
+                            <option value="wanted" selected>구해요</option>
+                            <option value="transaction">거래중</option>
                         </select>
                     </td>
                     <th class="text-center"
                         style="vertical-align:middle;">지역</th>
                     <td>
-                        <select name="grade" class="form-select">
-                            <option value="ele" selected>경기도</option>
-                            <option value="mid">서울시</option>
+                        <select name="region" class="form-select">
+                            <option value="gyeonggi" selected>경기도</option>
+                            <option value="seoul">서울시</option>
                         </select>
                     </td>
                 </tr>
@@ -94,7 +94,7 @@
                     <th class="text-center"
                         style="vertical-align:middle;">가격</th>
                     <td colspan="3">
-                        <input type="text" class="form-control w-25" placeholder="가격를 표시합니다"/>
+                        <input type="text" name="price" class="form-control w-25" placeholder="가격를 표시합니다"/>
                     </td>
                 </tr>
                 <tr>
@@ -118,7 +118,7 @@
                 <!-- 각종 버튼 부분 -->
                 <button type="button" class="btn text-white">리스트보기</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn text-white" onclick="location.href='inquiryboardView.html';">글등록</button>
+                <button type="button" class="btn text-white" onclick="location.href='tradeBoardWrite';">글등록</button>
                 &nbsp;&nbsp;
             </div>
         </div> <!--컨테이너 끝-->
