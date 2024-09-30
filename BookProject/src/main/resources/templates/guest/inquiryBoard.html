@@ -98,68 +98,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><i class="bi bi-lock-fill"></i><a href="boardView.html">제목입니다</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변대기</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
+                        <tr th:if="${#lists.isEmpty(inquiryBoards)}">
+                            <td class="text-center" colspan="7">
+                                등록된 게시글이 없습니다.
+                            </td>
                         </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">제목입니다.</a><i class="bi bi-paperclip"></i></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">100</td>
-                            <td class="text-left"><a href="boardView.html">책 판매합니다.</a></td>
-                            <td class="text-center">작성자</td>
-                            <td class="text-center">작성일</td>
-                            <td class="text-center">답변완료</td>
-                            <td class="text-center">12</td>
-                            <td class="text-center">9</td>
+                        <tr th:each="inquiryBoard : ${inquiryBoards}">
+                            <td class="text-center" th:text="${inquiryBoard.qidx}"></td> <!-- 글번호 -->
+                            <td class="text-left" th:text="${inquiryBoard.qtitle}"><i class="bi bi-lock-fill"></i><a href="boardView.html"></a></td> <!-- 제목 -->
+                            <td class="text-center" th:text="${inquiryBoard.nick}"></td> <!-- 작성자 -->
+                            <td class="text-center" th:text="${inquiryBoard.qcreate_date}"></td> <!-- 작성일 -->
+                            <td class="text-center">답변대기</td> <!-- 답변여부 -->
+                            <td class="text-center">12</td> <!-- 조화수 -->
+                            <td class="text-center">9</td> <!-- 댓글 -->
                         </tr>
                     </tbody>
                 </table>
