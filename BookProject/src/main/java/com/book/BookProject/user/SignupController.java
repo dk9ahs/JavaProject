@@ -1,20 +1,20 @@
-package com.book.BookProject.member;
+package com.book.BookProject.user;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class UserController {
+public class SignupController {
 
-    private final UserService userService;
+    private final SignupService signupService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public SignupController(SignupService signupService) {
+        this.signupService = signupService;
     }
 
     @GetMapping("/signup")
@@ -24,28 +24,26 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("userDTO") UserDTO userDTO, Model model) {
+    public String register(@ModelAttribute("userDTO") UserDTO userDTO, RedirectAttributes redirectAttributes) {
         try {
-            // 폼에서 넘어온 값을 로그로 확인
-            userService.registerUser(userDTO);  // UserDTO로 전달
-            return "redirect:/login";  // 성공 시 로그인 페이지로 리다이렉트
+            signupService.registerUser(userDTO);
+            // 회원가입 성공 후 Flash Attribute에 메시지 추가
+            redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다.");
+            return "redirect:/login";  // 로그인 페이지로 리다이렉트
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "member/Signup";  // 에러 발생 시 다시 회원가입 페이지로
+            // 실패 시에도 Flash Attribute에 메시지 추가
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/signup";  // 회원가입 페이지로 리다이렉트
         }
     }
 
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "member/Login";  // 로그인 페이지 템플릿 반환
-    }
 
     // 아이디 중복 체크 API
     @PostMapping("/IdCheck")
     @ResponseBody
     public Map<String, Boolean> checkId(@RequestBody Map<String, String> requestData) {
         String id = requestData.get("id");
-        boolean isUnique = userService.isIdUnique(id);
+        boolean isUnique = signupService.isIdUnique(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", !isUnique);  // 중복 여부에 따라 결과 설정
         return response;
@@ -56,7 +54,7 @@ public class UserController {
     @ResponseBody
     public Map<String, Boolean> checkNick(@RequestBody Map<String, String> requestData) {
         String nick = requestData.get("nick");
-        boolean isUnique = userService.isNickUnique(nick);
+        boolean isUnique = signupService.isNickUnique(nick);
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", !isUnique);  // 중복 여부에 따라 결과 설정
         return response;
