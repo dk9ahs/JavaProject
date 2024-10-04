@@ -1,5 +1,7 @@
-package com.book.BookProject.user;
+package com.book.BookProject;
 
+import com.book.BookProject.user.SignupService;
+import com.book.BookProject.user.UserDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
