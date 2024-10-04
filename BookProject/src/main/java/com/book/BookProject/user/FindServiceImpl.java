@@ -14,6 +14,7 @@ import java.util.UUID;
 public class FindServiceImpl implements FindService{
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+    private String verificationCode;
 
     @Autowired
     public FindServiceImpl(UserRepository userRepository, JavaMailSender mailSender) {
@@ -33,33 +34,68 @@ public class FindServiceImpl implements FindService{
     }
 
     @Override
-    public void sendTempPassword(String email, String name) {
-        Optional<UserEntity> userOptional = userRepository.findByNameAndEmail(name, email);
-        if (userOptional.isPresent()) {
-            String tempPassword = generateTempPassword();
-            UserEntity user = userOptional.get();
-            user.setPwd(tempPassword);
-            userRepository.save(user);
-            sendEmail(email, "임시 비밀번호 발송", "임시 비밀번호는 " + tempPassword + " 입니다.");
-        } else {
-            throw new IllegalArgumentException("해당하는 사용자가 없습니다.");
-        }
+    public boolean isUserValid(String name, String email, String id) {
+        return userRepository.findByNameAndEmailAndId(name, email, id).isPresent();
     }
 
-    private String generateTempPassword() {
-        return UUID.randomUUID().toString().substring(0, 8);  // 임시 비밀번호 생성
-    }
+    @Override
+    public void sendVerificationCode(String email) {
+        verificationCode = generateVerificationCode();
 
-    private void sendEmail(String to, String subject, String text) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(text);
+            helper.setTo(email);
+            helper.setSubject("인증번호 발송");
+            helper.setText("인증번호는 " + verificationCode + " 입니다.");
             mailSender.send(message);
-        } catch (MessagingException e) {
-            throw new RuntimeException("이메일 발송 중 오류가 발생했습니다.");
+        } catch (Exception e) {
+            throw new RuntimeException("이메일 발송 실패");
+        }
+    }
+
+    @Override
+    public boolean verifyAuthCode(String authCode) {
+        return authCode.equals(verificationCode);
+    }
+
+    @Override
+    public String generateTempPasswordAndSendEmail(String email) {
+        String tempPassword = generateTempPassword();
+
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
+            user.setPwd(tempPassword);  // 임시 비밀번호로 업데이트
+            userRepository.save(user);  // DB 업데이트
+
+            // 임시 비밀번호 전송
+            sendTempPasswordEmail(email, tempPassword);
+        } else {
+            throw new IllegalArgumentException("일치하는 사용자를 찾을 수 없습니다.");
+        }
+
+        return tempPassword; // 생성된 임시 비밀번호 반환
+    }
+
+    private String generateVerificationCode() {
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    private String generateTempPassword() {
+        return UUID.randomUUID().toString().substring(0, 12);  // 임시 비밀번호 생성 (12자)
+    }
+
+    private void sendTempPasswordEmail(String email, String tempPassword) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject("임시 비밀번호 발급");
+            helper.setText("임시 비밀번호는 " + tempPassword + " 입니다.");
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("임시 비밀번호 이메일 발송 실패");
         }
     }
 }

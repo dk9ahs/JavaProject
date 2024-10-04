@@ -43,19 +43,39 @@ public class FindIdPasswordController {
         return response; // JSON 형식으로 응답
     }
 
-    // 비밀번호 찾기 요청 처리 (이메일로)
-    @PostMapping("/password")
-    public String findPassword(@RequestParam("email") String email,
-                               @RequestParam("name") String name,
-                               RedirectAttributes redirectAttributes) {
-        try {
-            findService.sendTempPassword(email, name); // 임시 비밀번호 전송
-            redirectAttributes.addFlashAttribute("successMessage", "임시 비밀번호가 이메일로 발송되었습니다.");
-            return "redirect:/login"; // 성공 시 로그인 페이지로 리다이렉트
-        } catch (IllegalArgumentException e) {
-            // 비밀번호를 찾을 수 없는 경우
-            redirectAttributes.addFlashAttribute("errorMessage", "일치하는 정보를 찾을 수 없습니다.");
-            return "redirect:/find"; // 오류 메시지를 가지고 페이지 리다이렉트
+    // 인증번호 전송
+    @PostMapping("/sendAuthCode")
+    @ResponseBody
+    public Map<String, Boolean> sendAuthCode(@RequestBody Map<String, String> request) {
+        String name = request.get("name");
+        String email = request.get("email");
+        String id = request.get("id");
+
+        Map<String, Boolean> response = new HashMap<>();
+        if (findService.isUserValid(name, email, id)) {
+            findService.sendVerificationCode(email);
+            response.put("success", true);
+        } else {
+            response.put("success", false);
         }
+        return response;
+    }
+
+    // 인증번호 확인 및 임시 비밀번호 발급
+    @PostMapping("/verifyAuthCode")
+    @ResponseBody
+    public Map<String, Object> verifyAuthCode(@RequestBody Map<String, String> request) {
+        String authCode = request.get("authCode");
+        String email = request.get("email");
+
+        Map<String, Object> response = new HashMap<>();
+        if (findService.verifyAuthCode(authCode)) {
+            String tempPassword = findService.generateTempPasswordAndSendEmail(email); // 임시 비밀번호 생성 및 전송
+            response.put("verified", true);
+            response.put("tempPassword", tempPassword);
+        } else {
+            response.put("verified", false);
+        }
+        return response;
     }
 }

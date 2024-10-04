@@ -184,9 +184,6 @@
             <input type="text" class="form-control" id="auth-code" required>
             <button type="button" class="btn btn-secondary mt-2" id="verify-auth-code">인증번호 확인</button>
           </div>
-          <div class="d-grid gap-2" id="temp-password-section" style="display:none;">
-            <button type="submit" class="btn btn-secondary" id="get-temp-password">다음</button>
-          </div>
         </form>
       </div>
     </div>
@@ -240,63 +237,74 @@
 
 <!-- 비밀번호 찾기 로직 -->
 <script>
-  $(document).ready(function () {
-      $('#send-auth-code').click(function () {
-          var userName = $('#find-password-name').val();
-          var userEmail = $('#find-password-email').val();
+  // 인증번호 발송 버튼 클릭 시
+  $('#send-auth-code').click(function () {
+    var name = $('#find-password-name').val();
+    var email = $('#find-password-email').val();
+    var id = $('#find-password-id').val();
 
-          if (!userName || !userEmail) {
-              alert('이름과 이메일을 입력해주세요.');
-              return;
-          }
+    if (!name || !email || !id) {
+      alert('이름, 이메일, 아이디를 모두 입력해주세요.');
+      return;
+    }
 
-          $.ajax({
-              type: 'POST',
-              url: '/sendAuthCode',
-              contentType: 'application/json',
-              dataType: 'json',
-              data: JSON.stringify({ name: userName, email: userEmail }),
-              success: function (response) {
-                  if (response.success) {
-                      alert('인증번호가 발송되었습니다.');
-                      $('#auth-code-section').show();
-                  } else {
-                      alert('인증번호 발송에 실패했습니다. 다시 시도해주세요.');
-                  }
-              },
-              error: function () {
-                  alert('오류가 발생했습니다. 다시 시도해주세요.');
-              }
-          });
-      });
+    // 인증번호 발송 요청
+    $.ajax({
+      url: '/find/sendAuthCode',
+      type: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        name: name,
+        email: email,
+        id: id
+      }),
+      success: function (response) {
+        if (response.success) {
+          alert('인증번호가 발송되었습니다.');
+          $('#auth-code-section').show(); // 인증번호 입력창 표시
+        } else {
+          alert('입력하신 정보와 일치하는 계정이 없습니다.');
+        }
+      },
+      error: function () {
+        alert('인증번호 발송 중 오류가 발생했습니다.');
+      }
+    });
+  });
 
-      $('#verify-auth-code').click(function () {
-          var authCode = $('#auth-code').val().trim();
+  // 인증번호 확인 버튼 클릭 시
+  $('#verify-auth-code').click(function () {
+    var authCode = $('#auth-code').val();
+    var email = $('#find-password-email').val();
 
-          if (!authCode) {
-              alert('인증번호를 입력해주세요.');
-              return;
-          }
+    if (!authCode) {
+      alert('인증번호를 입력해주세요.');
+      return;
+    }
 
-          $.ajax({
-              type: 'POST',
-              url: '/verifyAuthCode',
-              contentType: 'application/json',
-              dataType: 'json',
-              data: JSON.stringify({ authCode: authCode }),
-              success: function (response) {
-                  if (response.verified) {
-                      alert('인증이 완료되었습니다.');
-                      $('#temp-password-section').show();
-                  } else {
-                      alert('인증번호가 일치하지 않습니다.');
-                  }
-              },
-              error: function () {
-                  alert('오류가 발생했습니다. 다시 시도해주세요.');
-              }
-          });
-      });
+    // 인증번호 확인 요청
+    $.ajax({
+      url: '/find/verifyAuthCode',
+      type: 'POST',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        authCode: authCode,
+        email: email
+      }),
+      success: function (response) {
+        if (response.verified) {
+          alert('인증이 완료되었습니다. 임시 비밀번호가 이메일로 발송됩니다.');
+          window.location.href = '/login'; // 인증 성공 후 로그인 페이지로 이동
+        } else {
+          alert('인증번호가 일치하지 않습니다.');
+        }
+      },
+      error: function () {
+        alert('오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    });
   });
 </script>
 
