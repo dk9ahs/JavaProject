@@ -40,8 +40,7 @@ public class SignupController {
     }
 
 
-    // 아이디 중복 체크 API
-    @PostMapping("/IdCheck")
+    @PostMapping("/IdCheck")  // POST 메서드 사용
     @ResponseBody
     public Map<String, Boolean> checkId(@RequestBody Map<String, String> requestData) {
         String id = requestData.get("id");
@@ -50,6 +49,8 @@ public class SignupController {
         response.put("exists", !isUnique);  // 중복 여부에 따라 결과 설정
         return response;
     }
+
+
 
     // 닉네임 중복 체크 API
     @PostMapping("/NickCheck")

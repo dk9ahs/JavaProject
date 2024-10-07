@@ -39,7 +39,7 @@ public class LoginController {
                 session.setAttribute("user", user.getId()); // 세션에 사용자 ID 저장
 
                 // UserEntity의 authority 필드에서 권한을 가져옴
-                if (user.getAuthority().equals("ROLE_ADMIN")) {
+                if (user.getAuthority().equals("ADMIN")) {
                     session.setAttribute("role", "ADMIN");
                 } else {
                     session.setAttribute("role", "MEMBER");

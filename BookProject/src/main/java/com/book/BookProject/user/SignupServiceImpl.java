@@ -1,16 +1,18 @@
 package com.book.BookProject.user;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Service
-public class SignupServiceImpl implements SignupService{
-    private final UserRepository userRepository;
+public class SignupServiceImpl implements SignupService {
 
-    public SignupServiceImpl(UserRepository userRepository) {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public SignupServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,29 +28,27 @@ public class SignupServiceImpl implements SignupService{
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        String authority = "ROLE_USER";
+        String authority = "USER";
         if (userDTO.getId().equalsIgnoreCase("admin")) {
-            authority = "ROLE_ADMIN";
+            authority = "ADMIN";
         }
 
         UserEntity userEntity = UserEntity.builder()
                 .id(userDTO.getId())
                 .nick(userDTO.getNick())
-                .pwd(userDTO.getPwd())
+                .pwd(passwordEncoder.encode(userDTO.getPwd())) // 비밀번호 암호화
                 .name(userDTO.getName())
                 .phone(userDTO.getPhone())
                 .email(userDTO.getEmail())
                 .zipcode(userDTO.getZipcode())
                 .address(userDTO.getAddress())
                 .detailAddress(userDTO.getDetailAddress())
-                .createDate(LocalDateTime.now())
                 .authority(authority)
                 .enabled(1)
                 .build();
 
         userRepository.save(userEntity);
     }
-
     @Override
     public boolean isIdUnique(String id) {
         return !userRepository.existsById(id);

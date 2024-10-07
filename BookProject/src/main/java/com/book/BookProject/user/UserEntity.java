@@ -26,7 +26,7 @@ public class UserEntity {
     @Column(nullable = false, unique = true, length = 50)  // VARCHAR(50), UNIQUE 제약 조건 추가
     private String nick;           // 고유 닉네임
 
-    @Column(nullable = false, length = 50)  // VARCHAR(50)
+    @Column(nullable = false, length = 512)  // VARCHAR(512)
     private String pwd;            // 비밀번호
 
     @Column(nullable = false, length = 100)  // VARCHAR(100)
@@ -56,7 +56,7 @@ public class UserEntity {
 
     @Builder.Default
     @Column(length = 20, nullable = false)  // VARCHAR(20)
-    private String authority = "ROLE_USER";      // 권한 (기본값 ROLE_USER)
+    private String authority = "USER";      // 권한 (기본값 ROLE_USER)
 
     @Builder.Default
     private int enabled = 1;           // 활성화 여부 (기본값 1)

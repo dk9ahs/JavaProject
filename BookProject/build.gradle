@@ -33,6 +33,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-core'
 
 }
 

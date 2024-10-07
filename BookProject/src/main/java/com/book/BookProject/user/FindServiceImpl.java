@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,11 +16,13 @@ public class FindServiceImpl implements FindService{
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
     private String verificationCode;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public FindServiceImpl(UserRepository userRepository, JavaMailSender mailSender) {
+    public FindServiceImpl(UserRepository userRepository, JavaMailSender mailSender,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 이름과 전화번호로 아이디 찾기 메서드 추가
@@ -66,9 +69,10 @@ public class FindServiceImpl implements FindService{
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
         if (userOptional.isPresent()) {
             UserEntity user = userOptional.get();
-            user.setPwd(tempPassword);  // 임시 비밀번호로 업데이트
+            // 임시 비밀번호를 암호화하여 저장
+            String encodedTempPassword = passwordEncoder.encode(tempPassword);
+            user.setPwd(encodedTempPassword);  // 암호화된 비밀번호로 업데이트
             userRepository.save(user);  // DB 업데이트
-
             // 임시 비밀번호 전송
             sendTempPasswordEmail(email, tempPassword);
         } else {
