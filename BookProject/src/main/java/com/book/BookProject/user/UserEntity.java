@@ -56,7 +56,7 @@ public class UserEntity {
 
     @Builder.Default
     @Column(length = 20, nullable = false)  // VARCHAR(20)
-    private String authority = "USER";      // 권한 (기본값 ROLE_USER)
+    private String authority = "ROLE_USER";      // 권한 (기본값 ROLE_USER)
 
     @Builder.Default
     private int enabled = 1;           // 활성화 여부 (기본값 1)

@@ -24,6 +24,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
+                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks").permitAll()  // API 경로 허용
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -31,8 +33,8 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/login?error=true")
-                        .usernameParameter("id")
-                        .passwordParameter("pwd")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
