@@ -62,47 +62,53 @@
     <nav class="menu">
         <!-- 분야보기 추가 -->
         <div class="dropdown">
-            <a href="#" class="menu-link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-            </svg> 분야보기 &#x25BE;</a>
-            <div class="dropdown-menu">
-                <div class="category-column">
-                    <div class="category-title">국내도서</div>
-                    <ul class="category-list">
-                        <li><a href="/category/40107">가정/요리/뷰티</a></li>
-                        <li><a href="/category/40107">건강/취미/레저</a></li>
-                        <li><a href="/category/40107">경제경영</a></li>
-                        <li><a href="/category/40108">고등학교참고서</a></li>
-                        <li><a href="/category/40108">고전</a></li>
-                        <li><a href="/category/40108">과학</a></li>
-                        <li><a href="/category/40108">대학교재/전문서적</a></li>
-                        <li><a href="/category/40108">만화</a></li>
-                        <li><a href="/category/40108">사회과학</a></li>
-                        <li><a href="/category/40108">소설/시/희곡</a></li>
-                        <li><a href="/category/40108">수험서/자격증</a></li>
-                        <li><a href="/category/40108">어린이</a></li>
-                        <li><a href="/category/40108">에세이</a></li>
-                        <li><a href="/category/40108">여행</a></li>
-                        <li><a href="/category/40108">역사</a></li>
-                        <li><a href="/category/40108">예술/대중문화</a></li>
-                        <li><a href="/category/40108">외국어</a></li>
-                        <li><a href="/category/40108">유아</a></li>
-                        <li><a href="/category/40108">인문학</a></li>
-                        <li><a href="/category/40108">일본 도서</a></li>
-                        <li><a href="/category/40108">자기계발</a></li>
-                        <li><a href="/category/40108">잡지</a></li>
-                        <li><a href="/category/40108">장르소설</a></li>
-                        <li><a href="/category/40108">전집/중고전집</a></li>
-                        <li><a href="/category/40108">종교역학</a></li>
-                        <li><a href="/category/40108">좋은부모</a></li>
-                        <li><a href="/category/40108">중학교참고서</a></li>
-                        <li><a href="/category/40108">청소년</a></li>
-                        <li><a href="/category/40108">청소년_추천도서</a></li>
-                        <li><a href="/category/40108">초등학교참고서</a></li>
-                        <li><a href="/category/40108">컴퓨터/모바일</a></li>
-                        <li><a href="/category/40108">Gift</a></li>
-                        <!-- 나머지 카테고리 추가 -->
-                    </ul>
+            <a href="#" class="menu-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                </svg> 분야보기 &#x25BE;
+            </a>
+            <div class="dropdown-menu p-3" aria-labelledby="dropdownMenuButton" style="width: 600px;"> <!-- 너비 설정 -->
+                <div class="row"> <!-- 2열로 나누기 위해 row와 col 사용 -->
+                    <div class="col-12">
+                        <div class="category-title bg-dark text-white text-center py-2 col-12">국내도서</div> <!-- 1행을 채우는 검정 배경 설정 -->
+                    </div>
+                    <div class="col-6">
+                        <ul class="category-list">
+                            <li><a href="/category/55890">건강/취미/레저</a></li>
+                            <li><a href="/category/170">경제경영</a></li>
+                            <li><a href="/category/76001">고등학교참고서</a></li>
+                            <li><a href="/category/2105">고전</a></li>
+                            <li><a href="/category/987">과학</a></li>
+                            <li><a href="/category/8257">대학교재/전문서적</a></li>
+                            <li><a href="/category/2551">만화</a></li>
+                            <li><a href="/category/798">사회과학</a></li>
+                            <li><a href="/category/1">소설/시/희곡</a></li>
+                            <li><a href="/category/1383">수험서/자격증</a></li>
+                            <li><a href="/category/1108">어린이</a></li>
+                            <li><a href="/category/55889">에세이</a></li>
+                            <li><a href="/category/1196">여행</a></li>
+                            <li><a href="/category/74">역사</a></li>
+                            <li><a href="/category/517">예술/대중문화</a></li>
+                            <li><a href="/category/1230">요리/뷰티</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <ul class="category-list">
+                            <li><a href="/category/1322">외국어</a></li>
+                            <li><a href="/category/13789">유아</a></li>
+                            <li><a href="/category/656">인문학</a></li>
+                            <li><a href="/category/336">자기계발</a></li>
+                            <li><a href="/category/2913">잡지</a></li>
+                            <li><a href="/category/112011">장르소설</a></li>
+                            <li><a href="/category/17195">전집/중고전집</a></li>
+                            <li><a href="/category/1237">종교역학</a></li>
+                            <li><a href="/category/2030">좋은부모</a></li>
+                            <li><a href="/category/76000">중학교참고서</a></li>
+                            <li><a href="/category/1137">청소년</a></li>
+                            <li><a href="/category/50246">초등학교참고서</a></li>
+                            <li><a href="/category/351">컴퓨터/모바일</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -23,6 +23,9 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
                 .authorizeRequests(auth -> auth
+                        .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
+                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
+                        .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
                         .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
                         .anyRequest().authenticated()
                 )

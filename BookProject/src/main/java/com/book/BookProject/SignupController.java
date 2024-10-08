@@ -2,7 +2,6 @@ package com.book.BookProject;
 
 import com.book.BookProject.user.SignupService;
 import com.book.BookProject.user.UserDTO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

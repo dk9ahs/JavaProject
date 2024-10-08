@@ -91,58 +91,66 @@ body {
     font-weight: bold;
 }
 
-/* 드롭다운 메뉴를 항상 맨 앞으로 보이게 하기 위한 스타일 수정 */
 .dropdown {
     position: relative;
-    z-index: 999;
 }
 
-/* 드롭다운 기본 스타일 - 마우스 갖다 대지 않았을 때는 숨김 */
+/* 드롭다운 기본적으로 숨김 처리 */
 .dropdown-menu {
-    display: none !important; /* 기본적으로 숨김 처리 */
+    display: none;
     position: absolute;
     top: 100%;
-    left: 50%; /* 왼쪽에서 50% 이동 */
-    transform: translateX(-50%); /* 중앙에 맞게 조정 */
+    left: 0;
+    width: 600px; /* 드롭다운 전체 너비 설정 */
     background-color: white;
-    width: 600px !important; /* 전체 너비 설정 */
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    padding: 10px !important;
-    flex-wrap: wrap !important; /* 여러 열로 나눌 수 있도록 설정 */
-    gap: 20px !important; /* 열 간격 */
-    justify-content: center; /* 중앙 정렬 */
+    padding: 10px;
+    gap: 20px;
 }
 
-/* 드롭다운 메뉴 마우스를 올렸을 때만 보이도록 설정 */
+/* 마우스를 올렸을 때만 드롭다운 보이도록 설정 */
 .dropdown:hover .dropdown-menu {
-    display: flex !important; /* 마우스를 올렸을 때만 드롭다운 보이도록 */
+    display: grid; /* 마우스를 올렸을 때만 드롭다운 보임 */
 }
 
-/* 기본적인 항목 스타일 */
-.category-list {
-    list-style: none;
-    padding: 0 !important;
-    text-align: center; /* 항목들 가운데 정렬 */
-}
-
-.category-list li {
-    margin-bottom: 5px !important;
-}
-
+/* category-title의 스타일 수정: 가운데 정렬, 배경 검정, 텍스트 흰색 */
 .category-title {
     font-weight: bold;
     margin-bottom: 10px;
-    text-align: center; /* 타이틀 가운데 정렬 */
+    text-align: center;
+    background-color: black; /* 검정 배경 */
+    color: white; /* 글자색 흰색 */
+    padding: 10px;
+    width: 100%; /* 전체 너비 */
 }
 
-.category-column {
+/* 1열과 2열의 텍스트 정렬 문제 해결 */
+.dropdown-menu .row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between; /* 양쪽 끝에 1열과 2열 배치 */
+}
+
+.col-6 {
     display: flex;
     flex-direction: column;
-    align-items: center; /* 열을 가운데로 정렬 */
-    width: 100%; /* 열 전체 너비 설정 */
+    width: 48%; /* 1열과 2열의 너비를 동일하게 조정 */
 }
 
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 5px;
+    text-align: left;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 미디어 쿼리 */
 @media screen and (max-width: 768px) {
     .menu {
         display: none;
