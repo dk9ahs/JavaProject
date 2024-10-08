@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link th:href="@{/css/Footer.css}" rel="stylesheet" />
+</head>
+<body>
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content" th:fragment="footerFragment">
+            <!-- 회사 정보 섹션 -->
+            <div class="company-info">
+                <h3>(주)더조은 서점</h3>
+                <p>경기 고양시 일산동구 중앙로1275번길 38-10 우림로데오스위트 2층 201호</p>
+                <p>이메일: tjoeun@tjoeun.co.kr</p>
+                <p>&copy; Tjoeun Communication. All Rights Reserved.</p>
+            </div>
+
+            <!-- 고객센터 정보 섹션 -->
+            <div class="customer-center">
+                <h3>고객센터</h3>
+                <p>0507-1400-1777 (발신자 부담)</p>
+                <div class="customer-links">
+                    <button>1:1 문의</button>
+                    <button>FAQ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 하단 섹션 -->
+        <div class="footer-bottom">
+            <p>&copy; 2024 더조은 서점. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

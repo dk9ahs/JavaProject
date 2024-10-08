@@ -7,8 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/Front/css/Header.css" />
-    <link rel="stylesheet" href="/Front/css/Footer.css" />
+    <link rel="stylesheet" href="./css/Header.css" />
+    <link rel="stylesheet" href="./css/Footer.css" />
     <style>
         /* 책 리스트 테이블 */
         .book-list-table {
@@ -17,15 +17,19 @@
             margin: 20px 0;
         }
         .book-list-table th, .book-list-table td {
-            border: 1px solid #ddd;
+<!--            border: 1px solid #ddd;-->
             padding: 8px;
         }
         .book-list-table th {
             background-color: #f4f4f4;
             text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
         }
         .book-list-table td {
+            margin: 3px;
             vertical-align: top;
+            border-bottom: 1px solid #ddd;
         }
         .book-image {
             width: 150px;
@@ -95,83 +99,123 @@
         .search-bar button:hover {
             background-color: #1f8a37;
         }
+
+        .book-actions {
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button {
+            background-color: #ff6f61;
+            color: white;
+            padding: 5px 8px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #ff4c3b;
+        }
+
+        .remarks {
+            width: 100px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 <div th:replace="guest/Front/Header :: header"></div>
 
 <!-- 도서 목록 -->
+<!-- 글쓰기 버튼 오른쪽 상단 -->
+<div class="write-btn-wrapper mt-1">
+    <a href="/salesboard/write" class="btn">글쓰기</a>
+</div>
 <table class="book-list-table">
+    <colgroup>
+        <col width="10%" />
+        <col width="30%" />
+        <col width="20%" />
+        <col width="25%" />
+        <col width="30%" />
+    </colgroup>
     <thead>
     <tr>
         <th>번호</th>
-        <th>판매 구분</th>
+<!--        <th>판매 지역</th>-->
         <th>제목</th>
-        <th>가격</th>
         <th>작성자</th>
         <th>작성일</th>
-        <th>조회</th>
+        <th>비고</th>
     </tr>
     </thead>
     <tbody>
-    <!-- 더미 데이터 표시 -->
-    <tr>
-        <td>2</td>
-        <td>판매</td>
-        <td>
-            <div class="book-info">
-                <img src="https://image.aladin.co.kr/product/34474/76/cover500/k292932634_3.jpg" alt="Book Image" class="book-image">
-                <div class="book-details">
-                    <p><strong>이중 하나는 거짓말</strong></p>
-                    <p>김예현 | 문학동네 | 2024년 8월</p>
-                    <p>판매지수: 158,630</p>
+        <!--게시글 없을때 -->
+        <tr th:if="${salesBoards == null} or ${salesBoards.size() == 0}">
+            <td colspan="7" align="center">
+                등록된 게시물이 없습니다^^*
+            </td>
+        </tr>
+        <!--게시글 있을때 -->
+        <tr th:each="post : ${salesBoards}">
+            <td style="text-align:center;" th:text="${post.sidx}"></td>
+            <td>
+                <div class="book-info">
+                    <img th:if="${post.oimage == ''} or ${post.oimage == null}"  src="/images/NoImage.jpg" alt="No Image" class="book-image">
+                    <img th:unless="${post.oimage == ''} or ${post.oimage == null}" th:src="${post.simage}" alt="Book Image" class="book-image">
+                    <div class="book-details">
+                        <br/>
+                        <strong>
+                            <th:block th:switch="${post.classification}">
+                                <a th:case="sale" th:text="'[판매] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
+                                <a th:case="trade" th:text="'[교환] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
+                                <a th:case="sharing" th:text="'[나눔] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
+                                <a th:case="wanted" th:text="'[구해요] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
+                                <a th:case="*" th:text="'[거래완료] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
+                            </th:block>
+<!--                            <a th:text="'[' + ${post.classification} + '] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>-->
+                        </strong>
+                        <br/>
+                        <p style="white-space: nowrap;">
+                            <span th:text="${post.booktitle}"></span> |
+                            <span th:text="${post.author}"></span> |
+                            <span th:text="${post.publisher}"></span>
+                        </p>
+                        <span th:if="${post.region} == '시/도 선택'"></span>
+                        <p th:unless="${post.region} == '시/도 선택'" th:text="${post.region}">판매 지역</p>
+<!--                        <p style="white-space: nowrap;">-->
+<!--                        <span th:text="${post.nick}">판매자 닉네임</span> <i class="bi bi-chat-dots-fill"></i>-->
+<!--                        </p>-->
+                            <span class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'"></span>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td class="price">14,400원</td>
-        <td>작성자 A</td>
-        <td>2024.10.03</td>
-        <td>100</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>구매</td>
-        <td>
-            <div class="book-info">
-                <img src="https://image.aladin.co.kr/product/34634/14/cover500/8959897221_1.jpg" alt="Book Image" class="book-image">
-                <div class="book-details">
-                    <p><strong>트렌드 코리아 2025</strong></p>
-                    <p>김난도 외 | 미래의창 | 2024년 9월</p>
-                    <p>판매지수: 75,740</p>
-                </div>
-            </div>
-        </td>
-        <td class="price">18,000원</td>
-        <td>작성자 B</td>
-        <td>2024.10.02</td>
-        <td>150</td>
-    </tr>
+                <p align="right">
+                    조회 <span align="right" th:text="${post.viewCount}"></span>
+                    좋아요 <span style="align=right;" th:text="${post.likeCount}"></span>&nbsp;
+                </p>
+            </td>
+            <td style="text-align:center; vertical-align: middle;">
+                <span th:text="${post.nick}">판매자 닉네임</span> <i class="bi bi-chat-dots-fill"></i>
+            </td>
+<!--            <td class="price" th:if="${post.price == 0}">가격없음</td>-->
+<!--            <td class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'">가격</td>-->
+<!--            <td th:text="${post.nick}">작성자</td>-->
+<!--            <td style="text-align:center; vertical-align: middle;" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}">작성일</td>-->
 
-    <!-- salesboard 테이블의 데이터 표시 -->
-    <tr th:each="salesBoard, iterStat : ${salesBoards}">
-        <td th:text="${iterStat.count}"></td> <!-- 번호 -->
-<!--        <td th:text="${salesBoard.category}">판매 구분</td> &lt;!&ndash; 판매 구분 &ndash;&gt;-->
-        <td>
-            <div class="book-info">
-<!--                <img th:src="${salesBoard.sImage}" alt="Book Image" class="book-image"> &lt;!&ndash; 이미지 &ndash;&gt;-->
-                <div class="book-details">
-                    <p><strong th:text="${salesBoard.sbooktitle}">제목</strong></p> <!-- 제목 -->
-<!--                    <p th:text="${salesBoard.author}">저자</p> &lt;!&ndash; 저자 &ndash;&gt;-->
-<!--                    <p th:text="${salesBoard.publisher}">출판사</p> &lt;!&ndash; 출판사 &ndash;&gt;-->
+            <td class="remarks" style="vertical-align: middle;">
+                <div class="book-actions">
+                    <button class="button">바로구매</button>
+                    <button class="button">장바구니</button>
                 </div>
-            </div>
-        </td>
-        <td class="price" th:text="${salesBoard.price}">가격</td> <!-- 가격 -->
-        <td th:text="${salesBoard.nick}">작성자</td> <!-- 작성자 -->
-<!--        <td th:text="${#dates.format(salesBoard.screateDate, 'yyyy.MM.dd')}">작성일</td> &lt;!&ndash; 작성일 &ndash;&gt;-->
-        <td th:text="${salesBoard.sviewCount}">조회</td> <!-- 조회수 -->
-    </tr>
-    </tbody>
+            </td>
+        </tr>
+        </tbody>
 </table>
 
 <!-- 페이징과 검색바 -->
@@ -196,7 +240,7 @@
 </div>
 
 <!-- 검색바 중앙 배치 -->
-<div class="search-bar">
+<div class="search-bar mb-3">
     <select>
         <option value="">전체기간</option>
     </select>
@@ -207,11 +251,6 @@
     </select>
     <input type="text" placeholder="검색어를 입력해주세요">
     <button type="button">검색</button>
-</div>
-
-<!-- 글쓰기 버튼 오른쪽 상단 -->
-<div class="write-btn-wrapper">
-    <a href="/salesboard/write" class="btn">글쓰기</a>
 </div>
 
 <div th:replace="guest/Front/Footer :: footer"></div>
