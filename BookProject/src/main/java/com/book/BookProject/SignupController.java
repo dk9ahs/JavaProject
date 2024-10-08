@@ -24,7 +24,7 @@ public class SignupController {
     @GetMapping("/signup")
     public String showRegisterForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());  // 빈 DTO 객체를 넘김
-        return "member/Signup";  // Thymeleaf 템플릿 이름
+        return "guest/Signup";  // Thymeleaf 템플릿 이름
     }
 
     @PostMapping("/register")

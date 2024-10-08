@@ -21,7 +21,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "member/Login";  // 로그인 페이지 템플릿 반환
+        return "guest/Login";  // 로그인 페이지 템플릿 반환
     }
 
     @PostMapping("/login")
