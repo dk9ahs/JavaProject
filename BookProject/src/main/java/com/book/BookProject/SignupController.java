@@ -2,6 +2,7 @@ package com.book.BookProject;
 
 import com.book.BookProject.user.SignupService;
 import com.book.BookProject.user.UserDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class SignupController {
         this.signupService = signupService;
     }
 
+
     @GetMapping("/signup")
     public String showRegisterForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());  // 빈 DTO 객체를 넘김
@@ -26,7 +28,8 @@ public class SignupController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("userDTO") UserDTO userDTO, RedirectAttributes redirectAttributes) {
+    public String register(@ModelAttribute("userDTO") UserDTO userDTO,
+                           RedirectAttributes redirectAttributes) {
         try {
             signupService.registerUser(userDTO);
             // 회원가입 성공 후 Flash Attribute에 메시지 추가
