@@ -1,35 +1,55 @@
 package com.book.BookProject.inquiryboard;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
+@DynamicInsert
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@Entity(name = "INQUIRYBOARD")
+@Entity
+@Table(name = "INQUIRYBOARD")
 public class InquiryBoard {
 
-    @Id
-    @GeneratedValue
+    @Id // 엔티티의 주키(primary key)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가(Auto Increment)를 지정
     private  Long qidx; // 인덱스
-    private int qparentidx; //
-    private String qparentid;
-    private int qresponses;
-    private String nick;
-    private String qtitle;
-    private String qcontent;
-    private LocalDate qcreate_date;
-    private LocalDate qupdate_date;
-    private int qview_count;
-    private int qlike_count;
-    private String qofile;
-    private String qsfile;
-    private int qdown_count;
+    @Column(name="QPARENTIDX", columnDefinition = "INT default 0")
+    private int parentIdx; // 부모 인덱스
+    @Column(name="QPARENTID", columnDefinition = "VARCHAR(50)")
+    private String parentId; // 부모 ID
+//    @ManyToOne
+//    @JoinColumn(name = "member")
+    private String nick; // 외래키, 작성자 닉네임
+    @Column(name="QRESPONSES", columnDefinition = "INT default 0")
+    private int responses; // 답변 여부
+    @Column(name="QTITLE", nullable = false, columnDefinition = "VARCHAR(100)")
+    private String title; // 제목
+    @Column(name="QCONTENT", nullable = false, columnDefinition = "TEXT")
+    private String content; // 내용
+    @Column(name="QPASS", columnDefinition = "VARCHAR(20)")
+    private String pass; // 글 비밀번호
+    @Column(name="QCREATE_DATE", columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
+    private LocalDate createDate; // 생성 날짜
+    @LastModifiedDate
+    @Column(name="QUPDATE_DATE", columnDefinition = "DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private LocalDate updateDate; // 업데이트 날짜
+    @Column(name="QVIEW_COUNT", columnDefinition = "INT default 0")
+    private int viewCount; // 조회수
+    @Column(name="QLIKE_COUNT", columnDefinition = "INT default 0")
+    private int likeCount; // 좋아요 수
+    @Column(name="QOFILE", columnDefinition = "VARCHAR(200)")
+    private String oFile; // 원본 파일명
+    @Column(name="QSFILE", columnDefinition = "VARCHAR(200)")
+    private String sFile; // 저장된 파일명
+    @Column(name="QDOWN_COUNT", columnDefinition = "INT default 0")
+    private int downCount; // 다운로드 수
 
 }

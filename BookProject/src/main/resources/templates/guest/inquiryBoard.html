@@ -98,27 +98,28 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr th:if="${#lists.isEmpty(inquiryBoards)}">
+                        <tr th:if="${#lists.isEmpty(list)}">
                             <td class="text-center" colspan="7">
                                 등록된 게시글이 없습니다.
                             </td>
                         </tr>
-                        <tr th:each="inquiryBoard : ${inquiryBoards}">
+                        <tr th:each="inquiryBoard : ${list}">
                             <td class="text-center" th:text="${inquiryBoard.qidx}"></td> <!-- 글번호 -->
-                            <td class="text-left" th:text="${inquiryBoard.qtitle}"><i class="bi bi-lock-fill"></i><a href="boardView.html"></a></td> <!-- 제목 -->
+<!--                            <td class="text-left" th:text="${inquiryBoard.title}"><i class="bi bi-lock-fill"></i><a href="boardView.html"></a></td> &lt;!&ndash; 제목 &ndash;&gt;-->
+                            <td class="text-left"><a th:text="${inquiryBoard.title}" th:href="@{inquiryboardview(qidx=${inquiryBoard.qidx})}"></a><i class="bi bi-lock-fill"></i></td> <!-- 제목 -->
                             <td class="text-center" th:text="${inquiryBoard.nick}"></td> <!-- 작성자 -->
-                            <td class="text-center" th:text="${inquiryBoard.qcreate_date}"></td> <!-- 작성일 -->
+                            <td class="text-center" th:text="${inquiryBoard.createDate}"></td> <!-- 작성일 -->
                             <td class="text-center">답변대기</td> <!-- 답변여부 -->
-                            <td class="text-center">12</td> <!-- 조화수 -->
+                            <td class="text-center" th:text="${inquiryBoard.viewCount}">12</td> <!-- 조화수 -->
                             <td class="text-center">9</td> <!-- 댓글 -->
                         </tr>
                     </tbody>
                 </table>
                 <div class="col d-flex justify-content-end">
                     <!-- 각종 버튼 부분 -->
-                    <button type="button" class="btn text-white" onclick="location.href='inquiryBoard';">리스트보기</button>
+                    <button type="button" class="btn text-white" onclick="location.href='/inquiryboard';">리스트보기</button>
                     &nbsp;&nbsp;
-                    <button type="button" class="btn text-white" onclick="location.href='inquiryBoardWriteForm';">글등록</button>
+                    <button type="button" class="btn text-white" onclick="location.href='inquiryboardwriteform';">글등록</button>
                     &nbsp;&nbsp;
                     <button type="button" class="btn text-white" style="background-color: #86AB89;">답글쓰기</button>
                     &nbsp;&nbsp;
