@@ -1,4 +1,3 @@
-/* 기본 전역 스타일 */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,6 @@ body {
     max-width: 1200px;
 }
 
-/* 헤더 스타일 */
 .header {
     display: flex;
     justify-content: space-between;
@@ -30,7 +28,6 @@ body {
 }
 
 .header .search-bar {
-    display: flex;
     position: relative;
     width: 50%;
     margin-left: 30px;
@@ -38,18 +35,28 @@ body {
 
 .header .search-bar input[type="text"] {
     width: 100%;
-    padding: 12px 40px 12px 12px;
+    padding: 12px 45px 12px 12px;
     border: 1px solid #ccc;
     border-radius: 20px;
     outline: none;
+    box-sizing: border-box;
 }
 
-.header .search-bar a {
+.header .search-bar button {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #333;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.header .search-bar button svg {
+    width: 20px;
+    height: 20px;
+    fill: #333;
 }
 
 .header .user-menu {
@@ -68,6 +75,8 @@ body {
 
 .menu {
     display: flex;
+    align-items: center;
+    gap: 20px;
     justify-content: center;
     padding: 10px 0;
     background-color: #f9f9f9;
@@ -79,6 +88,59 @@ body {
     color: black;
     font-size: 14px;
     padding: 10px 20px;
+    font-weight: bold;
+}
+
+/* 드롭다운 메뉴를 항상 맨 앞으로 보이게 하기 위한 스타일 수정 */
+.dropdown {
+    position: relative;
+    z-index: 999;
+}
+
+/* 드롭다운 기본 스타일 - 마우스 갖다 대지 않았을 때는 숨김 */
+.dropdown-menu {
+    display: none !important; /* 기본적으로 숨김 처리 */
+    position: absolute;
+    top: 100%;
+    left: 50%; /* 왼쪽에서 50% 이동 */
+    transform: translateX(-50%); /* 중앙에 맞게 조정 */
+    background-color: white;
+    width: 600px !important; /* 전체 너비 설정 */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px !important;
+    flex-wrap: wrap !important; /* 여러 열로 나눌 수 있도록 설정 */
+    gap: 20px !important; /* 열 간격 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+/* 드롭다운 메뉴 마우스를 올렸을 때만 보이도록 설정 */
+.dropdown:hover .dropdown-menu {
+    display: flex !important; /* 마우스를 올렸을 때만 드롭다운 보이도록 */
+}
+
+/* 기본적인 항목 스타일 */
+.category-list {
+    list-style: none;
+    padding: 0 !important;
+    text-align: center; /* 항목들 가운데 정렬 */
+}
+
+.category-list li {
+    margin-bottom: 5px !important;
+}
+
+.category-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center; /* 타이틀 가운데 정렬 */
+}
+
+.category-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 열을 가운데로 정렬 */
+    width: 100%; /* 열 전체 너비 설정 */
 }
 
 @media screen and (max-width: 768px) {
