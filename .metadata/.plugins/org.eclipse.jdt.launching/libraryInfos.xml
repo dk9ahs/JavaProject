@@ -16,6 +16,7 @@
             <entry path="null"/>
         </endorsedDirs>
     </libraryInfo>
+    <libraryInfo home="/Users/leechangkyun/Library/Java/JavaVirtualMachines/graalvm-jdk-17.0.12/Contents/Home" version="17.0.12"/>
     <libraryInfo home="C:\FrontEnd\dev\sts-4.24.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.3.v20240426-1530" version="21.0.3">
         <bootpath>
             <entry path="null"/>

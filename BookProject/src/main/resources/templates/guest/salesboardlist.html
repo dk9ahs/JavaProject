@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TJOEUN BOOK 판매 게시판</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/Front/css/Header.css" />
+    <link rel="stylesheet" href="/Front/css/Footer.css" />
+    <style>
+        /* 책 리스트 테이블 */
+        .book-list-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .book-list-table th, .book-list-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .book-list-table th {
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .book-list-table td {
+            vertical-align: top;
+        }
+        .book-image {
+            width: 150px;
+            height: auto;
+            margin-right: 10px;
+        }
+        .price {
+            color: red;
+            font-weight: bold;
+        }
+        .book-info {
+            display: flex;
+            gap: 10px;
+        }
+        .book-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 글쓰기 버튼 - 오른쪽 상단 */
+        .write-btn-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .write-btn-wrapper .btn {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 페이징 중앙 배치 */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* 검색바 중앙 배치 */
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .search-bar select, .search-bar input, .search-bar button {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* 검색 버튼 스타일 */
+        .search-bar button {
+            background-color: #2eb14b;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #1f8a37;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="guest/Front/Header :: header"></div>
+
+<!-- 도서 목록 -->
+<table class="book-list-table">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>판매 구분</th>
+        <th>제목</th>
+        <th>가격</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 더미 데이터 표시 -->
+    <tr>
+        <td>2</td>
+        <td>판매</td>
+        <td>
+            <div class="book-info">
+                <img src="https://image.aladin.co.kr/product/34474/76/cover500/k292932634_3.jpg" alt="Book Image" class="book-image">
+                <div class="book-details">
+                    <p><strong>이중 하나는 거짓말</strong></p>
+                    <p>김예현 | 문학동네 | 2024년 8월</p>
+                    <p>판매지수: 158,630</p>
+                </div>
+            </div>
+        </td>
+        <td class="price">14,400원</td>
+        <td>작성자 A</td>
+        <td>2024.10.03</td>
+        <td>100</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>구매</td>
+        <td>
+            <div class="book-info">
+                <img src="https://image.aladin.co.kr/product/34634/14/cover500/8959897221_1.jpg" alt="Book Image" class="book-image">
+                <div class="book-details">
+                    <p><strong>트렌드 코리아 2025</strong></p>
+                    <p>김난도 외 | 미래의창 | 2024년 9월</p>
+                    <p>판매지수: 75,740</p>
+                </div>
+            </div>
+        </td>
+        <td class="price">18,000원</td>
+        <td>작성자 B</td>
+        <td>2024.10.02</td>
+        <td>150</td>
+    </tr>
+
+    <!-- salesboard 테이블의 데이터 표시 -->
+    <tr th:each="salesBoard, iterStat : ${salesBoards}">
+        <td th:text="${iterStat.count}"></td> <!-- 번호 -->
+<!--        <td th:text="${salesBoard.category}">판매 구분</td> &lt;!&ndash; 판매 구분 &ndash;&gt;-->
+        <td>
+            <div class="book-info">
+<!--                <img th:src="${salesBoard.sImage}" alt="Book Image" class="book-image"> &lt;!&ndash; 이미지 &ndash;&gt;-->
+                <div class="book-details">
+                    <p><strong th:text="${salesBoard.sbooktitle}">제목</strong></p> <!-- 제목 -->
+<!--                    <p th:text="${salesBoard.author}">저자</p> &lt;!&ndash; 저자 &ndash;&gt;-->
+<!--                    <p th:text="${salesBoard.publisher}">출판사</p> &lt;!&ndash; 출판사 &ndash;&gt;-->
+                </div>
+            </div>
+        </td>
+        <td class="price" th:text="${salesBoard.price}">가격</td> <!-- 가격 -->
+        <td th:text="${salesBoard.nick}">작성자</td> <!-- 작성자 -->
+<!--        <td th:text="${#dates.format(salesBoard.screateDate, 'yyyy.MM.dd')}">작성일</td> &lt;!&ndash; 작성일 &ndash;&gt;-->
+        <td th:text="${salesBoard.sviewCount}">조회</td> <!-- 조회수 -->
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이징과 검색바 -->
+<div class="pagination-wrapper">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- 검색바 중앙 배치 -->
+<div class="search-bar">
+    <select>
+        <option value="">전체기간</option>
+    </select>
+    <select>
+        <option value="">게시글 + 댓글</option>
+        <option value="">제목만</option>
+        <option value="">글 작성자</option>
+    </select>
+    <input type="text" placeholder="검색어를 입력해주세요">
+    <button type="button">검색</button>
+</div>
+
+<!-- 글쓰기 버튼 오른쪽 상단 -->
+<div class="write-btn-wrapper">
+    <a href="/salesboard/write" class="btn">글쓰기</a>
+</div>
+
+<div th:replace="guest/Front/Footer :: footer"></div>
+</body>
+</html>

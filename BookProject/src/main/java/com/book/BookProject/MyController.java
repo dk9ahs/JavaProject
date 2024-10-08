@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MyController {
+<<<<<<< HEAD
 	
 //    @RequestMapping("/")
 //    public String main() {
@@ -33,16 +34,21 @@ public String mainPage(HttpSession session, Model model) {
     @RequestMapping("/board")
     public String book2() {
     	return "guest/board";
+=======
+
+    @RequestMapping
+    public String main() {
+        return "guest/home";
+>>>>>>> feature/a
     }
 
     @RequestMapping("/board2")
     public String board2() {
-        return "guest/board2";
+        return "guest/board2"; // guest/board2.html로 이동
     }
 
     @RequestMapping("/boardView")
     public String boardView() {
-        return "guest/boardView";
+        return "guest/boardView"; // guest/boardView.html로 이동
     }
-
 }
