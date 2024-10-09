@@ -17,9 +17,9 @@ public class AladinBookController {
     private final String SEARCH_URL = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
     private final String LOOKUP_URL = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 
-    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
+//    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
+    private final String TTB_KEY = "ttbtle651621001"; // 지훈형님 키
 //    private final String TTB_KEY = "ttblckdrbs1419006"; // 창균 키
-
 
     // 베스트셀러 리스트 가져오기
     @GetMapping("/book") // /book 경로로 매핑
@@ -70,6 +70,61 @@ public class AladinBookController {
 
         // 페이징된 결과를 반환
         return paginatedBooks;
+    }
+
+    // 카테고리별 베스트셀러 리스트 가져오기
+    @GetMapping("/api/category")
+    public ObjectNode getCategoryBooks(@RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam String categoryId)
+                                       throws Exception {
+        // 알라딘 API의 정렬 옵션을 정확하게 전달
+        String apiUrl = API_URL + "?ttbkey=" + TTB_KEY
+                + "&QueryType=Bestseller&MaxResults=50&start=1"
+                + "&SearchTarget=Book&output=js&Version=20131101&Cover=Big"
+                + "&CategoryId=" + categoryId;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(apiUrl, String.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(response);
+        ArrayNode books = (ArrayNode) rootNode.path("item");
+
+        int totalResults = books.size();
+
+        // 페이지네이션 처리
+        int start = (page - 1) * size;
+        int end = Math.min(start + size, totalResults);
+
+        ArrayNode paginatedBooks = objectMapper.createArrayNode();
+        for (int i = start; i < end; i++) {
+            JsonNode book = books.get(i);
+            String isbn13 = book.path("isbn13").asText();
+
+            // 별점 정보 추가 (ISBN을 이용해 별점 조회)
+            String lookupUrl = LOOKUP_URL + "?ttbkey=" + TTB_KEY + "&itemIdType=ISBN13&ItemId=" + isbn13
+                    + "&output=js&Version=20131101&OptResult=ratingInfo";
+
+            String ratingResponse = restTemplate.getForObject(lookupUrl, String.class);
+            JsonNode ratingNode = objectMapper.readTree(ratingResponse);
+
+            String rating = "N/A"; // 기본 값 설정
+            if (ratingNode.path("item").size() > 0 && ratingNode.path("item").get(0).path("subInfo").has("ratingInfo")) {
+                rating = ratingNode.path("item").get(0).path("subInfo").path("ratingInfo").path("ratingScore").asText("N/A");
+            }
+
+            // 책 정보에 별점 추가
+            ((ObjectNode) book).put("rating", rating);
+            paginatedBooks.add(book);
+        }
+
+        // 전체 결과 개수와 페이징된 책 목록을 반환
+        ObjectNode result = objectMapper.createObjectNode();
+        result.put("totalResults", totalResults);
+        result.set("books", paginatedBooks);
+
+        return result;
     }
 
     // 신간 리스트 가져오기
@@ -302,4 +357,5 @@ public class AladinBookController {
 
         return result;
     }
+
 }
