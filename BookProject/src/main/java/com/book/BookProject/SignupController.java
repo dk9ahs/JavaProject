@@ -1,5 +1,6 @@
 package com.book.BookProject;
 
+import com.book.BookProject.user.OAuth2Service;
 import com.book.BookProject.user.RecaptchaService;
 import com.book.BookProject.user.SignupService;
 import com.book.BookProject.user.UserDTO;
@@ -17,13 +18,17 @@ public class SignupController {
 
     private final SignupService signupService;
     private final RecaptchaService recaptchaService;  // RecaptchaService 의존성 주입
+    private final OAuth2Service oAuth2Service;
 
 
-    public SignupController(SignupService signupService,RecaptchaService recaptchaService)
+
+    public SignupController(SignupService signupService,
+                            RecaptchaService recaptchaService,
+                            OAuth2Service oAuth2Service)
     {
         this.signupService = signupService;
         this.recaptchaService = recaptchaService;
-
+        this.oAuth2Service = oAuth2Service;
     }
 
 
@@ -55,6 +60,30 @@ public class SignupController {
         }
     }
 
+    @GetMapping("/socialSignupCheck")
+    public String socialSignupCheck(Model model) {
+        UserDTO currentUser = oAuth2Service.getCurrentUser();  // OAuth2Service 사용하여 소셜 로그인 후 사용자 정보 가져오기
+
+        if (currentUser == null) {
+            model.addAttribute("userDTO", new UserDTO());
+            return "guest/Socialsignup";  // 추가 정보 입력 페이지로 이동
+        }
+
+        return "redirect:/";  // 이미 회원 정보가 있을 경우 메인 페이지로 이동
+    }
+
+    @PostMapping("/socialRegister")
+    public String socialRegister(@ModelAttribute("userDTO") UserDTO userDTO,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            signupService.registerSocialUser(userDTO);  // 소셜 로그인 사용자를 DB에 저장
+            redirectAttributes.addFlashAttribute("successMessage", "소셜 회원가입이 완료되었습니다.");
+            return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/socialSignupCheck";
+        }
+    }
 
     @PostMapping("/IdCheck")  // POST 메서드 사용
     @ResponseBody
