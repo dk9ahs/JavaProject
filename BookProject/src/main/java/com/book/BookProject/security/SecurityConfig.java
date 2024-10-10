@@ -14,6 +14,7 @@ public class SecurityConfig {
 
     private final UserServiceImpl userServiceImpl;
 
+
     public SecurityConfig(UserServiceImpl userServiceImpl) {
         this.userServiceImpl = userServiceImpl;
     }

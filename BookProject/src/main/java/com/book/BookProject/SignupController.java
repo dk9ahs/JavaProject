@@ -1,5 +1,6 @@
 package com.book.BookProject;
 
+import com.book.BookProject.user.RecaptchaService;
 import com.book.BookProject.user.SignupService;
 import com.book.BookProject.user.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +16,14 @@ import java.util.Map;
 public class SignupController {
 
     private final SignupService signupService;
+    private final RecaptchaService recaptchaService;  // RecaptchaService 의존성 주입
 
-    public SignupController(SignupService signupService) {
+
+    public SignupController(SignupService signupService,RecaptchaService recaptchaService)
+    {
         this.signupService = signupService;
+        this.recaptchaService = recaptchaService;
+
     }
 
 
@@ -29,7 +35,14 @@ public class SignupController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("userDTO") UserDTO userDTO,
+                           @RequestParam("g-recaptcha-response") String recaptchaResponse,
                            RedirectAttributes redirectAttributes) {
+
+        // 서버에서 reCAPTCHA 검증 실행
+        if (!recaptchaService.verifyRecaptcha(recaptchaResponse)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "reCAPTCHA 인증에 실패했습니다.");
+            return "redirect:/signup";  // 실패 시 다시 회원가입 페이지로 리다이렉트
+        }
         try {
             signupService.registerUser(userDTO);
             // 회원가입 성공 후 Flash Attribute에 메시지 추가
