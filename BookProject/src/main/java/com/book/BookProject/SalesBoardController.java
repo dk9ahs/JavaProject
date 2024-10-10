@@ -6,6 +6,12 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +41,7 @@ public class SalesBoardController {
 
     // 게시판 목록 조회
     @GetMapping
-    public String list(Model model){
+    public String list(Model model, HttpServletRequest request){
         List<SalesBoardDTO> salesBoardDTOS = salesBoardService.getAllSalesBoards();
         model.addAttribute("salesBoards", salesBoardDTOS);
 
@@ -51,7 +60,8 @@ public class SalesBoardController {
 
         if (file != null && !file.isEmpty()) {
             String oImageName = file.getOriginalFilename();
-            String uploadDir = request.getSession().getServletContext().getRealPath("/"); // webapp에 저장되도록
+            String uploadDir = new File("src/main/resources/static/images").getAbsolutePath(); // 이미지 저장 경로 지정
+            System.out.println(uploadDir);
 
             File dir = new File(uploadDir);
             if (!dir.exists()) {
@@ -89,8 +99,18 @@ public class SalesBoardController {
     }
 
     // 게시글 상세 보기
+//    @GetMapping("/detail")
+//    public String detail(Long sidx, Model model) {
+//        salesBoardService.updateViewCount(sidx);
+//        model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sidx));
+//
+//        return "/guest/salesboarddetail";
+//    }
+
     @GetMapping("/detail")
-    public String detail(Long sidx, Model model) {
+    public String detail(Long sidx, Model model, HttpServletRequest req, HttpServletRequest res) {
+        salesBoardService.updateViewCount(sidx, req);
+
         model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sidx));
 
         return "/guest/salesboarddetail";
@@ -119,7 +139,7 @@ public class SalesBoardController {
         // 파일 업로드
         if (file != null && !file.isEmpty()) {
             String oImageName = file.getOriginalFilename();
-            String uploadDir = request.getSession().getServletContext().getRealPath("/"); // webapp에 저장되도록
+            String uploadDir = new File("src/main/resources/static/images").getAbsolutePath(); // 이미지 저장 경로 지정
 
             File dir = new File(uploadDir);
             if (!dir.exists()) {
@@ -157,17 +177,65 @@ public class SalesBoardController {
         return "redirect:/salesboard/detail?sidx=" + salesBoardDTO.getSidx();
     }
 
-//    // 게시글 수정 폼 이동
-//    @GetMapping("/edit/{sIdx}")
-//    public String editForm(@PathVariable Long sIdx, Model model) {
-//        model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sIdx));
-//        return "salesboard/form";  // 수정 폼
-//    }
+    // 좋아요 기능
+    @GetMapping("/like")
+    public String like(Long sidx, HttpServletRequest request) {
+        salesBoardService.updateLikeCount(sidx);
+
+        String referer = request.getHeader("Referer"); // 헤더에서 이전 페이지를 읽는다.
+
+        return "redirect:"+ referer;
+    }
+
+//    @GetMapping("/download")
+//    public ResponseEntity<Object> download(String simage, Long sidx) {
 //
-//    // 게시글 수정 처리
-//    @PostMapping("/edit/{sIdx}")
-//    public String update(@PathVariable Long sIdx, @ModelAttribute SalesBoardDTO salesBoardDTO) {
-//        salesBoardService.updateSalesBoard(sIdx, salesBoardDTO);
-//        return "redirect:/salesboard";
+//        salesBoardService.updateDownCount(sidx); // 다운로드 수 증가
+//
+//        String path = new File("src/main/resources/static/images").getAbsolutePath() +"/" + simage;
+//        System.out.println(path);
+//
+//        try {
+//            Path filePath = Paths.get(path);
+//            Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
+//
+//            File file = new File(path);
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+//
+//            return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+//        } catch(Exception e) {
+//            return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+//        }
 //    }
+
+    @GetMapping("/download")
+    public ResponseEntity<Object> download(String simage) {
+        String path = new File("src/main/resources/static/images").getAbsolutePath() +"/" + simage;
+        System.out.println(path);
+
+        try {
+            Path filePath = Paths.get(path);
+            Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
+
+            File file = new File(path);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+
+            return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+        }
+    }
+
+    @PostMapping("/updateDownloadCount")
+    public ResponseEntity<Void> updateDownloadCount(@RequestParam("sidx") Long sidx) {
+        salesBoardService.updateDownCount(sidx);
+        return ResponseEntity.ok().build();
+    }
+
+
+
 }

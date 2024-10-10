@@ -21,14 +21,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
-                .authorizeRequests(auth -> auth
-                        .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
-                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search", "/api/category", "/category/**", "/refundPayment").permitAll()  // API 경로 허용
-                        .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
-                        .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
-                        .anyRequest().authenticated()
-                )
+//                .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
+//                .authorizeRequests(auth -> auth
+//                        .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
+//                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
+//                        .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
+//                        .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+//                        .anyRequest().authenticated()
+//                )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
@@ -63,3 +63,7 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 }
+
+
+
+

@@ -3,7 +3,7 @@ package com.book.BookProject.salesboard;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Entity(name="salesboard")
-@DynamicInsert
+@DynamicUpdate
 public class SalesBoard {
 
     @Id // 엔티티의 주키(primary key)
