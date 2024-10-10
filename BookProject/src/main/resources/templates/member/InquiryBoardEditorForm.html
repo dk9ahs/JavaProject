@@ -51,7 +51,7 @@
             <!-- 게시판리스트부분 -->
             <div class="container">
             <h3><b>문의게시판</b></h3>
-                <form action="inquiryboardeditor" method="post">
+                <form action="edit" method="post">
                     <input type="hidden" name="qidx" th:value="${view.qidx}" />
                     <table class="table table-bordered">
                         <colgroup>
@@ -64,20 +64,20 @@
                         <tr>
                             <th class="text-center"
                                 style="vertical-align:middle;">작성자</th>
-                            <td>
-                                <input type="text" class="form-control" style="width:100px;" name="nick" th:value="${view.nick}" />
+                            <td colspan="3">
+                                <input type="text" class="form-control" style="width:200px;" name="nick" th:value="${view.nick}" />
                             </td>
-                            <th class="text-center" style="vertical-align:middle;">비밀글 여부</th>
-                            <td class="text-center">
-                                <input type="checkbox" name="secret" style="margin-right: 5px;" />비밀글 작성
-                            </td>
+<!--                            <th class="text-center" style="vertical-align:middle;">비밀글 여부</th>-->
+<!--                            <td class="text-center">-->
+<!--                                <input type="checkbox" name="secret" style="margin-right: 5px;" />비밀글 작성-->
+<!--                            </td>-->
                         </tr>
                         <tr>
                             <th class="text-center" style="vertical-align:middle;">비밀번호</th>
                             <td colspan="3">
                                 <div style="display: flex; align-items: center;">
                                     <input type="password" class="form-control" id="boardPass"
-                                           style="width:200px;" name="boardPass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>※패스워드는 숫자, 5자 이하로 설정해 주세요.</small>
+                                           style="width:200px;" name="boardPass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>비밀번호 변경 가능 합니다.&nbsp;※(비밀번호는 숫자, 5자 이하로 설정해 주세요.)</small>
                                 </div>
                             </td>
                         </tr>
@@ -95,8 +95,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-center"
-                                style="vertical-align:middle;">첨부파일</th>
+                            <th class="text-center" style="vertical-align:middle;">첨부파일</th>
                             <td colspan="3">
                                 <input type="file" class="form-control" name="ofile"/>
                             </td>
@@ -105,7 +104,7 @@
                     </table>
                     <div class="col d-flex justify-content-end">
                         <!-- 각종 버튼 부분 -->
-                        <button type="button" class="btn text-white" onclick="location.href='inquiryBoard.html';">리스트보기</button>
+                        <button type="button" class="btn text-white" onclick="location.href='/inquiryboard';">리스트보기</button>
                         &nbsp;&nbsp;
                         <button type="submit" class="btn text-white">수정완료</button>
                         &nbsp;&nbsp;

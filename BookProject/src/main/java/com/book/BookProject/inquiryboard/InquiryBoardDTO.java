@@ -18,7 +18,7 @@ public class InquiryBoardDTO {
     private LocalDate updateDate; // 업데이트 날짜
     private int viewCount;     // 조회 수
     private int likeCount;     // 좋아요 수
-    private String oFile;      // 원본 파일명
-    private String sFile;      // 저장된 파일명
+    private String ofile;      // 원본 파일명
+    private String sfile;      // 저장된 파일명
     private int downCount;     // 다운로드 수
 }

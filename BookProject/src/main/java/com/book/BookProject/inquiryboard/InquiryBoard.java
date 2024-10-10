@@ -2,11 +2,8 @@ package com.book.BookProject.inquiryboard;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDate;
 
 @DynamicInsert
@@ -21,6 +18,8 @@ public class InquiryBoard {
     @Id // 엔티티의 주키(primary key)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가(Auto Increment)를 지정
     private  Long qidx; // 인덱스
+
+
     @Column(name="QPARENTIDX", columnDefinition = "INT default 0")
     private int parentIdx; // 부모 인덱스
     @Column(name="QPARENTID", columnDefinition = "VARCHAR(50)")
@@ -46,9 +45,9 @@ public class InquiryBoard {
     @Column(name="QLIKE_COUNT", columnDefinition = "INT default 0")
     private int likeCount; // 좋아요 수
     @Column(name="QOFILE", columnDefinition = "VARCHAR(200)")
-    private String oFile; // 원본 파일명
+    private String ofile; // 원본 파일명
     @Column(name="QSFILE", columnDefinition = "VARCHAR(200)")
-    private String sFile; // 저장된 파일명
+    private String sfile; // 저장된 파일명
     @Column(name="QDOWN_COUNT", columnDefinition = "INT default 0")
     private int downCount; // 다운로드 수
 
