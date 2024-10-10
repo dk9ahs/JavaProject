@@ -7,8 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/Front/css/Header.css" />
-    <link rel="stylesheet" href="/Front/css/Footer.css" />
+    <link th:href="@{/css/Header.css}" rel="stylesheet" />
+    <link th:href="@{/css/Footer.css}" rel="stylesheet" />
     <style>
         table {
             font-weight: 400;
@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-<div th:replace="guest/Front/Header :: header"></div>
+<div th:replace="Front/Header :: header"></div>
 <div class="col-9 mx-auto pt-3">
     <div class="row mt-3 mx-1">
         <!-- 게시판리스트부분 -->
@@ -126,7 +126,7 @@
         </div> <!--컨테이너 끝-->
     </div>
 </div>
-<div th:replace="guest/Front/Footer :: footer"></div>
+<div th:replace="Front/Footer :: footer"></div>
 </body>
 
 <script>
