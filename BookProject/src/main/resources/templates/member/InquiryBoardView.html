@@ -93,15 +93,20 @@
                     <tr style="height: 300px">
                         <th class="text-center"
                             style="vertical-align:middle;">내용</th>
-                        <td colspan="3" th:text="${view.content}">
-                            내용입니다
+<!--                        <td colspan="3" th:if="${not #lists.isEmpty(view.ofile)} and isImage eq true" th:text="${view.content}">-->
+<!--                            내용입니다-->
+<!--                            <img th:src="@{dir}">-->
+<!--                        </td>-->
+                        <td colspan="3">
+                            <div th:text="${view.content}">내용입니다</div>
+                            <img th:if="${not #lists.isEmpty(view.ofile)}" th:src="@{/webapp/${view.sfile}}" alt="첨부된 이미지">
                         </td>
                     </tr>
                     <tr>
                         <th class="text-center"
                             style="vertical-align:middle;">첨부파일</th>
-                        <td colspan="3">
-                            첨부파일 입니다.
+                        <td colspan="3" th:if="${not #lists.isEmpty(view.ofile)}" th:text="${view.ofile}">
+                            첨부파일
                         </td>
                     </tr>
                     </tbody>
@@ -111,9 +116,9 @@
                     <button type="button" class="btn text-white" onclick="location.href='/inquiryboard';">리스트보기</button>
                     &nbsp;&nbsp;
 <!--                    <button type="button" class="btn text-white" onclick="location.href='inquiryboardView.html';">수정하기</button>-->
-                    <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboardeditorform (qidx=${view.qidx})}'|">수정하기</button>
+                    <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboard/editform(qidx=${view.qidx})}'|">수정하기</button>
                     &nbsp;&nbsp;
-                    <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboarddelete(qidx=${view.qidx})}'|">삭제</button>
+                    <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboard/delete(qidx=${view.qidx})}'|">삭제</button>
                     &nbsp;&nbsp;
                 </div>
 
