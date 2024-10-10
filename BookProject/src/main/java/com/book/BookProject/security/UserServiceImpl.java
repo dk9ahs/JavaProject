@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserDetailsService {
         return User.builder()
                 .username(userEntity.getId())
                 .password(userEntity.getPwd())
-                .authorities(userEntity.getAuthority()) // 사용자 권한 설정
+                .authorities("ROLE_" + userEntity.getAuthority())
                 .build();
     }
 }

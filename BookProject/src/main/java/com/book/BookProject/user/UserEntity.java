@@ -56,18 +56,18 @@ public class UserEntity {
 
     @Builder.Default
     @Column(length = 20, nullable = false)  // VARCHAR(20)
-    private String authority = "USER";      // 권한 (기본값 ROLE_USER)
+    private String authority = "ROLE_USER";      // 권한 (기본값 ROLE_USER)
 
     @Builder.Default
     private int enabled = 1;           // 활성화 여부 (기본값 1)
 
-    @Column(length = 100)  // VARCHAR(100)
+    @Column(length = 200)  // VARCHAR(100)
     private String socialId;       // 소셜 아이디
 
-    @Column(length = 100)  // VARCHAR(100)
+    @Column(length = 200)  // VARCHAR(100)
     private String socialProvider; // 소셜 제공자
 
-    @Column(length = 100)  // VARCHAR(100)
+    @Column(length = 200)  // VARCHAR(100)
     private String socialEmail;    // 소셜 이메일
 
     @Builder.Default

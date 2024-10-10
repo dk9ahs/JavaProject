@@ -14,8 +14,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public boolean validateUser(String id, String password) {
-        UserEntity user = userRepository.findById(id)
+    public boolean validateUser(String username, String password) {
+        UserEntity user = userRepository.findById(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
 
         // 암호화된 비밀번호 비교
@@ -23,8 +23,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public UserEntity getUserById(String id) {
-        return userRepository.findById(id)
+    public UserEntity getUserById(String username) {
+        return userRepository.findById(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     }
 }
