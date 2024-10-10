@@ -5,6 +5,4 @@ public interface SignupService {
     void registerUser(UserDTO userDTO);
     boolean isIdUnique(String id);
     boolean isNickUnique(String nick);
-    void registerSocialUser(UserDTO userDTO);
-
 }

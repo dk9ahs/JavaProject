@@ -36,7 +36,7 @@ public class SignupServiceImpl implements SignupService {
         UserEntity userEntity = UserEntity.builder()
                 .id(userDTO.getId())
                 .nick(userDTO.getNick())
-                .pwd(passwordEncoder.encode(userDTO.getPwd()))
+                .pwd(passwordEncoder.encode(userDTO.getPwd())) // 비밀번호 암호화
                 .name(userDTO.getName())
                 .phone(userDTO.getPhone())
                 .email(userDTO.getEmail())
@@ -44,31 +44,6 @@ public class SignupServiceImpl implements SignupService {
                 .address(userDTO.getAddress())
                 .detailAddress(userDTO.getDetailAddress())
                 .authority(authority)
-                .enabled(1)
-                .build();
-
-        userRepository.save(userEntity);
-    }
-
-    @Override
-    @Transactional
-    public void registerSocialUser(UserDTO userDTO) {
-        // 소셜 로그인 사용자의 경우 비밀번호를 'SOCIAL_LOGIN'으로 저장
-        userDTO.setPwd("SOCIAL_LOGIN");
-
-        UserEntity userEntity = UserEntity.builder()
-                .id(userDTO.getId())
-                .nick(userDTO.getNick())
-                .pwd(userDTO.getPwd())  // 소셜 로그인 사용자는 비밀번호가 'SOCIAL_LOGIN'
-                .name(userDTO.getName())
-                .phone(userDTO.getPhone())
-                .email(userDTO.getEmail())
-                .zipcode(userDTO.getZipcode())
-                .address(userDTO.getAddress())
-                .detailAddress(userDTO.getDetailAddress())
-                .socialId(userDTO.getSocialId())  // 소셜 아이디 저장
-                .socialProvider(userDTO.getSocialProvider())  // 소셜 제공자 저장
-                .authority("USER")
                 .enabled(1)
                 .build();
 
