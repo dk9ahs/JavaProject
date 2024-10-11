@@ -75,4 +75,10 @@ public class UserEntity {
 
     @Builder.Default
     private int accountLocked = 0;     // 계정 잠금 여부, 기본값 0
+
+    public UserEntity updateSocialEmail(String email) {
+        this.email = this.socialEmail = email;
+        this.updateDate = LocalDateTime.now();
+        return this;
+    }
 }

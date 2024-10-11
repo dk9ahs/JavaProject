@@ -1,5 +1,6 @@
 package com.book.BookProject.security;
 
+import com.book.BookProject.oauth2.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,10 +14,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserServiceImpl userServiceImpl;
+    private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 추가
 
 
-    public SecurityConfig(UserServiceImpl userServiceImpl) {
+    public SecurityConfig(UserServiceImpl userServiceImpl, CustomOAuth2UserService customOAuth2UserService) {
         this.userServiceImpl = userServiceImpl;
+        this.customOAuth2UserService = customOAuth2UserService;
     }
 
     @Bean
@@ -27,18 +30,25 @@ public class SecurityConfig {
                         .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
                         .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
-                        .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/socialSignup").permitAll()
+                        .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error=true")
-                        .usernameParameter("username")
-                        .passwordParameter("password")
+                        .loginPage("/login")  // 커스텀 로그인 페이지
+                        .loginProcessingUrl("/login")  // 로그인 처리 URL
+                        .defaultSuccessUrl("/", true)  // 로그인 성공 후 리다이렉트 경로
+                        .failureUrl("/login?error=true")  // 로그인 실패 시 리다이렉트 경로
+                        .usernameParameter("username")  // 로그인 폼의 username 파라미터
+                        .passwordParameter("password")  // 로그인 폼의 password 파라미터
+                )
+                .oauth2Login(oauth2 -> oauth2  // 소셜 로그인 설정
+                        .loginPage("/login")  // 소셜 로그인 페이지
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))  // 소셜 로그인 사용자 정보 처리
+                        .defaultSuccessUrl("/", true)  // 소셜 로그인 성공 후 추가 정보 확인 경로
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
