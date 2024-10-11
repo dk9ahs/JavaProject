@@ -51,8 +51,8 @@
             <!-- 게시판리스트부분 -->
             <div class="container">
             <h3><b>문의게시판</b></h3>
-                <form action="edit" method="post">
-                    <input type="hidden" name="qidx" th:value="${view.qidx}" />
+                <form th:action="@{/inquiryboard/edit(qidx=${inquiryBoard.qidx})}" method="post" enctype="multipart/form-data">
+<!--                    <input type="hidden" name="qidx" th:value="${inquiryBoard.qidx}" />-->
                     <table class="table table-bordered">
                         <colgroup>
                             <col width="20%"/>
@@ -62,10 +62,9 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th class="text-center"
-                                style="vertical-align:middle;">작성자</th>
+                            <th class="text-center" style="vertical-align:middle;">작성자</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" style="width:200px;" name="nick" th:value="${view.nick}" />
+                                <input type="text" class="form-control" style="width:200px;" name="nick" th:value="${inquiryBoard.nick}" />
                             </td>
 <!--                            <th class="text-center" style="vertical-align:middle;">비밀글 여부</th>-->
 <!--                            <td class="text-center">-->
@@ -76,28 +75,28 @@
                             <th class="text-center" style="vertical-align:middle;">비밀번호</th>
                             <td colspan="3">
                                 <div style="display: flex; align-items: center;">
-                                    <input type="password" class="form-control" id="boardPass"
-                                           style="width:200px;" name="boardPass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>비밀번호 변경 가능 합니다.&nbsp;※(비밀번호는 숫자, 5자 이하로 설정해 주세요.)</small>
+                                    <input type="password" class="form-control" id="pass" style="width:200px;" name="pass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>비밀번호 변경 가능 합니다.&nbsp;※(비밀번호는 숫자, 5자 이하로 설정해 주세요.)</small>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th class="text-center" style="vertical-align:middle;">제목</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" name="title" th:value="${view.title}" />
+                                <input type="text" class="form-control" name="title" th:value="${inquiryBoard.title}" />
                             </td>
                         </tr>
                         <tr >
-                            <th class="text-center"
-                                style="vertical-align:middle;">내용</th>
+                            <th class="text-center" style="vertical-align:middle;">내용</th>
                             <td colspan="3">
-                                <textarea rows="9" class="form-control" name="content" th:text="${view.content}"></textarea>
+                                <textarea rows="9" class="form-control" name="content" th:text="${inquiryBoard.content}"></textarea>
                             </td>
                         </tr>
                         <tr>
                             <th class="text-center" style="vertical-align:middle;">첨부파일</th>
                             <td colspan="3">
-                                <input type="file" class="form-control" name="ofile"/>
+                                <p th:text="'현재 파일 : ' + ${inquiryBoard.ofile}"></p>
+                                <input type="file" class="form-control" name="file"/>
+                                <small>새 파일을 선택하지 않으면 기존 파일이 유지됩니다.</small>
                             </td>
                         </tr>
                         </tbody>

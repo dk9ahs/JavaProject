@@ -46,40 +46,20 @@ public class InquiryBoardController {
         int totalPage = listPage.getTotalPages();
         int currentGroup = (page - 1) / 5; // 현재 그룹 (0부터 시작)
         int pageSize = listPage.getSize();
-
+        // 리스트
         model.addAttribute("list", listPage.getContent());
+        // 페이지
         model.addAttribute("totalPage", totalPage); // 총 페이지
         model.addAttribute("currentPage", page); // 현재 페이지 추가
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("pageSize", pageSize);
-
+        // 검색
         model.addAttribute("searchField", searchField); // 검색필드
         model.addAttribute("searchWord", searchWord); // 검색어
 
         return "guest/InquiryBoard";
     }
-//    @GetMapping
-//    public  String inquiryBoard(Model model, @RequestParam(defaultValue = "1") int page)
-//    {
-//        Page<InquiryBoardDTO> listPage = inquiryBoardService.inquiryBoardList(page - 1);
-//
-//        long totalCount = listPage.getTotalElements();
-//
-//        int totalPage = listPage.getTotalPages();
-//        int currentGroup = (page - 1) / 5; // 현재 그룹 (0부터 시작)
-//
-//        int pageSize = listPage.getSize();
-//
-//        model.addAttribute("list", listPage.getContent());
-//        model.addAttribute("totalPage", totalPage); // 총 페이지
-//        model.addAttribute("currentPage", page); // 현재 페이지 추가
-//        model.addAttribute("currentGroup", currentGroup);
-//        model.addAttribute("totalCount", totalCount);
-//        model.addAttribute("pageSize", pageSize);
-//
-//        return "guest/InquiryBoard";
-//    }
 
     // 문의게시판 상세보기
     @GetMapping("/view")
@@ -88,6 +68,7 @@ public class InquiryBoardController {
         inquiryBoardService.inquiryBoardViewCount(qidx); // 제목 클릭 시 조회수 증가
 
         InquiryBoardDTO view = inquiryBoardService.inquiryBoardView(qidx);
+
         model.addAttribute("view", view);
 
         return "/member/InquiryBoardView";
@@ -146,8 +127,13 @@ public class InquiryBoardController {
     @GetMapping("/editform")
     public  String inquiryBoardEditorForm(Model model, Long qidx)
     {
-        InquiryBoardDTO view = inquiryBoardService.inquiryBoardView(qidx);
-        model.addAttribute("view", view);
+//        model.addAttribute("inquiryBoard", inquiryBoardService.inquiryBoardView(qidx));
+
+        InquiryBoardDTO inquiryBoard = inquiryBoardService.inquiryBoardView(qidx);
+        model.addAttribute("inquiryBoard", inquiryBoard);
+
+//        InquiryBoardDTO view = inquiryBoardService.inquiryBoardView(qidx);
+//        model.addAttribute("view", view);
 
         return "/member/InquiryBoardEditorForm";
     }
@@ -186,6 +172,8 @@ public class InquiryBoardController {
             // 파일이 없을 떄
             System.out.println("No file uploaded.");
         }
+        inquiryBoardService.inquiryBoardEditor(inquiryBoardDTO.getQidx(), inquiryBoardDTO);
+
         return "redirect:/inquiryboard/view?qidx=" + inquiryBoardDTO.getQidx();
     }
 

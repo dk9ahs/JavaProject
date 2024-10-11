@@ -15,7 +15,7 @@ public interface InquiryBoardRepository extends JpaRepository<InquiryBoard, Long
     @Query(value = "update INQUIRYBOARD set QVIEW_COUNT=QVIEW_COUNT+1 where qidx=:qidx", nativeQuery = true)
     void viewCount(@Param("qidx") Long qidx); // 조회수 증가
 
-    Page<InquiryBoard> findByTitleContaining(String title, Pageable pageable);
-    Page<InquiryBoard> findByContentContaining(String content, Pageable pageable);
-    Page<InquiryBoard> findByNickContaining(String nick, Pageable pageable);
+    Page<InquiryBoard> findByTitleContaining(String title, Pageable pageable); // 제목검색
+    Page<InquiryBoard> findByContentContaining(String content, Pageable pageable); // 내용검색
+    Page<InquiryBoard> findByNickContaining(String nick, Pageable pageable); // 작성자검색
 }

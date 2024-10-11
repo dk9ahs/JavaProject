@@ -46,14 +46,6 @@ public class InquiryBoardService {
 
         return new PageImpl<>(dtoList, inquiryBoardPage.getPageable(), inquiryBoardPage.getTotalElements());
     }
-//    public Page<InquiryBoardDTO> inquiryBoardList(int page)
-//    {
-//        Page<InquiryBoard> inquiryBoardPage = inquiryBoardRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "qidx")));
-//        // 엔티티를 dto로 변환
-//        List<InquiryBoardDTO> dtoList = inquiryBoardMapper.toDtoList(inquiryBoardPage.getContent());
-//
-//        return new PageImpl<>(dtoList, inquiryBoardPage.getPageable(), inquiryBoardPage.getTotalElements());
-//    }
 
     // 문의게시판 상세보기
     public InquiryBoardDTO inquiryBoardView(Long qidx)
