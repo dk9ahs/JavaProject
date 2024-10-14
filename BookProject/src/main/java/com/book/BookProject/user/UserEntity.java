@@ -76,6 +76,17 @@ public class UserEntity {
     @Builder.Default
     private int accountLocked = 0;     // 계정 잠금 여부, 기본값 0
 
+    @Transient  // DB에 저장하지 않는 필드
+    private boolean isNewUser;
+
+    public boolean isNewUser() {
+        return isNewUser;
+    }
+
+    public void setNewUser(boolean isNewUser) {
+        this.isNewUser = isNewUser;
+    }
+
     public UserEntity updateSocialEmail(String email) {
         this.email = this.socialEmail = email;
         this.updateDate = LocalDateTime.now();

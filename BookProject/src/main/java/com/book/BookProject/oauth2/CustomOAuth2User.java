@@ -1,6 +1,7 @@
 package com.book.BookProject.oauth2;
 
 import com.book.BookProject.user.UserEntity;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,10 +11,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+@Getter
 public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     private final UserEntity userEntity;
     private final Map<String, Object> attributes;
+    private String redirectUri;
+
+    public CustomOAuth2User(UserEntity userEntity, Map<String, Object> attributes, String redirectUri) {
+        this.userEntity = userEntity;
+        this.attributes = attributes;
+        this.redirectUri = redirectUri;
+    }
 
     public CustomOAuth2User(UserEntity userEntity, Map<String, Object> attributes) {
         this.userEntity = userEntity;

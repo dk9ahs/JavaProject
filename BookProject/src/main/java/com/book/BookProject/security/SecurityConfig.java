@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 public class SecurityConfig {
@@ -31,7 +33,7 @@ public class SecurityConfig {
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
                         .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
                         .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 추가
-                        .requestMatchers("/socialSignup").permitAll()
+                        .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
@@ -45,10 +47,10 @@ public class SecurityConfig {
                         .usernameParameter("username")  // 로그인 폼의 username 파라미터
                         .passwordParameter("password")  // 로그인 폼의 password 파라미터
                 )
-                .oauth2Login(oauth2 -> oauth2  // 소셜 로그인 설정
-                        .loginPage("/login")  // 소셜 로그인 페이지
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))  // 소셜 로그인 사용자 정보 처리
-                        .defaultSuccessUrl("/", true)  // 소셜 로그인 성공 후 추가 정보 확인 경로
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/SocialLoginSuccess", true)
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -74,5 +76,11 @@ public class SecurityConfig {
                 .userDetailsService(userServiceImpl)
                 .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
+    }
+    @Bean
+    public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true); // 이중 슬래시 허용
+        return firewall;
     }
 }

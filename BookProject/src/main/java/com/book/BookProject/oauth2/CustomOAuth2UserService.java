@@ -2,36 +2,45 @@ package com.book.BookProject.oauth2;
 
 import com.book.BookProject.user.UserEntity;
 import com.book.BookProject.user.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final HttpSession session;
 
-    public CustomOAuth2UserService(UserRepository userRepository) {
+    public CustomOAuth2UserService(UserRepository userRepository, HttpSession session) {
         this.userRepository = userRepository;
+        this.session = session;
     }
 
     @Override
-    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId(); // Social provider (Google, Naver, Kakao)
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
-                .getUserInfoEndpoint().getUserNameAttributeName(); // OAuth2 login's PK
+                .getUserInfoEndpoint().getUserNameAttributeName();
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        System.out.println("Saving or updating user: " + attributes.getEmail());
-
         UserEntity userEntity = saveOrUpdate(attributes);
+
+        // 닉네임이 없는 경우 회원가입 페이지로 이동
+        if (userEntity.getNick() == null || userEntity.getNick().isEmpty()) {
+            session.setAttribute("socialUser", userEntity);
+            session.setAttribute("redirectUri", "/guest/SocialSignup");
+        } else {
+            // 닉네임이 있는 경우 메인 페이지로 리다이렉트
+            session.setAttribute("redirectUri", "/");
+        }
 
         return new CustomOAuth2User(userEntity, oAuth2User.getAttributes());
     }
@@ -39,16 +48,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private UserEntity saveOrUpdate(OAuthAttributes attributes) {
         return userRepository.findBySocialId(attributes.getSocialId())
                 .map(user -> {
-                    // 이미 존재하는 유저의 경우 이메일과 소셜 이메일을 업데이트
-                    user.updateSocialEmail(attributes.getEmail());  // 이메일 업데이트
-                    user.setSocialEmail(attributes.getEmail());     // 소셜 이메일 업데이트
-                    return userRepository.save(user);               // 변경 사항 저장
+                    user.updateSocialEmail(attributes.getEmail());
+                    user.setNewUser(false);  // 기존 유저
+                    return userRepository.save(user);
                 })
                 .orElseGet(() -> {
-                    // 새로운 유저 저장
                     UserEntity newUser = attributes.toEntity();
-                    newUser.setSocialEmail(attributes.getEmail());  // 소셜 이메일 설정
-                    return userRepository.save(newUser);            // 새로운 유저 저장
+                    newUser.setSocialEmail(attributes.getEmail());
+                    newUser.setNewUser(true); // 새로운 유저
+                    return userRepository.save(newUser);
                 });
     }
 }

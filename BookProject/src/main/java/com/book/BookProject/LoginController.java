@@ -8,12 +8,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class LoginController {
 
-//    private final OAuth2Service oAuth2Service;
-
-//    public LoginController(OAuth2Service oAuth2Service) {
-//        this.oAuth2Service = oAuth2Service;
-//    }
-
     // 로그인 페이지 렌더링
     @GetMapping("/login")
     public String showLoginPage(Model model, RedirectAttributes redirectAttributes) {

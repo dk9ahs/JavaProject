@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Builder  // 클래스 레벨에 @Builder 추가
@@ -61,6 +62,7 @@ public class OAuthAttributes {
 
     public UserEntity toEntity() {
         return UserEntity.builder()
+                .id(UUID.randomUUID().toString())
                 .socialId(socialId)
                 .socialProvider(socialProvider)
                 .email(email)
