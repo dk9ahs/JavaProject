@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface InquiryBoardRepository extends JpaRepository<InquiryBoard, Long>
 {
@@ -18,4 +20,5 @@ public interface InquiryBoardRepository extends JpaRepository<InquiryBoard, Long
     Page<InquiryBoard> findByTitleContaining(String title, Pageable pageable); // 제목검색
     Page<InquiryBoard> findByContentContaining(String content, Pageable pageable); // 내용검색
     Page<InquiryBoard> findByNickContaining(String nick, Pageable pageable); // 작성자검색
+
 }

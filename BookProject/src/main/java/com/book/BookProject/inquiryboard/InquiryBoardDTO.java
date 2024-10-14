@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Data
 public class InquiryBoardDTO {
     private Long qidx;         // 인덱스
-    private int parentIdx;     // 부모 인덱스
+    private Long parentIdx;     // 부모 인덱스
     private String parentId;    // 부모 ID
     private String nick;       // 작성자 닉네임
     private int responses;     // 응답 수

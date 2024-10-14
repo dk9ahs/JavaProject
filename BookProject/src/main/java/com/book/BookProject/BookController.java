@@ -14,8 +14,8 @@ public class BookController {
 
     private final String API_URL = "http://www.aladin.co.kr/ttb/api/ItemList.aspx";
 //    private final String TTB_KEY = "ttbtle651621001"; // 지훈형님 키
-//    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
-    private final String TTB_KEY = "ttblckdrbs1419006"; // 창균 키
+    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
+//    private final String TTB_KEY = "ttblckdrbs1419006"; // 창균 키
 
 
     @GetMapping("/bookList")

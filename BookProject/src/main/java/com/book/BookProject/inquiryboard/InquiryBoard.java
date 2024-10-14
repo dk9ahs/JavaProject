@@ -18,10 +18,8 @@ public class InquiryBoard {
     @Id // 엔티티의 주키(primary key)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가(Auto Increment)를 지정
     private  Long qidx; // 인덱스
-
-
-    @Column(name="QPARENTIDX", columnDefinition = "INT default 0")
-    private int parentIdx; // 부모 인덱스
+    @Column(name="QPARENTIDX")
+    private Long parentIdx; // 부모 인덱스
     @Column(name="QPARENTID", columnDefinition = "VARCHAR(50)")
     private String parentId; // 부모 ID
 //    @ManyToOne

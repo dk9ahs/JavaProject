@@ -120,6 +120,8 @@
                     &nbsp;&nbsp;
                     <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboard/delete(qidx=${view.qidx})}'|">삭제</button>
                     &nbsp;&nbsp;
+                    <!-- 시큐리티 설정 할 것 관리자만 보이게 -->
+                    <button type="button" class="btn text-white" th:onclick="|location.href='@{/inquiryboard/replywriteform(qidx=${view.qidx})}'|">답변하기</button>
                 </div>
 
             </div> <!--컨테이너 끝-->

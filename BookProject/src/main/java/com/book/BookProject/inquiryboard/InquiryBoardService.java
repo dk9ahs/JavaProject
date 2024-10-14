@@ -100,4 +100,12 @@ public class InquiryBoardService {
     {
         inquiryBoardRepository.viewCount(qidx);
     }
+
+    // 문의게시판 답글 작성
+    public void inquiryBoardReplyWrite(InquiryBoardDTO inquiryBoardDTO)
+    {
+        InquiryBoard inquiryBoard = inquiryBoardMapper.toEntity(inquiryBoardDTO);
+        inquiryBoardRepository.save(inquiryBoard);
+
+    }
 }
