@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -62,4 +63,19 @@ public class ProfileUpdateController {
             return "member/profileUpdate";
         }
     }
+    @PostMapping("/withdraw")
+    public String withdrawMember(Principal principal, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        // 회원 정보 삭제 처리
+        profileUpdateService.deleteUserById(principal.getName());
+
+        // 세션 무효화 및 로그아웃 처리
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+        // 탈퇴 성공 메시지 전달
+        redirectAttributes.addFlashAttribute("withdrawSuccess", "회원탈퇴가 완료되었습니다.");
+
+        // 로그아웃 후 로그인 페이지로 리다이렉트
+        return "redirect:/login?logout=true";
+    }
+
 }

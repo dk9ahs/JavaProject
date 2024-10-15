@@ -151,11 +151,16 @@
     </div>
 </div>
 
-
+<!--//회원가입, 회원탈퇴 알림-->
 <script>
     var successMessage = [[${successMessage != null}]] ? '[[${successMessage}]]' : '';
     if (successMessage !== '') {
         alert(successMessage);
+    }
+
+    var withdrawSuccess = [[${withdrawSuccess != null}]] ? '[[${withdrawSuccess}]]' : '';
+    if (withdrawSuccess !== '') {
+        alert(withdrawSuccess);
     }
 </script>
 

@@ -217,7 +217,7 @@
 			<div class="mb-3 row">
 				<label for="detailAddress" class="col-sm-3 col-form-label">상세 주소</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" id="detailAddress" th:field="*{detailAddress}" required/>
+					<input type="text" class="form-control" id="detailAddress" th:field="*{detailAddress}" required/>edit
 				</div>
 			</div>
 
@@ -225,10 +225,14 @@
 			<div class="text-center">
 				<button type="submit" class="btn btn-secondary w-100">정보수정</button>
 			</div>
-			<div class="text-end mt-2">
-				<a href="/member/withdraw?id=${id}" style="color: black; font-size: 12px; text-decoration: none;">회원탈퇴</a>
-			</div>
 		</form>
+		<div class="text-end mt-2">
+			<form th:action="@{/member/withdraw}" method="post" style="display:inline;">
+				<button type="submit" class="btn btn-danger" style="background-color: transparent; border: none; color: black; font-size: 12px; padding: 0; text-decoration: none;">
+					회원탈퇴
+				</button>
+			</form>
+		</div>
 	</div>
 
 	<script>
@@ -327,6 +331,9 @@ $('#signup-form').on('submit', function (e) {
             }).open();
         }
 	</script>
-        
+
+
+
+
     </body>
 </html>

@@ -68,4 +68,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 .detailAddress(userEntity.getDetailAddress())
                 .build();
     }
+    @Transactional
+    public void deleteUserById(String id) {
+        userRepository.deleteById(id);
+    }
 }
