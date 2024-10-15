@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
-                        .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
+                        .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
                         .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 추가
                         .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
