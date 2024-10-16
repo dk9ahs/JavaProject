@@ -31,9 +31,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     // 소셜 아이디로 유저 찾기
     Optional<UserEntity> findBySocialId(String socialId);
 
+    // 소셜 이메일로 유저 찾기
+    Optional<UserEntity> findBySocialEmail(String socialEmail);
+
     // 회원탈퇴
     void deleteById(String id);
-
-
-
 }

@@ -28,54 +28,90 @@ public class ProfileUpdateController {
         this.profileUpdateService = profileUpdateService;
     }
 
+    // 회원 정보 수정 폼 표시
     @GetMapping("Update")
     public String showProfileUpdateForm(Model model, Principal principal) {
-        // 현재 사용자의 정보를 가져와서 모델에 추가
         UserDTO userDTO = profileUpdateService.getUserByUsername(principal.getName());
         model.addAttribute("userDTO", userDTO);
-        return "member/profileUpdate"; // 해당하는 Thymeleaf 페이지로 연결
+        return "member/profileUpdate";
     }
 
+    // 일반 회원 정보 수정 처리
     @PostMapping("Update")
     public String updateProfile(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult result,
                                 Model model, Principal principal,
-                                HttpServletRequest request, HttpServletResponse response) {
+                                HttpServletRequest request, HttpServletResponse response,
+                                RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            return "member/profileUpdate"; // 유효성 검사에 실패한 경우 다시 폼으로
+            return "member/profileUpdate";
         }
 
         try {
-            // 사용자 정보 업데이트 처리
+            boolean isSocialUser = profileUpdateService.isSocialUser(principal.getName());
+
+            // 소셜 로그인 사용자는 이메일과 비밀번호를 수정할 수 없도록 처리
+            if (isSocialUser) {
+                if (!userDTO.getEmail().equals(profileUpdateService.getUserByUsername(principal.getName()).getEmail())) {
+                    model.addAttribute("errorMessage", "소셜 로그인 사용자는 이메일을 수정할 수 없습니다.");
+                    return "member/profileUpdate";
+                }
+                if (userDTO.getPwd() != null && !userDTO.getPwd().isEmpty()) {
+                    model.addAttribute("errorMessage", "소셜 로그인 사용자는 비밀번호를 수정할 수 없습니다.");
+                    return "member/profileUpdate";
+                }
+            }
+
             profileUpdateService.updateUserProfile(userDTO, principal.getName());
 
-            // 세션 무효화 및 로그아웃 처리
-            request.getSession().invalidate(); // 세션 무효화
+            request.getSession().invalidate();
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 
-            model.addAttribute("successMessage", "회원정보가 성공적으로 수정되었습니다.");
-            return "redirect:/login?logout"; // 수정 후 로그인 페이지로 리다이렉트
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());  // 오류 메시지 출력
-            return "member/profileUpdate"; // 오류 발생 시 다시 폼으로
+            // 성공 메시지 전달
+            redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다. 다시 로그인 해주세요.");
+
+            return "redirect:/login?logout";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "오류가 발생했습니다: " + e.getMessage());
             return "member/profileUpdate";
         }
     }
-    @PostMapping("/withdraw")
-    public String withdrawMember(Principal principal, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
-        // 회원 정보 삭제 처리
-        profileUpdateService.deleteUserById(principal.getName());
 
-        // 세션 무효화 및 로그아웃 처리
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+    // 소셜 로그인 회원 정보 수정 처리
+    @PostMapping("/socialUpdate")
+    public String updateSocialProfile(@Valid @ModelAttribute("userDTO") UserDTO userDTO,
+                                      BindingResult result,
+                                      Model model, Principal principal,
+                                      RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return "member/profileUpdate";
+        }
 
-        // 탈퇴 성공 메시지 전달
-        redirectAttributes.addFlashAttribute("withdrawSuccess", "회원탈퇴가 완료되었습니다.");
+        try {
+            boolean isSocialUser = profileUpdateService.isSocialUser(principal.getName());
 
-        // 로그아웃 후 로그인 페이지로 리다이렉트
-        return "redirect:/login?logout=true";
+            if (!isSocialUser) {
+                model.addAttribute("errorMessage", "일반 회원은 소셜 회원 정보 수정 페이지에 접근할 수 없습니다.");
+                return "member/profileUpdate";
+            }
+
+            profileUpdateService.updateUserProfile(userDTO, principal.getName());
+            // 성공 메시지 전달
+            redirectAttributes.addFlashAttribute("updateSuccess", "회원정보가 성공적으로 수정되었습니다. 다시 로그인 해주세요.");
+            return "redirect:/member/socialUpdate";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "오류가 발생했습니다: " + e.getMessage());
+            return "member/profileUpdate";
+        }
     }
 
+    @PostMapping("/withdraw")
+    public String withdrawMember(Principal principal, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        profileUpdateService.deleteUserById(principal.getName());
+
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+        redirectAttributes.addFlashAttribute("withdrawSuccess", "회원탈퇴가 완료되었습니다.");
+        return "redirect:/login?logout=true";
+    }
 }

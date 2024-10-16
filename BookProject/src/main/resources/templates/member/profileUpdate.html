@@ -150,8 +150,8 @@
 				</div>
 			</div>
 
-			<!-- 현재 비밀번호 -->
-			<div class="mb-3 row">
+			<!-- 현재 비밀번호 (일반 사용자일 때만 표시) -->
+			<div th:if="${userDTO.socialProvider == null}" class="mb-3 row">
 				<label for="currentPwd" class="col-sm-3 col-form-label">현재 비밀번호</label>
 				<div class="col-sm-6">
 					<input type="password" class="form-control" id="currentPwd" name="currentPwd" th:field="*{currentPwd}" required>
@@ -159,8 +159,8 @@
 				</div>
 			</div>
 
-			<!-- 새 비밀번호 -->
-			<div class="mb-3 row">
+			<!-- 새 비밀번호 (일반 사용자일 때만 표시) -->
+			<div th:if="${userDTO.socialProvider == null}" class="mb-3 row">
 				<label for="pwd" class="col-sm-3 col-form-label">새 비밀번호</label>
 				<div class="col-sm-6">
 					<input type="password" class="form-control" id="pwd" name="pwd" th:field="*{pwd}">
@@ -169,8 +169,8 @@
 				</div>
 			</div>
 
-			<!-- 새 비밀번호 확인 -->
-			<div class="mb-3 row">
+			<!-- 새 비밀번호 확인 (일반 사용자일 때만 표시) -->
+			<div th:if="${userDTO.socialProvider == null}" class="mb-3 row">
 				<label for="pwdconfirm" class="col-sm-3 col-form-label">새 비밀번호 확인</label>
 				<div class="col-sm-6">
 					<input type="password" class="form-control" id="pwdconfirm" name="pwdconfirm" th:field="*{pwdconfirm}">
@@ -186,11 +186,11 @@
 				</div>
 			</div>
 
-			<!-- 이메일 -->
+			<!-- 이메일 (일반 사용자일 때만 수정 가능) -->
 			<div class="mb-3 row">
 				<label for="email" class="col-sm-3 col-form-label">이메일</label>
 				<div class="col-sm-6">
-					<input type="email" class="form-control" id="email" th:field="*{email}" required/>
+					<input type="email" class="form-control" id="email" th:field="*{email}" th:readonly="${userDTO.socialProvider != null}" required/>
 				</div>
 			</div>
 
@@ -217,7 +217,7 @@
 			<div class="mb-3 row">
 				<label for="detailAddress" class="col-sm-3 col-form-label">상세 주소</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" id="detailAddress" th:field="*{detailAddress}" required/>edit
+					<input type="text" class="form-control" id="detailAddress" th:field="*{detailAddress}" required/>
 				</div>
 			</div>
 
@@ -287,11 +287,12 @@ function validatePassword() {
 
 // 회원가입 버튼 클릭 시 제출 시 모든 조건 확인
 $('#signup-form').on('submit', function (e) {
-    // 닉네임 중복 체크, 비밀번호 확인
+    // 닉네임 중복 체크
     if (!isNickChecked) {
         e.preventDefault();  // 폼 제출 방지
         alert("닉네임 중복 확인을 해주세요.");
-    } else if (!validatePassword()) {
+    } else if (!userDTO.socialProvider && !validatePassword()) {
+        // 일반 사용자인 경우에만 비밀번호 확인
         e.preventDefault();  // 폼 제출 방지
     }
 });

@@ -158,6 +158,11 @@
         alert(successMessage);
     }
 
+    var updateSuccess = [[${updateSuccess != null}]] ? '[[${updateSuccess}]]' : '';
+    if (updateSuccess !== '') {
+        alert(updateSuccess);
+    }
+
     var withdrawSuccess = [[${withdrawSuccess != null}]] ? '[[${withdrawSuccess}]]' : '';
     if (withdrawSuccess !== '') {
         alert(withdrawSuccess);
