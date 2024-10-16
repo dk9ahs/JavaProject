@@ -2,10 +2,14 @@ package com.book.BookProject;
 
 import com.book.BookProject.inquiryboard.InquiryBoardDTO;
 import com.book.BookProject.inquiryboard.InquiryBoardService;
+import com.book.BookProject.salesboard.Redis.RedisUtil;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +28,8 @@ public class InquiryBoardController
     InquiryBoardService inquiryBoardService;
     @Autowired
     ServletContext context;
+    @Autowired
+    RedisUtil redisUtil;
 
     // 문의게시판 리스트
     @GetMapping
@@ -75,13 +81,15 @@ public class InquiryBoardController
 
     // 문의게시판 글 작성
     @PostMapping("/write")
-    public String inquiryBoardWrite(HttpServletRequest request, InquiryBoardDTO inquiryBoardDTO, @RequestParam("file") MultipartFile file) throws FileNotFoundException
+    public String inquiryBoardWrite(InquiryBoardDTO inquiryBoardDTO,
+                                    @RequestParam("file") MultipartFile file) throws FileNotFoundException
     {
         // 파일 업로드
         if(file != null && !file.isEmpty())
         {
             String oFileName = file.getOriginalFilename();
-            String uploadDir = request.getSession().getServletContext().getRealPath("/"); // src/main/webapp에 저장
+            String uploadDir = new File("src/main/resources/static/images").getAbsolutePath(); // 이미지 저장 경로 지정
+            System.out.println(uploadDir);
 
             File dir = new File(uploadDir);
             if(!dir.exists())
@@ -127,7 +135,9 @@ public class InquiryBoardController
 
     // 문의게시판 글 수정
     @PostMapping("/edit")
-    public  String inquiryBoardEditor(HttpServletRequest request, InquiryBoardDTO inquiryBoardDTO, @RequestParam("file") MultipartFile file) throws FileNotFoundException
+    public  String inquiryBoardEditor(HttpServletRequest request,
+                                      InquiryBoardDTO inquiryBoardDTO,
+                                      @RequestParam("file") MultipartFile file) throws FileNotFoundException
     {
         // 파일 업로드
         if(file != null && !file.isEmpty())
@@ -225,5 +235,12 @@ public class InquiryBoardController
         inquiryBoardService.inquiryBoardReplyWrite(inquiryBoardDTO);
 
         return "redirect:/inquiryboard";
+    }
+
+    // 문의게시판 글 비밀번호 창
+    @GetMapping("/pass")
+    public  String inquiryBoardPass()
+    {
+        return "member/InquiryBoardPass";
     }
 }

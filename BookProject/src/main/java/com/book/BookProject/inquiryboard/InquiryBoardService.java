@@ -1,8 +1,11 @@
 package com.book.BookProject.inquiryboard;
 
+import com.book.BookProject.salesboard.Redis.RedisUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,8 @@ public class InquiryBoardService {
     private InquiryBoardRepository inquiryBoardRepository;
     @Autowired
     private InquiryBoardMapper inquiryBoardMapper;
+    @Autowired
+    RedisUtil redisUtil;
 
     // 문의게시판 리스트
     public Page<InquiryBoardDTO> inquiryBoardList(int page, String searchField, String searchWord)
@@ -98,7 +103,17 @@ public class InquiryBoardService {
     @Transactional
     public void inquiryBoardViewCount(Long qidx)
     {
-        inquiryBoardRepository.viewCount(qidx);
+        // 사용자의 로그인 상태 확인
+        String sId = SecurityContextHolder.getContext().getAuthentication().getName();
+        String key = "viewCount::" + qidx + "::" + sId;
+
+        // Redis에 데이터가 없을 경우만 조회 수 증가
+        if (redisUtil.getData(key) == null)
+        {
+            inquiryBoardRepository.viewCount(qidx); // 조회 수 증가
+
+            redisUtil.setDataExpire(key, "viewed", 1200); // 유효시간 20분
+        }
     }
 
     // 문의게시판 답글 작성
@@ -106,6 +121,5 @@ public class InquiryBoardService {
     {
         InquiryBoard inquiryBoard = inquiryBoardMapper.toEntity(inquiryBoardDTO);
         inquiryBoardRepository.save(inquiryBoard);
-
     }
 }

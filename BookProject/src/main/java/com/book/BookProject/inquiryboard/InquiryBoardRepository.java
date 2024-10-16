@@ -21,4 +21,5 @@ public interface InquiryBoardRepository extends JpaRepository<InquiryBoard, Long
     Page<InquiryBoard> findByContentContaining(String content, Pageable pageable); // 내용검색
     Page<InquiryBoard> findByNickContaining(String nick, Pageable pageable); // 작성자검색
 
+
 }
