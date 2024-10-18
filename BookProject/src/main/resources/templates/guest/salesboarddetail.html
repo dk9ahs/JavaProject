@@ -34,41 +34,39 @@
         border-radius: 3px;
         font-size: 16px;
     }
+    .book-image {
+        width: 150px;
+        height: 200px;
+        margin-right: 10px;
+    }
   </style>
   <script th:inline="javascript">
-    /*<![CDATA[*/
-      var sidx =[[${salesBoard.sidx}]];
-      var simage =[[${salesBoard.simage}]];
+      function deletePost(idx){
+        var confirmed = confirm("정말로 삭제하겠습니까?");
 
-<!--          function downloadFile() {-->
-<!--          // AJAX 요청으로 다운로드 수 증가-->
-<!--          fetch(`/updateDownloadCount?sidx=${sidx}`, {-->
-<!--              method: 'POST',-->
-<!--              headers: {-->
-<!--                  'Content-Type': 'application/json'-->
-<!--              }-->
-<!--          })-->
-<!--          .then(response => {-->
-<!--              if (response.ok) {-->
-<!--                  // 다운로드 URL로 리디렉션-->
-<!--                  window.location.href = `/download?simage=${simage}`;-->
-<!--              } else {-->
-<!--                  console.error("다운로드 수 증가에 실패했습니다.");-->
-<!--              }-->
-<!--          })-->
-<!--          .catch(error => console.error("에러 발생:", error));-->
-<!--      }-->
-    /*]]>*/
+        if (confirmed) {
+            var form = document.createElement('form');
+            form.method = "GET";
+            form.action = "/salesboard/delete";
 
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'sidx';
+            input.value = idx;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+      }
   </script>
 </head>
 <body>
   <div th:replace="Front/Header :: header"></div>
-  <!--<div class="col-11">-->
     <div class="row mt-3 mx-1">
       <div class="container">
         <h3><b>거래게시판</b></h3>
-        <table class="table table-bordered" style="height:350px">
+        <table class="table table-bordered">
           <colgroup>
             <col style="width: 25%;" />
             <col style="width: 15%;" />
@@ -89,7 +87,11 @@
 <!--                </div>-->
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img th:src="@{/images/{image}(image=${salesBoard.simage})}" class="d-block w-100"  style="height: 400px" alt="1">
+<!--                    <img th:if="${salesBoard.oimage == ''} and ${salesBoard.oimage == null}" src="/images/NoImage.jpg" class="d-block w-100"  style="height: 350px" alt="1">-->
+<!--                    <img th:unless="${salesBoard.oimage == ''} and ${salesBoard.oimage == null}" th:src="@{/images/{image}(image=${salesBoard.simage})}" class="d-block w-100"  style="height: 350px" alt="1">-->
+                    <img th:if="${salesBoard.limage != null}" th:src="@{${salesBoard.limage}}" alt="Image" class="d-block w-100"  style="height: 350px">
+                    <img th:if="${salesBoard.oimage == '' or salesBoard.oimage == null} and ${salesBoard.limage == null} and (${salesBoard.simage == '' or salesBoard.simage == null})" src="/images/NoImage.jpg" alt="No Image" class="d-block w-100"  style="height: 350px">
+                    <img th:unless="${salesBoard.oimage == '' or salesBoard.oimage == null}" th:src="@{/images/{image}(image=${post.simage})}" alt="Book Image" class="d-block w-100"  style="height: 350px">
                   </div>
 <!--                  <div class="carousel-item">-->
 <!--                    <img src="https://image.aladin.co.kr/product/34775/68/cover500/k062933120_1.jpg" class="d-block w-100" style="height: 350px" alt="2">-->
@@ -113,33 +115,53 @@
 <!--                  <span class="visually-hidden">Next</span>-->
 <!--                </button>-->
               </div>
+              <button th:if="${salesBoard.oimage != ''} and ${salesBoard.oimage != null}" class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage}, sidx=${salesBoard.sidx})}'|">다운로드</button>
+<!--              <button class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage}, sidx=${salesBoard.sidx})}'|">다운로드</button>-->
             </td>
             <td colspan="4">
               <th:block th:switch="${salesBoard.classification}">
                 <h5 th:case="sale" th:text="'[판매] ' + ${salesBoard.title}"></h5>
-                <h3 th:case="trade" th:text="'[교환] ' + ${salesBoard.title}"></h3>
-                <h3 th:case="sharing" th:text="'[나눔] ' + ${salesBoard.title}"></h3>
-                <h3 th:case="wanted" th:text="'[구해요] ' + ${salesBoard.title}"></h3>
-                <h3 th:case="*" th:text="'[거래완료] ' + ${salesBoard.title}"></h3>
+                <h5 th:case="trade" th:text="'[교환] ' + ${salesBoard.title}"></h5>
+                <h5 th:case="sharing" th:text="'[나눔] ' + ${salesBoard.title}"></h5>
+                <h5 th:case="wanted" th:text="'[구해요] ' + ${salesBoard.title}"></h5>
+                <h5 th:case="*" th:text="'[거래완료] ' + ${salesBoard.title}"></h5>
               </th:block>
 
-              <i class="bi bi-eye"></i> <span th:text="${salesBoard.viewCount}"></span>
-              <i class="bi bi-hand-thumbs-up"></i> <span th:text="${salesBoard.likeCount}"></span>&nbsp;
+              <span style="display:inline-block; text-align:right; font-size:20px; width:100%;">
+                <i class="bi bi-eye"></i> <span th:text="${salesBoard.viewCount}"></span>
+<!--                <a th:href="@{salesboard/like(sidx=${salesBoard.sidx})}"><i class="bi bi-hand-thumbs-up" ></i></a> <span th:text="${salesBoard.likeCount}"></span>&nbsp;-->
+<!--                <a th:href="@{like(sidx=${salesBoard.sidx})}">-->
+<!--                <i class="bi bi-hand-thumbs-up text-danger" th:if="${liked}"></i>-->
+<!--                <i class="bi bi-hand-thumbs-up" th:unless="${liked}"></i>-->
+<!--                </a>-->
+                    <th:block th:if="${loginNick == 'Guest'}">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                    </th:block>
+                    <th:block th:unless="${loginNick == 'Guest'}">
+                        <a th:href="@{like(sidx=${salesBoard.sidx})}"><i class="bi bi-hand-thumbs-up text-danger" th:if="${liked}"></i><i class="bi bi-hand-thumbs-up" th:unless="${liked}"></i></a>
+                    </th:block>
+                <span th:text="${salesBoard.likeCount}"></span>&nbsp;
+              </span>
             </td>
           </tr>
           <tr>
             <th class="text-center" style="vertical-align:middle;">작성자</th>
               <td th:text="${salesBoard.nick}"> 닉네임 </td>
             <th class="text-center" style="vertical-align:middle;">작성일</th>
-              <td th:if="${salesBoard.createDate.isBefore(salesBoard.updateDate)}" th:text="${#temporals.format(salesBoard.updateDate, 'yyyy-MM-dd HH:mm') + ' (수정)'}"></td>
-              <td th:if="${salesBoard.createDate == salesBoard.updateDate}" th:text="${#temporals.format(salesBoard.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+              <span th:if="${salesBoard.updateDate != null && salesBoard.updateDate != salesBoard.createDate}"
+                    th:text="${#temporals.format(salesBoard.updateDate, 'yyyy-MM-dd')} + ' (수정)'"></span>
+              <span th:unless="${salesBoard.updateDate != null && salesBoard.updateDate != salesBoard.createDate}"
+                    th:text="${#temporals.format(salesBoard.createDate, 'yyyy-MM-dd')}"></span>
+            </td>
           </tr>
           <tr>
             <th class="text-center" style="vertical-align:middle;"> 가격 </th>
               <td th:if="${salesBoard.price == 0}" style="color: red;">가격 없음</td>
               <td th:unless="${salesBoard.price == 0}" style="color: red;" th:text="${salesBoard.price}"></td>
             <th class="text-center" style="vertical-align:middle;"> 지역 </th>
-              <td th:text="${salesBoard.region}"> 거래 지역 </td>
+              <td th:if="${#strings.contains(salesBoard.region, '선택')}">지역 미설정</td>
+              <td th:unless="${#strings.contains(salesBoard.region, '선택')}" th:text="${salesBoard.region}"></td>
           </tr>
           <tr>
             <th class="text-center" style="vertical-align:middle;"> 책 상세내용 </th>
@@ -165,10 +187,6 @@
             <td colspan="4" class="text-center">
               <button class="button">바로구매</button>
               <button class="button">장바구니</button>
-<!--              <button class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage}, sidx=${salesBoard.sidx})}'|">다운로드</button>-->
-              <button class="button" onclick="downloadFile()">다운로드</button>
-              <span th:text="${salesBoard.downCount}"></span> |
-
             </td>
           </tr>
           </tbody>
@@ -180,11 +198,12 @@
           &nbsp;&nbsp;
           <button type="button" class="btn text-white" onclick="location.href='/salesboard/write';">글쓰기</button>
           &nbsp;&nbsp;
-          <button type="button" class="btn text-white" style="background-color: #86AB89;">답글쓰기</button>
-          &nbsp;&nbsp;
-          <button type="button" class="btn text-white" th:onclick="|location.href='@{delete(sidx=${salesBoard.sidx})}'|">삭제</button>
-          &nbsp;&nbsp;
-          <button type="button" class="btn text-white" th:onclick="|location.href='@{edit(sidx=${salesBoard.sidx})}'|">수정하기</button>
+<!--          <button type="button" class="btn text-white" style="background-color: #86AB89;">답글쓰기</button>-->
+          <div th:if="${salesBoard.nick == loginNick}">
+            <button type="button" class="btn text-white" th:onclick="|location.href='@{edit(sidx=${salesBoard.sidx})}'|">수정하기</button>
+<!--            <button type="button" class="btn text-white" th:onclick="|location.href='@{delete(sidx=${salesBoard.sidx})}'|">삭제</button>-->
+            <button type="button" class="btn text-white" th:onclick="deletePost([[${salesBoard.sidx}]]);">삭제</button>
+          </div>
           &nbsp;&nbsp;
         </div>
 

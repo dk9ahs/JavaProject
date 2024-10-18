@@ -25,8 +25,7 @@ public class SalesBoardDTO {
     private LocalDateTime  updateDate;  // 수정 시간
     private int viewCount; // 조회수
     private int likeCount; // 좋아요수
+    private String limage; // 이미지 원본 파일
     private String oimage; // 이미지 원본 파일
     private String simage; // 이미지 저장 파일
-    private int downCount; // 다운로드 수
-    
 }

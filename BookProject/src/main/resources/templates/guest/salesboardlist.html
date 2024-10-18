@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +19,7 @@
         margin: 20px 0;
     }
     .book-list-table th, .book-list-table td {
-<!--            border: 1px solid #ddd;-->
-        padding: 8px;
+        padding: 2px;
     }
     .book-list-table th {
         background-color: #f4f4f4;
@@ -29,13 +29,13 @@
         padding: 8px;
     }
     .book-list-table td {
-        margin: 3px;
+        margin: 2px;
         vertical-align: top;
         border-bottom: 1px solid #ddd;
     }
     .book-image {
         width: 150px;
-        height: auto;
+        height: 200px;
         margin-right: 10px;
     }
     .price {
@@ -130,6 +130,38 @@
         text-align: center;
     }
 </style>
+<script th:inline="javascript">
+    function checkWritePermission(){
+
+        let loginNick = [[${loginNick}]]
+
+        if(loginNick == 'Guest'){
+           var answer = window.confirm("비회원은 글쓰기가 불가능합니다. 로그인 하시겠습니까?");
+           if(answer == true){
+                location.href="../guest/loginform";
+           }
+        }
+        else {
+            location.href="/salesboard/write";
+        }
+    }
+
+    function openNewWindow(sendNick){
+        let loginNick = [[${loginNick}]]
+
+        if(loginNick == 'Guest'){
+           var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
+           if(answer == true){
+                location.href="../guest/loginform";
+           }
+        }
+        else {
+            window.open("/messages/form?sendNick=" + sendNick, "popup",
+                   'width=600,height=500');
+        }
+    }
+</script>
+
 <body>
 <div th:replace="~{Front/Header :: header}"></div>
 <!-- 도서 목록 -->
@@ -139,16 +171,20 @@
 <!--</div>-->
 <table class="book-list-table">
     <colgroup>
-        <col width="7%" />
-        <col width=* />
-        <col width="10%" />
-        <col width="10%" />
+        <col width="10%"/>
+        <col width="*" />
         <col width="15%" />
+        <col width="15%" />
+        <col width="15%" />
+<!--        <col width="100px" />-->
+<!--        <col width="180px" />-->
+<!--        <col width="400px" />-->
+<!--        <col width="400px" />-->
+<!--        <col width="300px" />-->
     </colgroup>
     <thead>
     <tr>
         <th>번호</th>
-<!--        <th>판매 지역</th>-->
         <th>제목</th>
         <th>작성자</th>
         <th>작성일</th>
@@ -158,17 +194,23 @@
     <tbody>
         <!--게시글 없을때 -->
         <tr th:if="${salesBoards == null} or ${salesBoards.size() == 0}" >
-            <td colspan="7" style="text-align:center; font-size:25px;">
+            <td colspan="7" style="text-align:center; font-size:20px;">
                 등록된 게시물이 없습니다.
             </td>
         </tr>
         <!--게시글 있을때 -->
+<!--        <tr th:each="post, iterStat: ${salesBoards}" style="height:250px">-->
         <tr th:each="post : ${salesBoards}" style="height:250px">
-            <td style="text-align:center;" th:text="${post.sidx}"></td>
+<!--            <td style="text-align:center;" th:text="${post.sidx}"></td>-->
+            <td style="text-align:center; font-size:18px;" th:text="${totalCount - ((currentPage -1) * pageSize) - postStat.index}">글번호</td>
             <td>
                 <div class="book-info">
-                    <img th:if="${post.oimage == ''} or ${post.oimage == null}"  src="/images/NoImage.jpg" alt="No Image" class="book-image">
-                    <img th:unless="${post.oimage == ''} or ${post.oimage == null}" th:src="@{/images/{image}(image=${post.simage})}" alt="Book Image" class="book-image">
+<!--                    <img th:if="${post.limage}" th:src="@{${post.limage}}" alt="Image" class="book-image">-->
+<!--                    <img th:if="${post.oimage == ''} or ${post.oimage == null}"  src="/images/NoImage.jpg" alt="No Image" class="book-image">-->
+<!--                    <img th:unless="${post.oimage == ''} or ${post.oimage == null}" th:src="@{/images/{image}(image=${post.simage})}" alt="Book Image" class="book-image">-->
+                    <img th:if="${post.limage != null}" th:src="@{${post.limage}}" alt="Image" class="book-image">
+                    <img th:if="${post.oimage == '' or post.oimage == null} and ${post.limage == null} and (${post.simage == '' or post.simage == null})" src="/images/NoImage.jpg" alt="No Image" class="book-image">
+                    <img th:unless="${post.oimage == '' or post.oimage == null}" th:src="@{/images/{image}(image=${post.simage})}" alt="Book Image" class="book-image">
                     <div class="book-details">
                         <br/>
                         <strong>
@@ -183,41 +225,55 @@
                         </strong>
                         <br/>
                         <p style="white-space: nowrap;">
-                            <span th:text="${post.booktitle}"></span> |
-                            <span th:text="${post.author}"></span> |
-                            <span th:text="${post.publisher}"></span>
+<!--                            <span th:text="${post.booktitle}"></span> |-->
+<!--                            <span th:text="${post.author}"></span> |-->
+<!--                            <span th:text="${post.publisher}"></span>-->
+                             <span style="font-weight: bold;" th:text="${post.booktitle}"></span> <br/>
+                            지은이 : <span th:text="${post.author}"></span> <br/>
+                            출판사 : <span th:text="${post.publisher}"></span>
                         </p>
-                        <span th:if="${post.region} == '시/도 선택'"></span>
-                        <p th:unless="${post.region} == '시/도 선택'" th:text="${post.region}">판매 지역</p>
-<!--                        <p style="white-space: nowrap;">-->
-<!--                        <span th:text="${post.nick}">판매자 닉네임</span> <i class="bi bi-chat-dots-fill"></i>-->
-<!--                        </p>-->
-                            <span class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'"></span>
+                        <!-- 지역 -->
+                        <span th:if="${#strings.contains(post.region, '선택')}">지역 미설정</span>
+                        <span th:unless="${#strings.contains(post.region, '선택')}" th:text="${post.region}"></span>
+                        <!--가격 -->
+                        <br/>
+                        <span class="price" th:if="${post.price == 0}">가격 정보 없음</span>
+                        <span class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'"></span>
                     </div>
                 </div>
-                <p align="right">
+                <!--조회수, 좋아요-->
+                <div style="text-align:right; font-size:20px;">
                     <i class="bi bi-eye"></i> <span th:text="${post.viewCount}"></span>
-                    <i class="bi bi-hand-thumbs-up"></i> <span th:text="${post.likeCount}"></span>&nbsp;
-                </p>
-
+<!--                    <a th:href="@{salesboard/like(sidx=${post.sidx})}">-->
+<!--                        <th:block th:if="${loginNick != 'Guest'}">-->
+<!--                            <i class="bi bi-hand-thumbs-up text-danger" th:if="${likedList[postStat.index]}"></i>-->
+<!--                            <i class="bi bi-hand-thumbs-up" th:unless="${likedList[postStat.index]}"></i>-->
+<!--                        </th:block>-->
+<!--                    </a><span th:text="${post.likeCount}"></span>&nbsp;-->
+                    <th:block th:if="${loginNick == 'Guest'}">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                    </th:block>
+                    <th:block th:unless="${loginNick == 'Guest'}">
+                        <a th:href="@{salesboard/like(sidx=${post.sidx})}"><i class="bi bi-hand-thumbs-up text-danger" th:if="${likedList[postStat.index]}"></i><i class="bi bi-hand-thumbs-up" th:unless="${likedList[postStat.index]}"></i></a>
+                    </th:block>
+                    <span th:text="${post.likeCount}"></span>&nbsp;
+                </div>
             </td>
             <td style="text-align:center; vertical-align: middle;">
-                <span th:text="${post.nick}">판매자 닉네임</span> <i class="bi bi-chat-dots-fill"></i>
+<!--                <span th:text="${post.nick}">판매자 닉네임</span> <a th:href="@{/messages/form}"><i class="bi bi-chat-dots-fill"></i></a>-->
+<!--                <span th:text="${post.nick}">판매자 닉네임</span> <a onclick="openNewWindow();"><i class="bi bi-chat-dots-fill"></i></a>-->
+                <span th:text="${post.nick}">판매자 닉네임</span> <a th:attr="onclick=|openNewWindow('${post.nick}')|"><i class="bi bi-chat-dots-fill"></i></a>
             </td>
-<!--            <td class="price" th:if="${post.price == 0}">가격없음</td>-->
-<!--            <td class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'">가격</td>-->
-<!--            <td th:text="${post.nick}">작성자</td>-->
-<!--            <td style="text-align:center; vertical-align: middle;" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}">작성일</td>-->
             <td  style="text-align:center; vertical-align: middle;" >
-<!--                <span th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}" ></span>-->
-                <span th:if="${post.createDate.isBefore(post.updateDate)}" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"></span>
-                <span th:unless="${post.createDate.isBefore(post.updateDate)}" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
+<!--                <span th:if="${post.createDate.isBefore(post.updateDate)}" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"></span>-->
+<!--                <span th:unless="${post.createDate.isBefore(post.updateDate)}" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>-->
+                <span th:if="${post.updateDate == null}" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
+                <span th:unless="${post.updateDate == null}" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"></span>
             </td>
             <td class="remarks" style="vertical-align: middle;">
                 <div class="book-actions">
                     <button class="button">바로구매</button>
                     <button class="button">장바구니</button>
-                    <button type="button" class="button" th:onclick="|location.href='@{salesboard/like(sidx=${post.sidx})}'|">좋아요</button>
                 </div>
             </td>
         </tr>
@@ -225,42 +281,89 @@
 </table>
 
 <div class="write-btn-wrapper mt-1">
-    <a href="/salesboard/write" class="btn">글쓰기</a>
+<!--    <a href="/salesboard/write" class="btn">글쓰기</a>-->
+    <a href="javascript:checkWritePermission();" class="btn">글쓰기</a>
 </div>
 
 <!-- 페이징과 검색바 -->
-<div class="pagination-wrapper">
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+<!--<nav aria-label="Page navigation example" class="d-flex justify-content-center">-->
+<!--    <ul class="pagination">-->
+<!--        <li th:if="${currentPage > 1} ? 'disabled'" class="page-item">-->
+<!--            <a class="page-link" th:href="@{/salesboard(page=${currentPage - 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Previous">-->
+<!--                <span aria-hidden="true">&laquo;</span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li th:each="page : ${#numbers.sequence(currentGroup * 5 + 1, totalPage)}"-->
+<!--            th:if="${page <= (currentGroup + 1) * 5}"-->
+<!--            th:class="${page == currentPage} ? 'active' : ''">-->
+<!--            <a th:href="@{/salesboard(page=${page}, searchField=${searchField}, searchWord=${searchWord})}" th:text="${page}" class="page-link"></a>-->
+<!--        </li>-->
+
+<!--        &lt;!&ndash; 다음 버튼: 현재 페이지가 마지막 페이지일 경우 비활성화 &ndash;&gt;-->
+<!--        <li th:if="${currentPage < totalPage}" class="page-item">-->
+<!--            <a class="page-link" th:href="@{/salesboard(page=${currentPage + 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Next">-->
+<!--                <span aria-hidden="true">&raquo;</span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->
+<nav aria-label="Page navigation example" class="d-flex justify-content-center" th:if="${totalPage > 0}">
+    <ul class="pagination">
+        <!-- 이전 버튼: 현재 페이지가 1보다 크면 활성화 -->
+        <li th:if="${currentPage > 1}" class="page-item">
+            <a class="page-link" th:href="@{/salesboard(page='1', searchField=${searchField}, searchWord=${searchWord})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li th:if="${currentPage > 1}" class="page-item">
+            <a class="page-link" th:href="@{/salesboard(page=${currentPage - 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Previous">
+                <span aria-hidden="true">&lsaquo;</span>
+            </a>
+        </li>
+
+        <!-- 페이지 번호 리스트 -->
+        <li th:each="page : ${#numbers.sequence(currentGroup * 5 + 1, totalPage)}"
+            th:if="${page <= (currentGroup + 1) * 5}"
+            th:classappend="${page == currentPage} ? 'active' : ''" class="page-item">
+            <a th:href="@{/salesboard(page=${page}, searchField=${searchField}, searchWord=${searchWord})}" th:text="${page}" class="page-link"></a>
+        </li>
+
+        <!-- 다음 버튼: 현재 페이지가 마지막 페이지보다 작으면 활성화 -->
+        <li th:if="${currentPage < totalPage}" class="page-item">
+            <a class="page-link" th:href="@{/salesboard(page=${currentPage + 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Next">
+                <span aria-hidden="true">&rsaquo;</span>
+            </a>
+        </li>
+
+        <li th:if="${currentPage < totalPage}" class="page-item">
+            <a class="page-link" th:href="@{/salesboard(page=${totalPage}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
 <!-- 검색바 중앙 배치 -->
 <div class="search-bar mb-3">
-    <select>
-        <option value="">전체기간</option>
-    </select>
-    <select>
-        <option value="">게시글 + 댓글</option>
-        <option value="">제목만</option>
-        <option value="">글 작성자</option>
-    </select>
-    <input type="text" placeholder="검색어를 입력해주세요">
-    <button type="button">검색</button>
+    <form>
+        <select>
+            <option value="">전체기간</option>
+        </select>
+        <select name="searchField">
+            <option value="title" th:selected="${searchField == 'title'}">제목</option>
+            <option value="content" th:selected="${searchField == 'content'}">내용</option>
+            <option value="nick" th:selected="${searchField == 'nick'}">작성자</option>
+            <option value="booktitle" th:selected="${searchField == 'booktitle'}">책이름</option>
+            <option value="author" th:selected="${searchField == 'author'}">지은이</option>
+            <option value="publisher" th:selected="${searchField == 'publisher'}">출판사</option>
+        </select>
+<!--        <input type="text" name="searchWord" placeholder="검색어를 입력해주세요">-->
+        <input type="text" name="searchWord" placeholder="검색어를 입력해주세요" th:if="${searchWord != null}" th:value="${searchWord}">
+        <input type="text" name="searchWord" placeholder="검색어를 입력해주세요" th:unless="${searchWord != null}">
+        <button type="submit">검색</button>
+        <!--    <input type="text" name="searchWord" class="form-control" style="width: 150px;" placeholder="검색어를 입력해주세요"/>-->
+        <!--    <button class="btn btn-outline-secondary" type="submit" style="background-color: white;"><i class="bi bi-search" style='font-size:15px'></i></button>-->
+    </form>
 </div>
 
 <div th:replace="~{Front/Footer :: footer}"></div>

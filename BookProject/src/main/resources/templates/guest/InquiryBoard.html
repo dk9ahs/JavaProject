@@ -102,7 +102,8 @@
                             </td>
                         </tr>
                         <tr th:each="inquiryBoard, iterStat  : ${list}">
-                            <td class="text-center" th:text="${totalCount - ((currentPage -1) * pageSize) - iterStat.index}">글번호</td>
+                            <td>1</td>
+<!--                            <td class="text-center" th:text="${totalCount - ((currentPage -1) * pageSize) - iterStat.index}">글번호</td>-->
 <!--                            <td class="text-center" th:text="${inquiryBoard.qidx}"></td> &lt;!&ndash; 글번호 &ndash;&gt;-->
                             <td class="text-left"><a th:text="${inquiryBoard.title}" th:href="@{inquiryboard/view(qidx=${inquiryBoard.qidx})}"></a><i class="bi bi-lock-fill"></i></td> <!-- 제목 -->
                             <td class="text-center" th:text="${inquiryBoard.nick}">작성자</td>
@@ -124,27 +125,27 @@
                 </div>
 
                 <!-- 페이징 부분 -->
-                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
-                    <ul class="pagination">
-                        <li th:if="${currentPage > 1} ? 'disabled'" class="page-item">
-                            <a class="page-link" th:href="@{/inquiryboard(page=${currentPage - 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li th:each="page : ${#numbers.sequence(currentGroup * 5 + 1, totalPage)}"
-                            th:if="${page <= (currentGroup + 1) * 5}"
-                            th:class="${page == currentPage} ? 'active' : ''">
-                            <a th:href="@{/inquiryboard(page=${page}, searchField=${searchField}, searchWord=${searchWord})}" th:text="${page}" class="page-link"></a>
-                        </li>
+<!--                <nav aria-label="Page navigation example" class="d-flex justify-content-center">-->
+<!--                    <ul class="pagination">-->
+<!--                        <li th:if="${currentPage > 1} ? 'disabled'" class="page-item">-->
+<!--                            <a class="page-link" th:href="@{/inquiryboard(page=${currentPage - 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Previous">-->
+<!--                                <span aria-hidden="true">&laquo;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li th:each="page : ${#numbers.sequence(currentGroup * 5 + 1, totalPage)}"-->
+<!--                            th:if="${page <= (currentGroup + 1) * 5}"-->
+<!--                            th:class="${page == currentPage} ? 'active' : ''">-->
+<!--                            <a th:href="@{/inquiryboard(page=${page}, searchField=${searchField}, searchWord=${searchWord})}" th:text="${page}" class="page-link"></a>-->
+<!--                        </li>-->
 
-                        <!-- 다음 버튼: 현재 페이지가 마지막 페이지일 경우 비활성화 -->
-                        <li th:if="${currentPage < totalPage}" class="page-item">
-                            <a class="page-link" th:href="@{/inquiryboard(page=${currentPage + 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+<!--                        &lt;!&ndash; 다음 버튼: 현재 페이지가 마지막 페이지일 경우 비활성화 &ndash;&gt;-->
+<!--                        <li th:if="${currentPage < totalPage}" class="page-item">-->
+<!--                            <a class="page-link" th:href="@{/inquiryboard(page=${currentPage + 1}, searchField=${searchField}, searchWord=${searchWord})}" aria-label="Next">-->
+<!--                                <span aria-hidden="true">&raquo;</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
             </div> <!--컨테이너 끝-->
         </div>
     </div>

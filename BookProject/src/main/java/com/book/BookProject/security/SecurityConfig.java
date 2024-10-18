@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
+                        .requestMatchers("/salesboard/**").permitAll()
                         .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
                         .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")

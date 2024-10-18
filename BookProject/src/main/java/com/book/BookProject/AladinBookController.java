@@ -16,8 +16,11 @@ public class AladinBookController {
     private final String API_URL = "http://www.aladin.co.kr/ttb/api/ItemList.aspx";
     private final String SEARCH_URL = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
     private final String LOOKUP_URL = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
-//    private final String TTB_KEY = "ttblckdrbs1419003"; // 알라딘 API 키
-    private final String TTB_KEY = ""; // 알라딘 API 키
+    
+//    private final String TTB_KEY = "ttbtle651621001"; // 지훈형님 키
+//    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
+//    private final String TTB_KEY = "ttblckdrbs1419006"; // 창균 키
+private final String TTB_KEY = "";
 
     // 베스트셀러 리스트 가져오기
     @GetMapping("/book") // /book 경로로 매핑

@@ -66,13 +66,13 @@ public class SalesBoard {
     @Column(name="slike_count", columnDefinition = "INT default 0")
     private int likeCount;
 
+    @Column(name="limage", columnDefinition = "VARCHAR(200)")
+    private String limage;
+
     @Column(name="oimage", columnDefinition = "VARCHAR(200)")
     private String oimage;
 
     @Column(name="simage", columnDefinition = "VARCHAR(200)")
     private String simage;
-
-    @Column(name="sdown_count", columnDefinition = "INT default 0")
-    private int downCount;
 
 }
