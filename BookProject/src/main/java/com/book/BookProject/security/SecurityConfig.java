@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
                         .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
-                        .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 권한 없이 경로 허용
                         .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")

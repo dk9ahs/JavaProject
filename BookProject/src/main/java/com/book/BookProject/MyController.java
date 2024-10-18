@@ -27,6 +27,7 @@ public class MyController {
 
         model.addAttribute("role", role);
 
-        return "guest/main";  // 메인 페이지로 이동
+//        return "guest/main";  // 메인 페이지로 이동
+        return "admin/Adminpage";  // 메인 페이지로 이동
     }
 }
