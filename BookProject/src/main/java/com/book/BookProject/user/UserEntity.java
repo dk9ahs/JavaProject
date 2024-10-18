@@ -76,6 +76,9 @@ public class UserEntity {
     @Builder.Default
     private int accountLocked = 0;     // 계정 잠금 여부, 기본값 0
 
+    @Column
+    private LocalDateTime lastLoginDate;
+
     @Transient  // DB에 저장하지 않는 필드
     private boolean isNewUser;
 

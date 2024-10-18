@@ -3,6 +3,7 @@ package com.book.BookProject.security;
 import com.book.BookProject.oauth2.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,12 +17,23 @@ import org.springframework.security.web.firewall.StrictHttpFirewall;
 public class SecurityConfig {
 
     private final UserServiceImpl userServiceImpl;
-    private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 추가
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomAuthenticationFailureHandler failureHandler;
+    private final CustomAuthenticationSuccessHandler successHandler;
+
+    private final CustomAuthenticationProvider customAuthenticationProvider; // CustomAuthenticationProvider 추가
 
 
-    public SecurityConfig(UserServiceImpl userServiceImpl, CustomOAuth2UserService customOAuth2UserService) {
+    public SecurityConfig(UserServiceImpl userServiceImpl,
+                          CustomOAuth2UserService customOAuth2UserService,
+                          CustomAuthenticationFailureHandler failureHandler,
+                          CustomAuthenticationSuccessHandler successHandler,
+                          CustomAuthenticationProvider customAuthenticationProvider) { // CustomAuthenticationProvider 주입
         this.userServiceImpl = userServiceImpl;
         this.customOAuth2UserService = customOAuth2UserService;
+        this.failureHandler = failureHandler;
+        this.successHandler = successHandler;
+        this.customAuthenticationProvider = customAuthenticationProvider; // CustomAuthenticationProvider 주입
     }
 
     @Bean
@@ -29,10 +41,12 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll() // 정적 리소스 경로 허용
-                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()  // API 경로 허용
+                        .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll()
+                        .requestMatchers("/guest/unlock").permitAll()  // 계정 잠김 해제 페이지 접근 허용
+
+                        .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search").permitAll()
                         .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
-                        .requestMatchers("/", "/register", "/signup", "/login", "/find/**","/IdCheck", "/NickCheck").permitAll()  // 권한 없이 경로 허용
+                        .requestMatchers("/", "/register", "/signup", "/login", "/find/**", "/IdCheck", "/NickCheck").permitAll()
                         .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")
@@ -40,12 +54,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")  // 커스텀 로그인 페이지
-                        .loginProcessingUrl("/login")  // 로그인 처리 URL
-                        .defaultSuccessUrl("/", true)  // 로그인 성공 후 리다이렉트 경로
-                        .failureUrl("/login?error=true")  // 로그인 실패 시 리다이렉트 경로
-                        .usernameParameter("username")  // 로그인 폼의 username 파라미터
-                        .passwordParameter("password")  // 로그인 폼의 password 파라미터
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureHandler(failureHandler)
+                        .successHandler(successHandler)
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
@@ -64,6 +79,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Lazy
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -77,6 +93,7 @@ public class SecurityConfig {
                 .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
+
     @Bean
     public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
         StrictHttpFirewall firewall = new StrictHttpFirewall();

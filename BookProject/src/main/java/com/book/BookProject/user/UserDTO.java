@@ -32,6 +32,7 @@ public class UserDTO {
     private String socialEmail;    // 소셜 이메일
     private int failedAttempts;    // 실패 시도 횟수
     private int accountLocked;     // 계정 잠금 여부
-    private String currentPwd;      // 현재 비밀번호 필드 추가
+    private String currentPwd;      // 현재 비밀번호 필드
+    private LocalDateTime lastLoginDate;  // 마지막 로그인 날짜
 
 }
