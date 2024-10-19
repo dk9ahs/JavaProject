@@ -18,4 +18,6 @@ public class MessageDTO {
     private String content;
     private LocalDateTime createDate;
     private Integer readstatus;
+    private Integer viewstatus;
+    private Integer sendviewstatus;
 }

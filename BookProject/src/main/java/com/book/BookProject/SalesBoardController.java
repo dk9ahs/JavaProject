@@ -112,9 +112,7 @@ public class SalesBoardController {
                 likedStatusList.add(liked);
             }
             model.addAttribute("likedList", likedStatusList);
-
         }
-
         return "/guest/salesboardlist";
     }
 

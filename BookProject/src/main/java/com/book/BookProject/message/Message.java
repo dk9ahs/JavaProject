@@ -44,10 +44,24 @@ public class Message {
     @Column(name = "readstatus", columnDefinition = "INT default 0")
     private Integer readstatus;
 
+    @Column(name = "viewstatus", columnDefinition = "INT default 1")
+    private Integer viewstatus;
+
+    @Column(name = "sendviewstatus", columnDefinition = "INT default 1")
+    private Integer sendviewstatus;
+
     @PrePersist
     public void prePersist() {
         if (this.readstatus == null) {
             this.readstatus = 0; // 기본값 설정
+        }
+
+        if (this.viewstatus == null) {
+            this.viewstatus = 1; // 기본값 설정
+        }
+
+        if (this.sendviewstatus == null) {
+            this.sendviewstatus = 1; // 기본값 설정
         }
     }
 }

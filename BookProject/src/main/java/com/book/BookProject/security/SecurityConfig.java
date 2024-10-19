@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/salesboard/**").permitAll()
                         .requestMatchers("/bestseller", "/bookdetail/**").permitAll()
                         .requestMatchers("/", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/test").permitAll()
                         .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
