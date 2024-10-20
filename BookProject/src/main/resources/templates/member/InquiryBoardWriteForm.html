@@ -66,13 +66,8 @@
                             <th class="text-center"
                                 style="vertical-align:middle;">작성자</th>
                             <td colspan="3">
-<!--                                <input type="text" class="form-control" style="width:100px;" name="nick" value="나봉" disabled/>-->
-                                <input type="text" class="form-control" style="width:200px;" name="nick" />
+                                <input type="text" class="form-control" style="width:200px;" name="nick" th:value="${nick}" readonly/>
                             </td>
-<!--                            <th class="text-center" style="vertical-align:middle;">비밀글 여부</th>-->
-<!--                            <td class="text-center">-->
-<!--                                <input type="checkbox" name="secret" style="margin-right: 5px;" />비밀글 작성-->
-<!--                            </td>-->
                         </tr>
                         <tr>
                             <th class="text-center" style="vertical-align:middle;">비밀번호</th>
@@ -116,6 +111,7 @@
             </div> <!--컨테이너 끝-->
         </div>
     </div>
+    &nbsp;
 <div th:replace="~{Front/Footer :: footer}"></div>
 </body>
 </html>

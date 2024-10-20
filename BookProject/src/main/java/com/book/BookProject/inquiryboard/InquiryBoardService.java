@@ -1,12 +1,14 @@
 package com.book.BookProject.inquiryboard;
 
 import com.book.BookProject.salesboard.Redis.RedisUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
+import com.book.BookProject.user.UserEntity;
+import com.book.BookProject.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,12 +20,14 @@ public class InquiryBoardService {
     @Autowired
     private InquiryBoardMapper inquiryBoardMapper;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     RedisUtil redisUtil;
 
     // 문의게시판 리스트
     public Page<InquiryBoardDTO> inquiryBoardList(int page, String searchField, String searchWord)
     {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "qidx"));
+        Pageable pageable = PageRequest.of(page, 10);
         Page<InquiryBoard> inquiryBoardPage;
 
         if(searchField != null && searchWord != null && !searchWord.isEmpty())
@@ -40,10 +44,10 @@ public class InquiryBoardService {
                     inquiryBoardPage = inquiryBoardRepository.findByNickContaining(searchWord, pageable);
                     break;
                 default:
-                    inquiryBoardPage = inquiryBoardRepository.findAll(pageable);
+                    inquiryBoardPage = inquiryBoardRepository.findAllOrdered(pageable);
             }
         }else{
-            inquiryBoardPage = inquiryBoardRepository.findAll(pageable);
+            inquiryBoardPage = inquiryBoardRepository.findAllOrdered(pageable);
         }
 
         // 엔티티를 dto로 변환
@@ -53,6 +57,7 @@ public class InquiryBoardService {
     }
 
     // 문의게시판 상세보기
+    @Transactional(readOnly = true)
     public InquiryBoardDTO inquiryBoardView(Long qidx)
     {
         InquiryBoard inquiryBoard = inquiryBoardRepository.findById(qidx).get();
@@ -63,8 +68,28 @@ public class InquiryBoardService {
     //문의게시판 글 작성
     public void inquiryBoardWrite(InquiryBoardDTO inquiryBoardDTO)
     {
+        if(inquiryBoardDTO.getPass().equals(""))
+        {
+            inquiryBoardDTO.setPass(null);
+        }
+
+        // dto에서 엔티티로 저장
         InquiryBoard inquiryBoard = inquiryBoardMapper.toEntity(inquiryBoardDTO);
-        inquiryBoardRepository.save(inquiryBoard);
+        InquiryBoard saveBoard = inquiryBoardRepository.save(inquiryBoard); // 1차 저장
+
+        // dto로 변환 후 Origin 설정 인덱스를 origin에 넣기 위해서
+        InquiryBoardDTO saveDTO = inquiryBoardMapper.toDto(saveBoard);
+        if (saveDTO.getOrigin() == null)
+        {
+
+            saveDTO.setOrigin(saveDTO.getQidx());
+            saveDTO.setUpdateDate(saveDTO.getCreateDate()); // 작성일과 수정일이 다르게 들어 갈 때 오류 방지로 한번 더 넣어준다.
+
+            // dto -> 엔티티로 변환 후 저장
+            InquiryBoard updateBoard = inquiryBoardMapper.toEntity(saveDTO);
+            inquiryBoardRepository.save(updateBoard); // 2차 저장
+        }
+
     }
 
     //문의게시판 글 수정
@@ -75,9 +100,16 @@ public class InquiryBoardService {
 
         originalDTO.setQidx(qidx);
         originalDTO.setNick(inquiryBoardDTO.getNick());
-        originalDTO.setPass(inquiryBoardDTO.getPass());
+
+        if(inquiryBoardDTO.getPass().equals(""))
+        {
+            originalDTO.setPass(null);
+        } else {
+            originalDTO.setPass(inquiryBoardDTO.getPass());
+        }
         originalDTO.setTitle(inquiryBoardDTO.getTitle());
         originalDTO.setContent(inquiryBoardDTO.getContent());
+        originalDTO.setUpdateDate(inquiryBoardDTO.getCreateDate());
 
         // 이미지 파일 변경 시에만 업데이트
         if(inquiryBoardDTO.getOfile() != null && !inquiryBoardDTO.getOfile().isEmpty())
@@ -116,10 +148,18 @@ public class InquiryBoardService {
         }
     }
 
-    // 문의게시판 답글 작성
-    public void inquiryBoardReplyWrite(InquiryBoardDTO inquiryBoardDTO)
+    // 비밀 글 일 때 로그인 된 닉네임과 비교 하기 위해
+    public String findNickById(String id)
     {
-        InquiryBoard inquiryBoard = inquiryBoardMapper.toEntity(inquiryBoardDTO);
-        inquiryBoardRepository.save(inquiryBoard);
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+
+        return userEntity.getNick();
+    }
+
+    // 답변 상태 업데이트
+    @Transactional
+    public void updateResponseStatus(Long originNo)
+    {
+        inquiryBoardRepository.updateResponse(originNo);
     }
 }

@@ -1,5 +1,6 @@
 package com.book.BookProject;
 
+import com.book.BookProject.inquiryboard.InquiryBoard;
 import com.book.BookProject.inquiryboard.InquiryBoardDTO;
 import com.book.BookProject.inquiryboard.InquiryBoardService;
 import com.book.BookProject.salesboard.Redis.RedisUtil;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/inquiryboard")
@@ -33,12 +36,23 @@ public class InquiryBoardController
 
     // 문의게시판 리스트
     @GetMapping
-    public  String inquiryBoard(Model model,
-                                @RequestParam(defaultValue = "1") int page,
-                                @RequestParam(required = false) String searchField,
-                                @RequestParam(required = false) String searchWord)
+    public String inquiryBoard(Model model,
+                               @RequestParam(defaultValue = "1") int page,
+                               @RequestParam(required = false) String searchField,
+                               @RequestParam(required = false) String searchWord)
     {
         Page<InquiryBoardDTO> listPage = inquiryBoardService.inquiryBoardList(page - 1, searchField, searchWord);
+
+        // 비밀 글 일 때 로그인 된 닉네임과 비교 하기 위해
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (id.equals("anonymousUser"))
+        {
+            model.addAttribute("loginNick", "Guest");
+        } else {
+            String nick = inquiryBoardService.findNickById(id);
+            model.addAttribute("loginNick", nick);
+        }
 
         long totalCount = listPage.getTotalElements();
         int totalPage = listPage.getTotalPages();
@@ -74,8 +88,15 @@ public class InquiryBoardController
 
     // 문의게시판 글 작성 폼
     @GetMapping("/writeform")
-    public  String inquiryBoardWriteForm()
+    public  String inquiryBoardWriteForm(Model model)
     {
+        // 글 작성 시 작성자에 로그인 한 사람의 닉네임 설정 하기 위해
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        // id로 닉네임 찾기
+        String nick = inquiryBoardService.findNickById(id);
+
+        model.addAttribute("nick", nick);
+
         return "member/InquiryBoardWriteForm";
     }
 
@@ -115,8 +136,6 @@ public class InquiryBoardController
             // 파일이 없을 떄
             System.out.println("No file uploaded.");
         }
-        System.out.println(inquiryBoardDTO.getOfile());
-        System.out.println(inquiryBoardDTO.getSfile());
 
         inquiryBoardService.inquiryBoardWrite(inquiryBoardDTO);
 
@@ -190,6 +209,13 @@ public class InquiryBoardController
         InquiryBoardDTO inquiryBoardDTO = inquiryBoardService.inquiryBoardView(qidx);
         model.addAttribute("inquiryBoardDTO", inquiryBoardDTO);
 
+        // 글 작성 시 작성자에 로그인 한 사람의 닉네임 설정 하기 위해
+        String id = SecurityContextHolder.getContext().getAuthentication().getName();
+        // id로 닉네임 찾기
+        String adminNick = inquiryBoardService.findNickById(id);
+
+        model.addAttribute("adminNick", adminNick);
+
         return "admin/InquiryBoardReplyWriteForm";
     }
 
@@ -197,8 +223,18 @@ public class InquiryBoardController
     @PostMapping("/replywrite")
     public  String inquiryBoardReplyWrite(HttpServletRequest request,
                                           InquiryBoardDTO inquiryBoardDTO,
+                                          Long qidx,
                                           @RequestParam("file") MultipartFile file) throws FileNotFoundException
     {
+        // 부모 글 dto
+        InquiryBoardDTO boardDTO = inquiryBoardService.inquiryBoardView(qidx);
+        inquiryBoardDTO.setQidx(null);  // 새로 생성될 글이므로 null로 설정
+        inquiryBoardDTO.setOrigin(boardDTO.getOrigin());
+        inquiryBoardDTO.setGroup(boardDTO.getGroup() + 1);
+        inquiryBoardDTO.setLayer(boardDTO.getLayer() + 1);
+
+        inquiryBoardService.updateResponseStatus(boardDTO.getOrigin());
+
         // 파일 업로드
         if(file != null && !file.isEmpty())
         {
@@ -229,18 +265,27 @@ public class InquiryBoardController
             // 파일이 없을 떄
             System.out.println("No file uploaded.");
         }
-        System.out.println(inquiryBoardDTO.getOfile());
-        System.out.println(inquiryBoardDTO.getSfile());
 
-        inquiryBoardService.inquiryBoardReplyWrite(inquiryBoardDTO);
+        inquiryBoardService.inquiryBoardWrite(inquiryBoardDTO);
 
-        return "redirect:/inquiryboard";
+        return "redirect:../inquiryboard";
     }
 
     // 문의게시판 글 비밀번호 창
     @GetMapping("/pass")
-    public  String inquiryBoardPass()
+    public  String inquiryBoardPass(Model model, Long qidx)
     {
+        InquiryBoardDTO pass = inquiryBoardService.inquiryBoardView(qidx);
+
+        model.addAttribute("pass", pass.getPass());
+        model.addAttribute("qidx", qidx);
+
         return "member/InquiryBoardPass";
     }
+
+//    @PostMapping("/updateResponse")
+//    public String updateResponse(@RequestParam Long qidx, @RequestParam int originNo) {
+//        inquiryBoardService.updateResponseStatus(originNo);
+//        return "redirect:/inquiryboard";  // 업데이트 후 게시글 리스트로 리다이렉트
+//    }
 }
