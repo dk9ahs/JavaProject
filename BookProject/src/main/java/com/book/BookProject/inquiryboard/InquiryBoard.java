@@ -2,9 +2,12 @@ package com.book.BookProject.inquiryboard;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @DynamicInsert
 @Getter
@@ -17,38 +20,33 @@ public class InquiryBoard {
 
     @Id // 엔티티의 주키(primary key)
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동증가(Auto Increment)를 지정
-    private  Long qidx; // 인덱스
-
-
-    @Column(name="QPARENTIDX", columnDefinition = "INT default 0")
-    private int parentIdx; // 부모 인덱스
-    @Column(name="QPARENTID", columnDefinition = "VARCHAR(50)")
-    private String parentId; // 부모 ID
-//    @ManyToOne
-//    @JoinColumn(name = "member")
-    private String nick; // 외래키, 작성자 닉네임
-    @Column(name="QRESPONSES", columnDefinition = "INT default 0")
+    private  Long qidx; // PK, 인덱스
+    @Column(name = "ORIGINNO")
+    private Long origin; // 그룹 번호 (원글 번호)
+    @Column(name = "GROUPORD")
+    private  int group; // 그룹 내 순서
+    @Column(name = "GROUPLAYER")
+    private int layer; // 그룹 계층 (답글의 깊이)
+    @Column(name="QRESPONSES")
     private int responses; // 답변 여부
-    @Column(name="QTITLE", nullable = false, columnDefinition = "VARCHAR(100)")
+    @Column(name="NICK")
+    private String nick; // 작성자 - 닉네임
+    @Column(name="QTITLE")
     private String title; // 제목
-    @Column(name="QCONTENT", nullable = false, columnDefinition = "TEXT")
+    @Column(name="QCONTENT")
     private String content; // 내용
-    @Column(name="QPASS", columnDefinition = "VARCHAR(20)")
+    @Column(name="QPASS")
     private String pass; // 글 비밀번호
-    @Column(name="QCREATE_DATE", columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
-    private LocalDate createDate; // 생성 날짜
-    @LastModifiedDate
-    @Column(name="QUPDATE_DATE", columnDefinition = "DATETIME default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDate updateDate; // 업데이트 날짜
-    @Column(name="QVIEW_COUNT", columnDefinition = "INT default 0")
+    @CreationTimestamp
+    @Column(name="QCREATE_DATE")
+    private LocalDateTime createDate; // 작성일
+    @UpdateTimestamp
+    @Column(name="QUPDATE_DATE")
+    private LocalDateTime updateDate; // 수정일
+    @Column(name="QVIEW_COUNT")
     private int viewCount; // 조회수
-    @Column(name="QLIKE_COUNT", columnDefinition = "INT default 0")
-    private int likeCount; // 좋아요 수
-    @Column(name="QOFILE", columnDefinition = "VARCHAR(200)")
+    @Column(name="QOFILE")
     private String ofile; // 원본 파일명
-    @Column(name="QSFILE", columnDefinition = "VARCHAR(200)")
+    @Column(name="QSFILE")
     private String sfile; // 저장된 파일명
-    @Column(name="QDOWN_COUNT", columnDefinition = "INT default 0")
-    private int downCount; // 다운로드 수
-
 }
