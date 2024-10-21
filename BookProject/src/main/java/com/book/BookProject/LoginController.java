@@ -12,8 +12,8 @@ public class LoginController {
         return "guest/Login";
     }
 
-    @GetMapping("/guest/unlock")
-    public String showUnlockUserPage() {
-        return "guest/UnlockUser";  // UnlockUser.html 반환
-    }
+//    @GetMapping("/guest/unlock")
+//    public String showUnlockUserPage() {
+//        return "guest/UnlockUser";  // UnlockUser.html 반환
+//    }
 }

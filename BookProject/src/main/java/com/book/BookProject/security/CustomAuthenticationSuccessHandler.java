@@ -1,5 +1,7 @@
 package com.book.BookProject.security;
 
+import com.book.BookProject.user.UserEntity;
+import com.book.BookProject.user.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,21 +15,23 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserServiceImpl userService;
+    private final UserRepository userRepository;
 
-    public CustomAuthenticationSuccessHandler(UserServiceImpl userService) {
+    public CustomAuthenticationSuccessHandler(UserServiceImpl userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String username = authentication.getName();  // 로그인 성공한 ID
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+        String username = authentication.getName();
 
-        // 로그인 성공한 경우 실패 시도 초기화 및 lastLoginDate 업데이트
-        if (username != null) {
-            userService.resetFailedAttempts(username);
-            userService.updateLastLoginDate(username);  // 마지막 로그인 시간 업데이트
-        }
+        // 사용자 엔티티 찾기
+        UserEntity user = userRepository.findById(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        response.sendRedirect("/");  // 로그인 성공 후 리다이렉트
+        userService.resetFailedAttempts(user);  // UserEntity 객체를 전달
+        response.sendRedirect("/");  // 로그인 성공 시 리다이렉트
     }
 }

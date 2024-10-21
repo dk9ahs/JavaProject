@@ -36,4 +36,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // 회원탈퇴
     void deleteById(String id);
+    // 이름, 이메일, ID, 전화번호로 사용자 찾기
+    Optional<UserEntity> findByNameAndEmailAndIdAndPhone(String name, String email, String id, String phone);
+
 }
