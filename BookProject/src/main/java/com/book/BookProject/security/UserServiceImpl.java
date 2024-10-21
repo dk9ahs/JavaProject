@@ -1,9 +1,7 @@
 package com.book.BookProject.security;
 
-import com.book.BookProject.user.UnlockService;
 import com.book.BookProject.user.UserEntity;
 import com.book.BookProject.user.UserRepository;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,13 +14,9 @@ import java.time.LocalDateTime;
 public class UserServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final UnlockService unlockService;  // UnlockService 주입
 
-
-    public UserServiceImpl(UserRepository userRepository, @Lazy UnlockService unlockService) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.unlockService = unlockService;  // UnlockService 주입
-
     }
 
     @Override
@@ -36,26 +30,50 @@ public class UserServiceImpl implements UserDetailsService {
 
         return new CustomUserDetails(userEntity);
     }
+    // getUserById 메서드 추가
+    public UserEntity getUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+    }
 
     // 마지막 로그인 시간 업데이트 메서드
     public void updateLastLoginDate(String id) {
-        UserEntity userEntity = findUserEntityById(id);
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
         userEntity.setLastLoginDate(LocalDateTime.now());  // 현재 시간으로 업데이트
         userRepository.save(userEntity);  // 변경 사항 저장
     }
 
-    // 유저 엔티티 검색 (중복 로직을 제거)
-    private UserEntity findUserEntityById(String id) {
-        return userRepository.findById(id)
+    // 실패 시도 초기화 메서드
+    public void resetFailedAttempts(String id) {
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
-    }
-    // 실패 시도 횟수 증가 메서드 (UnlockService에 위임)
-    public void increaseFailedAttempts(UserEntity userEntity) {
-        unlockService.increaseFailedAttempts(userEntity);  // UnlockService에서 처리
-    }
-    // 실패 시도 초기화 메서드 (UnlockService에 위임)
-    public void resetFailedAttempts(UserEntity userEntity) {
-        unlockService.resetFailedAttempts(userEntity);  // UnlockService에서 처리
+
+        userEntity.setFailedAttempts(0);  // 실패 시도 초기화
+        userRepository.save(userEntity);  // 변경 사항 저장
     }
 
+    // 실패 시도 횟수 증가 메서드
+    public void increaseFailedAttempts(String id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+
+        int newFailedAttempts = userEntity.getFailedAttempts() + 1;
+        userEntity.setFailedAttempts(newFailedAttempts);
+
+        if (newFailedAttempts >= 3) {
+            userEntity.setAccountLocked(1);  // 3회 실패 시 계정 잠금 설정
+        }
+
+        userRepository.save(userEntity);
+    }
+
+    public void unlockAccount(String id) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
+
+        userEntity.setAccountLocked(0);  // 계정 잠금 해제
+        userEntity.setFailedAttempts(0);  // 실패 시도 횟수 초기화
+        userRepository.save(userEntity);  // 변경 사항 저장
+    }
 }
