@@ -283,9 +283,9 @@ public class InquiryBoardController
         return "member/InquiryBoardPass";
     }
 
-//    @PostMapping("/updateResponse")
-//    public String updateResponse(@RequestParam Long qidx, @RequestParam int originNo) {
-//        inquiryBoardService.updateResponseStatus(originNo);
-//        return "redirect:/inquiryboard";  // 업데이트 후 게시글 리스트로 리다이렉트
-//    }
+    @PostMapping("/updateResponse")
+    public String updateResponse(@RequestParam Long qidx, @RequestParam Long originNo) {
+        inquiryBoardService.updateResponseStatus(originNo);
+        return "redirect:/inquiryboard";  // 업데이트 후 게시글 리스트로 리다이렉트
+    }
 }
