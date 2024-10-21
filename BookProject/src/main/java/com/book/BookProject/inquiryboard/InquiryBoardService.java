@@ -162,4 +162,26 @@ public class InquiryBoardService {
     {
         inquiryBoardRepository.updateResponse(originNo);
     }
+
+
+    // 전체 게시글과 답글을 originNo DESC, groupOrd ASC로 정렬하여 가져옴
+    @Transactional
+    public List<InquiryBoardDTO> getBoardList() {
+
+        List<InquiryBoard> inquiryBoardList = inquiryBoardRepository.viewList();
+
+        return inquiryBoardMapper.toDtoList(inquiryBoardList);
+    }
+
+    // 특정 원글의 답글 리스트를 가져옴
+    @Transactional
+    public List<InquiryBoardDTO> getReplies(Long originNo) {
+
+        List<InquiryBoard> inquiryBoardList = inquiryBoardRepository.findRepliesByOriginNo(originNo);
+
+        return inquiryBoardMapper.toDtoList(inquiryBoardList);
+    }
+
+
+
 }
