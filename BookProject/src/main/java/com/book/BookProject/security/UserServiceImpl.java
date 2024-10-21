@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserDetailsService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
 
+        // 권한 설정을 검토합니다.
+        String role = "ROLE_" + userEntity.getAuthority().toUpperCase();
+
         return User.builder()
                 .username(userEntity.getId())
                 .password(userEntity.getPwd())

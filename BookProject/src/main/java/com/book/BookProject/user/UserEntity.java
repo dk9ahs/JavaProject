@@ -1,5 +1,6 @@
 package com.book.BookProject.user;
 
+import com.book.BookProject.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -75,4 +78,8 @@ public class UserEntity {
 
     @Builder.Default
     private int accountLocked = 0;     // 계정 잠금 여부, 기본값 0
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>(); // 회원의 주문 목록
+
 }

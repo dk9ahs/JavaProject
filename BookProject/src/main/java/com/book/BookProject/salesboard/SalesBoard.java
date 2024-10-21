@@ -28,29 +28,29 @@ public class SalesBoard {
 
     private String nick;
 
-    @Column(name = "stitle", nullable = false, columnDefinition = "VARCHAR(100)")
-    private String title;
+//    @Column(name = "stitle", nullable = false, columnDefinition = "VARCHAR(100)")
+//    private String title;
 
     @Column(name = "sbooktitle", nullable = false, columnDefinition = "VARCHAR(100)")
     private String booktitle;  // 책 제목
 
-    @Column(name = "sauthor", nullable = false, columnDefinition = "VARCHAR(50)")
-    private String author;  // 책 지은이
+//    @Column(name = "sauthor", nullable = false, columnDefinition = "VARCHAR(50)")
+//    private String author;  // 책 지은이
 
-    @Column(name = "spublisher", nullable = false, columnDefinition = "VARCHAR(50)")
-    private String publisher;  // 책 출판사
+//    @Column(name = "spublisher", nullable = false, columnDefinition = "VARCHAR(50)")
+//    private String publisher;  // 책 출판사
 
     @Column(name="scontent", nullable = false, columnDefinition = "TEXT")
     private String content;  // 내용
 
-    @Column(name="sclassification", nullable = false, columnDefinition = "VARCHAR(50)")
-    private String classification; // 판매, 교환, 나눔
+//    @Column(name="sclassification", nullable = false, columnDefinition = "VARCHAR(50)")
+//    private String classification; // 판매, 교환, 나눔
 
-    @Column(name="sregion", nullable = false, columnDefinition = "VARCHAR(50)")
-    private String region; // 거래 지역
+//    @Column(name="sregion", nullable = false, columnDefinition = "VARCHAR(50)")
+//    private String region; // 거래 지역
 
-    @Column(name="sprice", nullable = false, columnDefinition = "Integer default 0")
-    private Integer price; // 가격
+//    @Column(name="sprice", nullable = false, columnDefinition = "Integer default 0")
+//    private Integer price; // 가격
 
     @CreationTimestamp
     @Column(name="screate_date", columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
@@ -72,7 +72,7 @@ public class SalesBoard {
     @Column(name="simage", columnDefinition = "VARCHAR(200)")
     private String simage;
 
-    @Column(name="sdown_count", columnDefinition = "INT default 0")
-    private int downCount;
+//    @Column(name="sdown_count", columnDefinition = "INT default 0")
+//    private int downCount;
 
 }
