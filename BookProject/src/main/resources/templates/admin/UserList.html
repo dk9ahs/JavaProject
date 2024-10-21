@@ -44,7 +44,7 @@
         <a th:href="@{/admin/list}" class="list-group-item list-group-item-action">전체회원목록 보기</a>
         <a th:href="@{/admin/localList}" class="list-group-item list-group-item-action">일반회원목록 보기</a>
         <a th:href="@{/admin/socialList}" class="list-group-item list-group-item-action">소셜회원목록 보기</a>
-        <a th:href="@{/admin/LockList}" class="list-group-item list-group-item-action">계정잠금 회원</a>
+        <a th:href="@{/admin/lockList}" class="list-group-item list-group-item-action">계정잠금 회원</a>
     </div>
 
     <!-- 검색폼 -->
@@ -104,11 +104,11 @@
 
                 <td th:text="${dto.authority}"></td>
                 <td>
-                    <span th:if="${dto.accountLocked  == 1}">NO</span>
-                    <span th:if="${dto.accountLocked  == 0}">LOCK</span>
+                    <span th:if="${dto.accountLocked  == 1}">사용불가</span>
+                    <span th:if="${dto.accountLocked  == 0}">사용가능</span>
                 </td>
                 <td>
-                    <a th:href="@{/admin/userUpdate(id=${dto.id})}">회원정보보기</a>
+                    <a th:href="@{/admin/userdetails(id=${dto.id})}">회원정보보기</a>
                 </td>
             </tr>
             </tbody>
