@@ -27,7 +27,11 @@ public class MypageController {
 
     @GetMapping("/order")
     public String order() {
+<<<<<<< HEAD
         return "member/orderList";
+=======
+        return "/member/order/orderList";
+>>>>>>> feature/a
     }
 
 

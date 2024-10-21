@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserDetailsService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));
 
+<<<<<<< HEAD
         if (userEntity.getAccountLocked() == 1) {
             throw new LockedException("계정이 잠겼습니다. 관리자에게 문의하세요.");
         }
@@ -75,5 +76,15 @@ public class UserServiceImpl implements UserDetailsService {
         userEntity.setAccountLocked(0);  // 계정 잠금 해제
         userEntity.setFailedAttempts(0);  // 실패 시도 횟수 초기화
         userRepository.save(userEntity);  // 변경 사항 저장
+=======
+        // 권한 설정을 검토합니다.
+        String role = "ROLE_" + userEntity.getAuthority().toUpperCase();
+
+        return User.builder()
+                .username(userEntity.getId())
+                .password(userEntity.getPwd())
+                .authorities("ROLE_" + userEntity.getAuthority())
+                .build();
+>>>>>>> feature/a
     }
 }

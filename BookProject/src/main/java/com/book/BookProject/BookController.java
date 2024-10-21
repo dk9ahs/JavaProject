@@ -3,6 +3,7 @@ package com.book.BookProject;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,12 @@ public class BookController {
     }
 
     @GetMapping("/bookdetail")
-    public String getBookDetailPage(@RequestParam("isbn") String isbn, Model model) {
+    public String getBookDetailPage(@RequestParam("isbn") String isbn, Model model, Authentication authentication) {
+
+        // 로그인 여부를 확인하여 모델에 추가
+        boolean isAuthenticated = authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal());
+        model.addAttribute("isAuthenticated", isAuthenticated);
+
         // ISBN 값을 모델에 추가하여 뷰에서 사용
         model.addAttribute("isbn", isbn);
         return "guest/bookdetail";
