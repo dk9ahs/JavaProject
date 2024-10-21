@@ -1,5 +1,5 @@
-# /BookProject/src/main/resources/ChatServiceAccountKey.json
-# /BookProject/src/main/resources/application-oauth.properties
+/BookProject/src/main/resources/ChatServiceAccountKey.json
+/BookProject/src/main/resources/application-oauth.properties
 
 HELP.md
 .gradle
