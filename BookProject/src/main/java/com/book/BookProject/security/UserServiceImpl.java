@@ -3,7 +3,6 @@ package com.book.BookProject.security;
 import com.book.BookProject.user.UserEntity;
 import com.book.BookProject.user.UserRepository;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -76,13 +75,5 @@ public class UserServiceImpl implements UserDetailsService {
         userEntity.setAccountLocked(0);  // 계정 잠금 해제
         userEntity.setFailedAttempts(0);  // 실패 시도 횟수 초기화
         userRepository.save(userEntity);  // 변경 사항 저장
-        // 권한 설정을 검토합니다.
-        String role = "ROLE_" + userEntity.getAuthority().toUpperCase();
-
-        return User.builder()
-                .username(userEntity.getId())
-                .password(userEntity.getPwd())
-                .authorities("ROLE_" + userEntity.getAuthority())
-                .build();
     }
 }
