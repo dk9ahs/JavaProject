@@ -53,8 +53,7 @@
             <!-- 게시판리스트부분 -->
             <div class="container">
             <h3><b>문의게시판</b></h3>
-                <form th:action="@{/inquiryboard/edit(qidx=${inquiryBoard.qidx})}" method="post" enctype="multipart/form-data">
-<!--                    <input type="hidden" name="qidx" th:value="${inquiryBoard.qidx}" />-->
+                <form th:action="@{/inquiryboard/edit(qidx=${inquiryBoard.qidx})}" method="post" onsubmit="return checkForm(this)" enctype="multipart/form-data">
                     <table class="table table-bordered">
                         <colgroup>
                             <col width="20%"/>
@@ -70,10 +69,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-center" style="vertical-align:middle;">비밀번호</th>
+                            <th class="text-center" style="vertical-align:middle;">패스워드</th>
                             <td colspan="3">
                                 <div style="display: flex; align-items: center;">
-                                    <input type="password" class="form-control" id="pass" style="width:200px;" name="pass" th:value="${inquiryBoard.pass}" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>비밀번호 변경 가능 합니다.&nbsp;※(비밀번호는 숫자, 5자 이하로 설정해 주세요.)</small>
+                                    <input type="password" class="form-control" id="pass" style="width:200px;" name="pass" th:value="${inquiryBoard.pass}" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>패스워드를 삭제하면 비밀글 상태가 해제되며 패스워드 변경도 가능합니다.&nbsp;※(패스워드는 숫자 5자 이하로 설정해 주세요.)</small>
                                 </div>
                             </td>
                         </tr>
@@ -92,7 +91,8 @@
                         <tr>
                             <th class="text-center" style="vertical-align:middle;">첨부파일</th>
                             <td colspan="3">
-                                <p th:text="'현재 파일 : ' + ${inquiryBoard.ofile}"></p>
+                                <p th:if="${inquiryBoard.ofile != null}" th:text="'현재 파일 : ' + ${inquiryBoard.ofile}"></p>
+                                <p th:if="${inquiryBoard.ofile == null}" th:text="'현재 파일 : ' + '없음'"></p>
                                 <input type="file" class="form-control" name="file"/>
                                 <small>새 파일을 선택하지 않으면 기존 파일이 유지됩니다.</small>
                             </td>
@@ -114,5 +114,20 @@
     </div>
     &nbsp;
 <div th:replace="~{Front/Footer :: footer}"></div>
+<script type="text/javascript">
+    function checkForm(form)
+    {
+        if(form.title.value == ""){
+            alert("제목을 입력 하세요")
+            form.title.focus();
+            return false;
+        }
+        if(form.content.value == ""){
+            alert("내용을 입력 하세요")
+            form.content.focus();
+            return false;
+        }
+    }
+</script>
 </body>
 </html>

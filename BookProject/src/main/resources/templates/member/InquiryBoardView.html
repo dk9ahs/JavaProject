@@ -88,22 +88,23 @@
                             1
                         </td>
                         <th class="text-center" style="vertical-align:middle;">답변</th>
-                        <td class="text-center">
-                            답변 대기
+                        <td class="text-center" th:text="${(view.group == 0 && view.responses == 1) ? '답변완료' :
+                                                           (view.group == 0 && view.responses == 0) ? '답변대기' :
+                                                           (view.group != 0 && view.responses == 0) ? '' :
+                                                           ''}">
                         </td>
                     </tr>
                     <tr style="height: 300px">
                         <th class="text-center" style="vertical-align:middle;">내용</th>
                         <td colspan="3">
                             <div th:text="${view.content}">내용입니다</div>
-                            <img th:if="${not #lists.isEmpty(view.ofile)}" th:src="@{/images/{file}(file=${view.sfile})}" alt="첨부된 이미지">
+<!--                            <img th:if="${not #lists.isEmpty(view.ofile)}" th:src="@{/images/{file}(file=${view.sfile})}" alt="첨부된 이미지">-->
+                            <img th:unless="${view.ofile == '' or view.ofile == null}" th:src="@{/images/{image}(image=${view.sfile})}" alt="첨부된 이미지" class="d-block w-100">
                         </td>
                     </tr>
                     <tr>
                         <th class="text-center" style="vertical-align:middle;">첨부파일</th>
-                        <td colspan="3" th:if="${not #lists.isEmpty(view.ofile)}" th:text="${view.ofile}">
-                            첨부파일
-                        </td>
+                        <td colspan="3" th:if="${not #lists.isEmpty(view.ofile)}" th:text="${view.ofile}">첨부파일</td>
                     </tr>
                     </tbody>
                 </table>

@@ -76,8 +76,9 @@
                     <col width="60px"/>
                     <col width="*" />
                     <col width="100px" />
-                    <col width="110px" />
-                    <col width="110px" />
+                    <col width="100px" />
+                    <col width="100px" />
+                    <col width="80px" />
                     <col width="80px" />
                 </colgroup>
                 <thead>
@@ -88,6 +89,7 @@
                     <th>작성일</th>
                     <th>답변여부</th>
                     <th>조회수</th>
+                    <th>파일</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -104,7 +106,7 @@
                             <!-- 비밀글일 때 잠금 아이콘 표시 -->
                             <span th:if="${inquiryBoard.pass != null}"><i class="bi bi-lock-fill"></i></span>
                             <!-- 답변 글이면 [답변] 표시 -->
-                            <span th:text="${inquiryBoard.group}==0 ? '' : ' &nbsp;&nbsp;&nbsp;&nbsp;▶ [답변] '"></span>
+                            <span th:text="${inquiryBoard.group}==0 ? '' : '▶ [답변] '"></span>
                             <!-- 일반 글 일 때 -->
                             <a th:if="${inquiryBoard.pass == null}" th:text="${inquiryBoard.title}" href="#" th:onclick="|guest();|"></a>
                             <!-- 비밀글 + 작성자일 때 -->
@@ -117,21 +119,20 @@
                             <!-- 비밀글일 때 잠금 아이콘 표시 -->
                             <span th:if="${inquiryBoard.pass != null}"><i class="bi bi-lock-fill"></i></span>
                             <!-- 답변 글이면 [답변] 표시 -->
-                            <span th:text="${inquiryBoard.group}==0 ? '' : ' &nbsp;&nbsp;&nbsp;&nbsp;▶ [답변] '"></span>
+                            <span th:text="${inquiryBoard.group}==0 ? '' : '▶ [답변] '"></span>
                             <!-- 일반 글 일 때 -->
                             <a th:if="${inquiryBoard.pass == null}" th:text="${inquiryBoard.title}" th:href="@{inquiryboard/view(qidx=${inquiryBoard.qidx})}"></a>
                             <!-- 비밀글 + 작성자일 때 -->
                             <a th:if ="${inquiryBoard.pass != null and inquiryBoard.nick == loginNick}" th:text="${inquiryBoard.title}" th:href="@{inquiryboard/pass(qidx=${inquiryBoard.qidx})}"></a>
-                            <!-- 비밀글 + 다른 사용자일 때 -->
-                            <a th:if ="${inquiryBoard.pass != null and inquiryBoard.nick != loginNick}" th:text="${inquiryBoard.title}" href="#" th:onclick="|noPass();|"></a>
-                            <!-- 회원 일 때 내가 남긴 비밀 글의 답글을 볼때 -->
+                            <!-- 비밀글 + 다른 사용자일 때(회원 일 때 내가 남긴 비밀 글의 답글을 볼때) -->
+                            <a th:if ="${inquiryBoard.pass != null and inquiryBoard.nick != loginNick}" th:text="${inquiryBoard.title}" th:href="@{inquiryboard/pass(qidx=${inquiryBoard.qidx})}"></a>
                         </div>
                         <!-- 관리자 -->
                         <div sec:authorize="hasRole('ROLE_ADMIN')">
                             <!-- 비밀글일 때 잠금 아이콘 표시 -->
                             <span th:if="${inquiryBoard.pass != null}"><i class="bi bi-lock-fill"></i></span>
                             <!-- 답변 글이면 [답변] 표시 -->
-                            <span th:text="${inquiryBoard.group}==0 ? '' : ' &nbsp;&nbsp;&nbsp;&nbsp;▶ [답변] '"></span>
+                            <span th:text="${inquiryBoard.group}==0 ? '' : '▶ [답변] '"></span>
                             <!-- 일반 글, 비밀 글 일 때 -->
                             <a th:text="${inquiryBoard.title}" th:href="@{inquiryboard/view(qidx=${inquiryBoard.qidx})}"></a>
                         </div>
@@ -147,6 +148,7 @@
                                                        ''}">
                     </td>
                     <td class="text-center" th:text="${inquiryBoard.viewCount}">조회수</td>
+                    <td class="text-center" th:if="${inquiryBoard.ofile != null}"><i class="bi bi-paperclip"></i></td><!-- 파일첨부 -->
                 </tr>
                 </tbody>
             </table>
@@ -190,6 +192,7 @@
         </div> <!--컨테이너 끝-->
     </div>
 </div>
+&nbsp;
 <div th:replace="~{Front/Footer :: footer}"></div>
 </body>
 </html>

@@ -53,7 +53,7 @@
             <!-- 게시판리스트부분 -->
             <div class="container">
             <h3><b>문의게시판</b></h3>
-                <form action="/inquiryboard/write" method="post" enctype="multipart/form-data">
+                <form action="/inquiryboard/write" method="post" onsubmit="return checkForm(this)" enctype="multipart/form-data">
                     <table class="table table-bordered">
                         <colgroup>
                             <col width="20%"/>
@@ -70,10 +70,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-center" style="vertical-align:middle;">비밀번호</th>
+                            <th class="text-center" style="vertical-align:middle;">패스워드</th>
                             <td colspan="3">
                                 <div style="display: flex; align-items: center;">
-                                    <input type="password" class="form-control" id="pass" style="width:200px;" name="pass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>비밀번호 입력 시 비밀글 자동 설정&nbsp;※(비밀번호는 숫자, 5자 이하로 설정해 주세요.)</small>
+                                    <input type="password" class="form-control" id="pass" style="width:200px;" name="pass" maxlength='5' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>&nbsp;&nbsp; <small>패스워드 입력 시 비밀글 자동 설정&nbsp;※(패스워드는 숫자, 5자 이하로 설정해 주세요.)</small>
                                 </div>
                             </td>
                         </tr>
@@ -113,5 +113,20 @@
     </div>
     &nbsp;
 <div th:replace="~{Front/Footer :: footer}"></div>
+<script type="text/javascript">
+    function checkForm(form)
+    {
+        if(form.title.value == ""){
+            alert("제목을 입력 하세요")
+            form.title.focus();
+            return false;
+        }
+        if(form.content.value == ""){
+            alert("내용을 입력 하세요")
+            form.content.focus();
+            return false;
+        }
+    }
+</script>
 </body>
 </html>
