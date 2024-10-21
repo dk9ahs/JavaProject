@@ -16,9 +16,12 @@ public class MyController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // 권한 정보를 가져옴
+        // 인증 객체 출력 (디버깅 용도)
+        System.out.println("Authentication: " + authentication);
+
         String role = "GUEST"; // 기본 역할은 비회원으로 설정
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal().equals("anonymousUser"))) {
+            // 권한 정보를 가져옴
             for (GrantedAuthority authority : authentication.getAuthorities()) {
                 role = authority.getAuthority(); // 권한을 가져옴 (ROLE_USER 또는 ROLE_ADMIN)
                 break; // 여러 개의 권한이 있어도 하나만 가져옴
@@ -27,7 +30,7 @@ public class MyController {
 
         model.addAttribute("role", role);
 
-//        return "guest/main";  // 메인 페이지로 이동
-        return "admin/Adminpage";  // 메인 페이지로 이동
+        return "guest/main";  // 메인 페이지로 이동
+//        return "admin/Adminpage";  // 메인 페이지로 이동
     }
 }

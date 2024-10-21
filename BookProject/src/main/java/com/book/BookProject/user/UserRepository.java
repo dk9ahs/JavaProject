@@ -1,5 +1,7 @@
 package com.book.BookProject.user;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -36,4 +38,14 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // 회원탈퇴
     void deleteById(String id);
+
+    Page<UserEntity> findAll(Pageable pageable);
+
+    Page<UserEntity> findBySocialProviderIsNull(Pageable pageable);  // 일반 회원 페이징 처리
+
+    Page<UserEntity> findBySocialProviderIsNotNull(Pageable pageable);  // 소셜 회원 페이징 처리
+
+    Page<UserEntity> findByAccountLocked(int accountLocked, Pageable pageable);  // 잠금 계정 페이징 처리
+
+
 }

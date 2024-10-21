@@ -2,9 +2,11 @@ package com.book.BookProject.security;
 
 import com.book.BookProject.user.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
     private final UserEntity userEntity;
@@ -15,8 +17,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한 관련 로직 추가 가능
-        return null;
+        // 권한을 설정 (예: "ROLE_USER", "ROLE_ADMIN" 등이 userEntity.getAuthority()에서 반환됨)
+        return Collections.singletonList(new SimpleGrantedAuthority(userEntity.getAuthority()));
     }
 
     @Override
