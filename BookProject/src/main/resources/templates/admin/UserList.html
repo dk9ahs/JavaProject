@@ -50,9 +50,9 @@
     <!-- 검색폼 -->
     <form method="get" onsubmit="return validateForm(this);">
         <div class="input-group ms-auto" style="width: 300px;">
-            <input type="checkbox" name="searchField" value="id" class="form-check-input"/>아이디
-            <input type="checkbox" name="searchField" value="name" class="form-check-input"/>이름
-            <input class="form-control" type="search" name="searchWord" placeholder="Search" aria-label="Search">
+            <input type="radio" name="searchField" value="id" class="form-check-input" th:checked="${param.searchField == 'id'}"/>아이디
+            <input type="radio" name="searchField" value="name" class="form-check-input" th:checked="${param.searchField == 'name'}"/>이름
+            <input class="form-control" type="search" name="searchWord" placeholder="Search" th:value="${param.searchWord}"/>
             <button class="btn btn-outline-primary" type="submit">
                 <i class="bi bi-search" style="font-size:20px"></i>
             </button>
@@ -124,14 +124,15 @@
     <div class="pagination justify-content-center">
         <ul class="pagination">
             <li th:classappend="${currentPage == 0} ? 'disabled'">
-                <a th:href="@{/admin/list(page=${currentPage - 1})}">이전</a>
+                <a th:href="@{/admin/list(page=${currentPage - 1}, searchField=${param.searchField}, searchWord=${param.searchWord})}">이전</a>
             </li>
             <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'">
-                <a th:href="@{/admin/list(page=${i})}" th:text="${i + 1}">1</a>
+                <a th:href="@{/admin/list(page=${i}, searchField=${param.searchField}, searchWord=${param.searchWord})}"
+                   th:text="${i + 1}">1</a>
             </li>
             <li th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
-                <a th:href="@{/admin/list(page=${currentPage + 1})}">다음</a>
+                <a th:href="@{/admin/list(page=${currentPage + 1}, searchField=${param.searchField}, searchWord=${param.searchWord})}">다음</a>
             </li>
         </ul>
     </div>

@@ -47,5 +47,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findByAccountLocked(int accountLocked, Pageable pageable);  // 잠금 계정 페이징 처리
 
+    Page<UserEntity> findByIdContaining(String id, Pageable pageable);
+    Page<UserEntity> findByNameContaining(String name, Pageable pageable);
+
+
+
 
 }
