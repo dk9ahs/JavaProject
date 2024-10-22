@@ -134,6 +134,7 @@ public class SalesBoardController {
         if (file != null && !file.isEmpty()) {
             String oImageName = file.getOriginalFilename();
             String uploadDir = new File("src/main/resources/static/images").getAbsolutePath(); // 이미지 저장 경로 지정
+//            String uploadDir = request.getSession().getServletContext().getRealPath("/");
             System.out.println(uploadDir);
 
             File dir = new File(uploadDir);

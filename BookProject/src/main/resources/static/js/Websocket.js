@@ -64,18 +64,18 @@
     }
 
     function updateMessageList(table) {
-            $.ajax({
-                url: '/messages/relist', // 메시지 목록을 가져오는 URL
-                type: 'GET',
-                success: function(data) {
-                    // 반환된 데이터를 사용하여 테이블 내용을 업데이트
-                    table.html(data);
-                },
-                error: function(xhr, status, error) {
-                    console.error('메시지 목록을 가져오는 중 오류 발생: ' + error);
-                }
-            });
-        }
+        $.ajax({
+            url: '/messages/relist', // 메시지 목록을 가져오는 URL
+            type: 'GET',
+            success: function(data) {
+                // 반환된 데이터를 사용하여 테이블 내용을 업데이트
+                table.html(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('메시지 목록을 가져오는 중 오류 발생: ' + error);
+            }
+        });
+    }
 
 
 

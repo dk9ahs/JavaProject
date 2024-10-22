@@ -63,15 +63,19 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+
+}
+.header .user-menu .btn:hover {
+    color: #3C3D37; /* hover 시 글자색 변경 */
 }
 
-.user-menu .login {
+/*.user-menu .login {
     background-color: limegreen;
     color: white;
     padding: 8px 15px;
     border-radius: 20px;
     text-decoration: none;
-}
+}*/
 
 .menu {
     display: flex;
@@ -161,4 +165,5 @@ body {
         font-size: 20px;
     }
 }
+
 
