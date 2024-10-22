@@ -44,7 +44,7 @@ public class SignupController {
         try {
             signupService.registerUser(userDTO);  // 일반 회원가입 처리
             redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다.");
-            return "redirect:/login";  // 성공 시 로그인 페이지로 리다이렉트
+            return "redirect:/";  // 성공 시 메인 페이지로 리다이렉트
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/signup";  // 실패 시 다시 회원가입 페이지로 리다이렉트

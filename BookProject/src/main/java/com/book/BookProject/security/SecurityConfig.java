@@ -100,37 +100,6 @@ public class SecurityConfig {
         return firewall;
     }
 
-//    // 로그인 성공 후 Referer 헤더 기반으로 리다이렉트하는 SuccessHandler
-//@Bean
-//public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
-//    return new SimpleUrlAuthenticationSuccessHandler() {
-//        @Override
-//        protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
-//            // 세션에서 redirectUrl 가져오기
-//            String redirectUrl = (String) request.getSession().getAttribute("redirectUrl");
-//
-//            if (redirectUrl != null && !redirectUrl.isEmpty()) {
-//                System.out.println("Redirecting to: " + redirectUrl);
-//                // 세션에서 사용 후 삭제
-//                request.getSession().removeAttribute("redirectUrl");
-//                return redirectUrl;  // redirectUrl로 리다이렉트
-//            }
-//
-//            // Referer 확인 (차선책)
-//            String referer = request.getHeader("Referer");
-//            System.out.println("Referer: " + referer);
-//
-//            if (referer != null && !referer.contains("/login")) {
-//                return referer;  // Referer가 로그인 페이지가 아니면 Referer로 리다이렉트
-//            }
-//
-//            // 기본 경로로 리다이렉트
-//            System.out.println("No valid Referer or redirectUrl found, redirecting to default target URL.");
-//            return "/";
-//        }
-//    };
-//}
-
 //     CORS 설정 추가
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
