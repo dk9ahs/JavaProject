@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-09T19:37:24+0900",
+    date = "2024-10-22T14:23:59+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
@@ -35,9 +35,9 @@ public class SalesBoardMapperImpl implements SalesBoardMapper {
         salesBoardDTO.setUpdateDate( salesBoard.getUpdateDate() );
         salesBoardDTO.setViewCount( salesBoard.getViewCount() );
         salesBoardDTO.setLikeCount( salesBoard.getLikeCount() );
+        salesBoardDTO.setLimage( salesBoard.getLimage() );
         salesBoardDTO.setOimage( salesBoard.getOimage() );
         salesBoardDTO.setSimage( salesBoard.getSimage() );
-        salesBoardDTO.setDownCount( salesBoard.getDownCount() );
 
         return salesBoardDTO;
     }
@@ -64,9 +64,9 @@ public class SalesBoardMapperImpl implements SalesBoardMapper {
         salesBoard.updateDate( dto.getUpdateDate() );
         salesBoard.viewCount( dto.getViewCount() );
         salesBoard.likeCount( dto.getLikeCount() );
+        salesBoard.limage( dto.getLimage() );
         salesBoard.oimage( dto.getOimage() );
         salesBoard.simage( dto.getSimage() );
-        salesBoard.downCount( dto.getDownCount() );
 
         return salesBoard.build();
     }
