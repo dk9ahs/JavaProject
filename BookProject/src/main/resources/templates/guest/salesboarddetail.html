@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>사구팔구</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
@@ -85,7 +85,6 @@
                     <img th:if="${salesBoard.limage != null}" th:src="@{${salesBoard.limage}}" alt="Image" class="d-block w-100"  style="height: 350px">
                     <img th:if="${salesBoard.oimage == '' or salesBoard.oimage == null} and ${salesBoard.limage == null} and (${salesBoard.simage == '' or salesBoard.simage == null})" src="/images/NoImage.jpg" alt="No Image" class="d-block w-100"  style="height: 350px">
                     <img th:unless="${salesBoard.oimage == '' or salesBoard.oimage == null}" th:src="@{/images/{image}(image=${salesBoard.simage})}" alt="Book Image" class="d-block w-100"  style="height: 350px">
-                    <img th:unless="${salesBoard.oimage == '' or salesBoard.oimage == null}" th:src="@{/images/${salesBoard.simage}" alt="Book Image" class="d-block w-100"  style="height: 350px">
                   </div>
                 </div>
               </div>
