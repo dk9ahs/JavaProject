@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/guest/unlock").permitAll()  // 계정 잠김 해제 페이지 접근 허용
                         .requestMatchers("/book", "/newbook", "/notablebooks", "/blogbestbooks", "/bookList", "/search", "/api/category", "/category/**", "/refundPayment").permitAll()  // API 경로 허용
                         .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
-                        .requestMatchers("/salesboard/**", "/inquiryboard/**").permitAll()
+                        .requestMatchers("/salesboard/**", "/inquiryboard/**", "/librarymap/**").permitAll()
                         .requestMatchers("/order/**").authenticated()
                         .requestMatchers("/","/api/sms/send", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
                         .requestMatchers("/test").permitAll()

@@ -13,6 +13,8 @@
     <script th:src="@{/js/chat.js}"></script>
     <link th:href="@{/css/Header.css}" rel="stylesheet" />
     <link th:href="@{/css/Footer.css}" rel="stylesheet" />
+    <script th:src="@{/js/Websocket.js}"></script>
+    <script th:src="@{/js/chat.js}"></script>
 </head>
 <style>
     table {
@@ -123,8 +125,8 @@
                     </td>
                     <td class="text-center" th:text="${inquiryBoard.nick}">작성자</td>
                     <td class="text-center">
-                        <span th:if="${inquiryBoard.createDate.isBefore(inquiryBoard.updateDate)}" th:text="${#temporals.format(inquiryBoard.updateDate, 'yy.MM.dd')}"></span>
-                        <span th:unless="${inquiryBoard.createDate.isBefore(inquiryBoard.updateDate)}" th:text="${#temporals.format(inquiryBoard.createDate, 'yy.MM.dd')}"></span>
+                        <span th:if="${inquiryBoard.createDate.isBefore(inquiryBoard.updateDate)}" th:text="${#temporals.format(inquiryBoard.updateDate, 'yy. MM. dd')}"></span>
+                        <span th:unless="${inquiryBoard.createDate.isBefore(inquiryBoard.updateDate)}" th:text="${#temporals.format(inquiryBoard.createDate, 'yy. MM. dd')}"></span>
                     </td>
                     <td class="text-center" th:text="${(inquiryBoard.group == 0 && inquiryBoard.responses == 1) ? '답변완료' :
                                                        (inquiryBoard.group == 0 && inquiryBoard.responses == 0) ? '답변대기' :

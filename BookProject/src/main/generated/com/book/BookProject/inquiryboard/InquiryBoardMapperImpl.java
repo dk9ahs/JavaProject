@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-10-22T09:56:41+0900",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.12 (Homebrew)"
+    date = "2024-10-22T14:23:59+0900",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.11 (Oracle Corporation)"
 )
 @Component
 public class InquiryBoardMapperImpl implements InquiryBoardMapper {
