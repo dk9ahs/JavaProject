@@ -25,9 +25,4 @@ public class MypageController {
         }
     }
 
-    @GetMapping("/order")
-    public String order() {
-        return "member/orderList";
-//        return "/member/order/orderList";
-    }
 }

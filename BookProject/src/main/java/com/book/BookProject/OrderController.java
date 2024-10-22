@@ -4,7 +4,6 @@ import com.book.BookProject.order.Order;
 import com.book.BookProject.order.OrderService;
 import com.book.BookProject.salesboard.MemberService;
 import com.book.BookProject.salesboard.SalesBoardService;
-import com.book.BookProject.user.LoginService;
 import com.book.BookProject.user.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,13 +24,11 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
-    private final LoginService loginService;
     private final MemberService memberService;
     private final SalesBoardService salesBoardService;
 
-    public OrderController(OrderService orderService, LoginService loginService, MemberService memberService, SalesBoardService salesBoardService) {
+    public OrderController(OrderService orderService, MemberService memberService, SalesBoardService salesBoardService) {
         this.orderService = orderService;
-        this.loginService = loginService;
         this.memberService = memberService;
         this.salesBoardService = salesBoardService;
     }
@@ -53,6 +51,7 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> saveOrder(@RequestBody Map<String, String> orderData, @AuthenticationPrincipal UserDetails userDetails) {
 
         System.out.println("saveOrder 메서드 호출됨");  // 로그 추가
+        System.out.println("orderData: " + orderData);  // 전달된 데이터 출력
 
         try {
             // SecurityContextHolder를 사용해 로그인된 사용자 ID를 가져옴
@@ -62,7 +61,7 @@ public class OrderController {
             // 주문 정보 생성
             Order order = Order.builder()
                     .member(user)  // 주문자 정보 설정
-                    .merchantUid(System.currentTimeMillis())  // 고유한 주문 번호 생성
+                    .merchantUid(String.valueOf(System.currentTimeMillis()))  // 고유한 주문 번호를 String으로 변환하여 설정
                     .orderDate(LocalDateTime.now())
                     .status("ORDERED")  // 기본 주문 상태 설정
                     .totalAmount(Double.parseDouble(orderData.get("amount")))  // 결제 금액 설정
@@ -72,6 +71,10 @@ public class OrderController {
                     .recipientPhone(orderData.get("buyerTel"))  // 수령인 연락처 설정
                     .paymentMethod("CARD")  // 결제 방법 설정
                     .paymentStatus("PAID")  // 결제 상태 설정
+                    .bookTitle(orderData.get("bookTitle"))  // 책 제목 추가
+                    .bookAuthor(orderData.get("bookAuthor"))  // 책 저자 추가
+                    .bookPublisher(orderData.get("bookPublisher"))  // 출판사 추가
+                    .bookImageUrl(orderData.get("bookImageUrl"))  // 책 이미지 URL 추가
                     .build();
 
             // 주문 정보 저장
@@ -89,12 +92,20 @@ public class OrderController {
         }
     }
 
-    // 아임포트 결제 검증 로직 (예시)
-    private boolean verifyPaymentWithIamport(String impUid, String merchantUid) {
-        // 실제 서버에서는 아임포트 API를 호출하여 결제를 검증하는 로직이 들어가야 합니다.
-        // 여기서는 예시로, 무조건 결제가 유효하다고 가정합니다.
-        return true;  // 결제가 성공적이었다고 가정
+    // 유저 주문 조회
+    @GetMapping
+    public String getAllOrders(Model model) {
+
+        String sId = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = memberService.findUserById(sId);  // `UserEntity` 객체를 반환
+
+        // 사용자의 주문 목록을 가져옴
+        List<Order> orders = orderService.getOrdersByUser(user.getId());
+
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "member/order/orderList";
     }
+
 
     // 특정 주문 조회
     @GetMapping("/{orderId}")
@@ -108,17 +119,11 @@ public class OrderController {
         }
     }
 
-    // 모든 주문 조회
-    @GetMapping
-    public String getAllOrders(Model model) {
-        model.addAttribute("orders", orderService.getAllOrders());
-        return "/order/orderList";
-    }
-
     // 주문 삭제
     @PostMapping("/{orderId}/delete")
     public String deleteOrder(@PathVariable Long orderId) {
         orderService.deleteOrder(orderId);
         return "redirect:/order";
     }
+
 }

@@ -11,49 +11,60 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "ORDERS") // ORDER는 예약어일 수 있으므로 백틱(`)을 사용하여 테이블 이름을 설정
+@Table(name = "ORDERS")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId; // 주문 고유 ID
+    private Long orderId;
 
     @Column(nullable = false, unique = true, length = 100)
-    private Long merchantUid; // 고유한 주문 ID (merchantUid 추가)
+    private String merchantUid;  // Long → String으로 변경
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false) // 회원 테이블의 IDX와 매핑
-    @ToString.Exclude  // Lombok 순환 참조 방지
-    private UserEntity member; // 회원과의 연관 관계 설정
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
+    private UserEntity member;
 
     @Column(nullable = false)
-    private LocalDateTime orderDate; // 주문 날짜
+    private LocalDateTime orderDate;
 
     @Column(nullable = false, length = 50)
-    private String status; // 주문 상태 (예: ORDERED, CANCELED, SHIPPED 등)
+    private String status;
 
     @Column(nullable = false)
-    private Double totalAmount; // 주문 총액
+    private Double totalAmount;
 
     @Column(nullable = false, length = 200)
-    private String shippingAddress; // 배송 주소
+    private String shippingAddress;
 
     @Column(nullable = false, length = 200)
-    private String detailAddress; // 배송 주소
+    private String detailAddress;
 
     @Column(nullable = false, length = 100)
-    private String recipientName; // 수령인 이름
+    private String recipientName;
 
     @Column(nullable = false, length = 20)
-    private String recipientPhone; // 수령인 연락처
+    private String recipientPhone;
 
     @Column(nullable = false, length = 50)
-    private String paymentMethod; // 결제 방법 (예: CARD, BANK_TRANSFER 등)
+    private String paymentMethod;
 
     @Column(nullable = false, length = 50)
-    private String paymentStatus; // 결제 상태 (예: PAID, PENDING, REFUNDED 등)
+    private String paymentStatus;
 
-    // 생성 날짜와 수정 날짜를 자동으로 관리
+    // 추가된 필드들
+    @Column(nullable = false, length = 200)
+    private String bookTitle;  // 책 제목
+
+    @Column(nullable = false, length = 100)
+    private String bookAuthor;  // 책 저자
+
+    @Column(nullable = false, length = 100)
+    private String bookPublisher;  // 책 출판사
+
+    @Column(nullable = false, length = 500)  // URL 필드 길이를 500자로 확장
+    private String bookImageUrl;  // 책 이미지 URL
+
     @Builder.Default
     @Column(updatable = false)
     private LocalDateTime createDate = LocalDateTime.now();

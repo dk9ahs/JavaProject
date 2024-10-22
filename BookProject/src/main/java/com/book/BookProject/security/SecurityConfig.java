@@ -100,7 +100,7 @@ public class SecurityConfig {
         return firewall;
     }
 
-//     CORS 설정 추가
+    //     CORS 설정 추가
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

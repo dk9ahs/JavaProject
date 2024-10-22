@@ -175,7 +175,6 @@
     const buyerAddr = document.getElementById('shippingAddress').value;
     const buyerDetailAddr = document.getElementById('shippingAddress2').value;
 
-
     // 결제 버튼 클릭 이벤트
     document.getElementById('pay-button').addEventListener('click', function() {
         const book = {
@@ -241,7 +240,6 @@
 
             if (data.success) {
                 console.log("Payment verification successful: ", data);
-<!--                alert('결제가 성공적으로 검증되었습니다.');-->
                 saveOrder(data.paymentInfo);
             } else {
                 console.log("Payment verification failed: ", data);
@@ -256,19 +254,26 @@
 
     function saveOrder(paymentInfo) {
         const orderData = {
-            impUid: paymentInfo.imp_uid,  // 결제 고유 ID
-            merchantUid: paymentInfo.merchant_uid,  // 상점 고유 주문 ID
-            amount: paymentInfo.amount,  // 결제 금액
+            impUid: paymentInfo.imp_uid,
+            merchantUid: paymentInfo.merchant_uid,
+            amount: paymentInfo.amount,
             buyerEmail: document.getElementById('orderEmail').value,
             buyerName: document.getElementById('recipientName').value,
             buyerTel: document.getElementById('recipientPhone').value,
             buyerAddr: document.getElementById('shippingAddress').value,
             buyerDetailAddr: document.getElementById('shippingAddress2').value,
             bookTitle: document.getElementById('book-title').textContent,
-            bookPrice: document.getElementById('book-price').textContent
+            bookPrice: document.getElementById('book-price').textContent,
+            bookAuthor: document.getElementById('book-author').textContent,
+            bookPublisher: document.getElementById('book-publisher').textContent,
+            bookImageUrl: document.getElementById('book-cover').src
         };
 
+        console.log(orderData);  // 데이터를 콘솔에서 확인
+
         console.log("Saving order", orderData);  // 주문 정보가 제대로 출력되는지 확인
+
+        console.log("Sending order data:", JSON.stringify(orderData));
 
         fetch('/order/saveOrder', {
             method: 'POST',
@@ -277,11 +282,19 @@
             },
             body: JSON.stringify(orderData)
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log("Response status:", response.status); // 상태 코드 출력
+            console.log("Response message:", response.statusText); // 상태 메시지 출력
+            if (!response.ok) {
+                console.error("Server responded with an error:", response.status, response.statusText);
+                throw new Error('Server response wasn\'t OK');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 // 주문 완료 후 페이지 이동 또는 추가 처리
-                window.location.href = '/';  // 예시
+                window.location.href = '/';
             } else {
                 alert('주문 저장에 실패하였습니다.');
             }
