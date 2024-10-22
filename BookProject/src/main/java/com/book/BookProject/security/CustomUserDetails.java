@@ -21,6 +21,7 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority(userEntity.getAuthority()));
     }
 
+
     @Override
     public String getPassword() {
         return userEntity.getPwd();  // 비밀번호 반환

@@ -149,20 +149,24 @@
   document.addEventListener('DOMContentLoaded', function() {
     // URL에서 책 정보 추출
     const urlParams = new URLSearchParams(window.location.search);
-    const bookCover = urlParams.get('cover');
-    const bookTitle = urlParams.get('title');
-    const bookAuthor = urlParams.get('author');
-    const bookPublisher = urlParams.get('publisher');
-    const bookPrice = urlParams.get('price');
+
+    const bookCover = urlParams.get('limage');  // 이미지 (limage)
+    const bookTitle = urlParams.get('title');   // 제목 (title)
+    const bookAuthor = urlParams.get('author'); // 저자 (author)
+    const bookPublisher = urlParams.get('publisher'); // 출판사 (publisher)
+    const bookPrice = urlParams.get('price');   // 가격 (price)
+
+    // 숫자에 쉼표를 추가한 형태로 가격을 표시
+    const formattedPrice = bookPrice ? Number(bookPrice).toLocaleString() : '가격 정보 없음';
 
     // 상품 정보 출력
     document.getElementById('book-cover').src = bookCover || 'default_cover_image.jpg'; // 기본 이미지 추가 가능
     document.getElementById('book-title').textContent = bookTitle || '제목 없음';
     document.getElementById('book-author').textContent = bookAuthor || '저자 정보 없음';
     document.getElementById('book-publisher').textContent = bookPublisher || '출판사 정보 없음';
-    document.getElementById('book-price').textContent = bookPrice || '가격 정보 없음';
-    document.getElementById('order-price').textContent = bookPrice || '0원';
-    document.getElementById('total-price').textContent = bookPrice || '0원';
+    document.getElementById('book-price').textContent = formattedPrice ? formattedPrice + ' 원' : '가격 정보 없음';
+    document.getElementById('order-price').textContent = formattedPrice ? formattedPrice + ' 원' : '0원';
+    document.getElementById('total-price').textContent = formattedPrice ? formattedPrice + ' 원' : '0원';
 
     // 사용자 정보 가져오기 (HTML 태그로부터 값 추출)
     const buyerEmail = document.getElementById('orderEmail').value;

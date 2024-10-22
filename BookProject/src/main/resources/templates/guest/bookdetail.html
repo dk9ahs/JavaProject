@@ -104,10 +104,6 @@
                 <span class="rating-score ms-2" id="book-rating">N/A</span>
             </div>
             <div class="book-description" id="book-description">책 설명</div>
-            <div class="book-actions">
-                <button class="btn btn-buy">구매하기</button>
-                <button class="btn btn-refund">환불하기</button>
-            </div>
         </div>
     </div>
 </div>
@@ -136,24 +132,6 @@
                     const rating = parseFloat(book.rating) || 0;
                     document.getElementById('stars').innerHTML = generateStars(rating);
                     document.getElementById('book-rating').textContent = rating.toFixed(1);
-
-                    // 로그인 상태 확인하여 버튼 동작 설정
-                    document.querySelector('.btn-buy').addEventListener('click', function() {
-                        if (!isAuthenticated) {
-                            // 로그인되지 않은 상태이면 /login으로 리다이렉트 + 현재 페이지를 redirectUrl로 전달
-                            const currentUrl = window.location.href;
-                            window.location.href = `/login?redirectUrl=${encodeURIComponent(currentUrl)}`;
-                        } else {
-                            const bookCover = document.getElementById('book-cover').src;
-                            const bookTitle = document.getElementById('book-title').textContent;
-                            const bookAuthor = document.getElementById('book-author').textContent;
-                            const bookPrice = document.getElementById('book-price').textContent;
-                            const bookDescription = document.getElementById('book-description').textContent;
-
-
-                            window.location.href = `/order/create?cover=${encodeURIComponent(bookCover)}&title=${encodeURIComponent(bookTitle)}&author=${encodeURIComponent(bookAuthor)}&description=${encodeURIComponent(bookDescription)}&price=${encodeURIComponent(bookPrice)}`;
-                        }
-                    });
                 })
                 .catch(error => console.error('Error fetching book details:', error));
         } else {

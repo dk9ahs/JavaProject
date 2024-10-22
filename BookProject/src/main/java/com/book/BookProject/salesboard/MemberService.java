@@ -18,4 +18,10 @@ public class MemberService {
         return userEntity.getNick();
     }
 
+    // UserEntity 반환 메서드
+    public UserEntity findUserById(String id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));
+    }
+
 }
