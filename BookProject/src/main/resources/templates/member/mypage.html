@@ -45,8 +45,12 @@
     <hr>
     <h3>나의 정보관리</h3>
     <ul>
-      <li><a href="#">개인 정보 수정</a></li>
-      <li><a href="#">회원 탈퇴</a></li>
+      <li><a href="/member/Update">개인 정보 수정</a></li>
+      <a href="#" onclick="event.preventDefault(); document.getElementById('withdraw-form').submit();" class="text-danger">회원 탈퇴</a>
+
+      <form id="withdraw-form" th:action="@{/member/withdraw}" method="post" style="display: none;">
+        <!-- 이 폼은 숨겨져 있고, POST 요청을 처리하기 위해 사용됩니다 -->
+      </form>
     </ul>
 
   </div>

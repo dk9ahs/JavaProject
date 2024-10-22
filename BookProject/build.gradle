@@ -52,6 +52,9 @@ dependencies {
 
 	// firebse realtime
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.3.0'
+
+	implementation 'net.nurigo:sdk:4.3.0'
+	implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
 }
 
 tasks.named('test') {

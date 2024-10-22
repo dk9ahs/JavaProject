@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -28,6 +29,19 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             userService.updateLastLoginDate(username);  // 마지막 로그인 시간 업데이트
         }
 
-        response.sendRedirect("/");  // 로그인 성공 후 리다이렉트
+        // 세션에서 redirectUrl 가져오기
+        String redirectUrl = (String) request.getSession().getAttribute("redirectUrl");
+
+        // Referer 확인
+        String referer = request.getHeader("Referer");
+
+        if (redirectUrl != null && !redirectUrl.isEmpty()) {
+            request.getSession().removeAttribute("redirectUrl");
+            response.sendRedirect(redirectUrl);  // 세션에 저장된 URL로 리다이렉트
+        } else if (referer != null && !referer.contains("/login")) {
+            response.sendRedirect(referer);  // Referer가 로그인 페이지가 아니면 Referer로 리다이렉트
+        } else {
+            response.sendRedirect("/");  // 기본 경로로 리다이렉트
+        }
     }
 }
