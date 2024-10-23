@@ -22,19 +22,20 @@ public class InquiryBoardMapperImpl implements InquiryBoardMapper {
         InquiryBoardDTO inquiryBoardDTO = new InquiryBoardDTO();
 
         inquiryBoardDTO.setQidx( inquiryBoard.getQidx() );
-        inquiryBoardDTO.setOrigin( inquiryBoard.getOrigin() );
-        inquiryBoardDTO.setGroup( inquiryBoard.getGroup() );
-        inquiryBoardDTO.setLayer( inquiryBoard.getLayer() );
-        inquiryBoardDTO.setResponses( inquiryBoard.getResponses() );
+        inquiryBoardDTO.setParentIdx( inquiryBoard.getParentIdx() );
+        inquiryBoardDTO.setParentId( inquiryBoard.getParentId() );
         inquiryBoardDTO.setNick( inquiryBoard.getNick() );
+        inquiryBoardDTO.setResponses( inquiryBoard.getResponses() );
         inquiryBoardDTO.setTitle( inquiryBoard.getTitle() );
         inquiryBoardDTO.setContent( inquiryBoard.getContent() );
         inquiryBoardDTO.setPass( inquiryBoard.getPass() );
         inquiryBoardDTO.setCreateDate( inquiryBoard.getCreateDate() );
         inquiryBoardDTO.setUpdateDate( inquiryBoard.getUpdateDate() );
         inquiryBoardDTO.setViewCount( inquiryBoard.getViewCount() );
-        inquiryBoardDTO.setOfile( inquiryBoard.getOfile() );
-        inquiryBoardDTO.setSfile( inquiryBoard.getSfile() );
+        inquiryBoardDTO.setLikeCount( inquiryBoard.getLikeCount() );
+        inquiryBoardDTO.setOFile( inquiryBoard.getOFile() );
+        inquiryBoardDTO.setSFile( inquiryBoard.getSFile() );
+        inquiryBoardDTO.setDownCount( inquiryBoard.getDownCount() );
 
         return inquiryBoardDTO;
     }
