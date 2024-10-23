@@ -60,20 +60,6 @@
           document.body.appendChild(form);
           form.submit();
       }
-
-    function openNewWindow(receiver){
-        let loginNick = [[${loginNick}]]
-
-        if(loginNick == 'Guest'){
-           var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
-           if(answer == true){
-                location.href="../guest/loginform";
-           }
-        }
-        else {
-            window.open("/messages/form?receiver=" + receiver, "popup",
-                   'width=600,height=500');
-        }
     }
 
     // 바로구매 버튼 클릭 시 결제 페이지로 이동
@@ -82,21 +68,6 @@
         const orderUrl = `/order/create?limage=${encodeURIComponent(limage)}&sidx=${sidx}&title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&publisher=${encodeURIComponent(publisher)}&price=${encodeURIComponent(price)}`;
         window.location.href = orderUrl;
     }
-
-      function openNewWindow(receiver){
-      let loginNick = [[${loginNick}]]
-
-      if(loginNick == 'Guest'){
-         var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
-         if(answer == true){
-              location.href="../guest/loginform";
-         }
-      }
-      else {
-          window.open("/messages/form?receiver=" + receiver, "popup",
-                 'width=600,height=500');
-      }
-  }
   </script>
 </head>
 <body>
@@ -154,51 +125,6 @@
         <td>
               <span th:if="${salesBoard.updateDate != null && salesBoard.updateDate != salesBoard.createDate}"
                     th:text="${#temporals.format(salesBoard.updateDate, 'yyyy-MM-dd')} + ' (수정)'"></span>
-              <span th:unless="${salesBoard.updateDate != null && salesBoard.updateDate != salesBoard.createDate}"
-                    th:text="${#temporals.format(salesBoard.createDate, 'yyyy-MM-dd')}"></span>
-            </td>
-          </tr>
-          <tr>
-            <th class="text-center" style="vertical-align:middle;"> 가격 </th>
-              <td th:if="${salesBoard.price == 0}" style="color: red;">가격 없음</td>
-              <td th:unless="${salesBoard.price == 0}" style="color: red;" th:text="${salesBoard.price}"></td>
-            <th class="text-center" style="vertical-align:middle;"> 지역 </th>
-              <td th:if="${#strings.contains(salesBoard.region, '선택')}">지역 미설정</td>
-              <td th:unless="${#strings.contains(salesBoard.region, '선택')}" th:text="${salesBoard.region}"></td>
-          </tr>
-          <tr>
-            <th class="text-center" style="vertical-align:middle;"> 책 상세내용 </th>
-              <td colspan="3">
-                <span th:text="${salesBoard.booktitle}"></span> |
-                <span th:text="${salesBoard.author}"></span> |
-                <span th:text="${salesBoard.publisher}"></span>
-              </td>
-          </tr>
-          <tr>
-            <th class="text-center" style="vertical-align:middle;">상세 설명</th>
-              <td colspan="3" th:text="${salesBoard.content}">글 내용 </td>
-          </tr>
-          <tr>
-            <td colspan="4" class="text-center">
-              <button th:unless="${salesBoard.price == 0}" class="button">바로구매</button>
-              <button th:if="${salesBoard.price == 0}" class="button" th:attr="onclick=|openNewWindow('${salesBoard.nick}')|">연락하기</button>
-              <button class="button" >장바구니</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-        <div class="col d-flex justify-content-end">
-          <!-- 각종 버튼 부분 -->
-          <button type="button" class="btn text-white" onclick="location.href='/salesboard';">리스트보기</button>
-          &nbsp;&nbsp;
-          <button type="button" class="btn text-white" onclick="location.href='/salesboard/write';">글쓰기</button>
-            <div th:if="${salesBoard.nick == loginNick} or ${#authentication.authorities.?[authority == 'ROLE_ADMIN'].size() > 0}">
-                <button type="button" class="btn text-white" th:onclick="|location.href='@{edit(sidx=${salesBoard.sidx})}'|">수정하기</button>
-                <button type="button" class="btn text-white" th:onclick="deletePost([[${salesBoard.sidx}]]);">삭제</button>
-            </div>
-          &nbsp;&nbsp;
-        </div>
           <span th:unless="${salesBoard.updateDate != null && salesBoard.updateDate != salesBoard.createDate}"
                 th:text="${#temporals.format(salesBoard.createDate, 'yyyy-MM-dd')}"></span>
         </td>
@@ -225,7 +151,7 @@
       </tr>
       <tr>
         <td colspan="4" class="text-center">
-          <button th:unless="${salesBoard.price == 0}" class="button"
+          <button class="button"
                   th:data-limage="${salesBoard.limage}"
                   th:data-sidx="${salesBoard.sidx}"
                   th:data-title="${salesBoard.booktitle}"
@@ -241,7 +167,6 @@
                       this.getAttribute('data-price'))">
             바로구매
           </button>
-          <button th:if="${salesBoard.price == 0}" class="button" th:attr="onclick=|openNewWindow('${post.nick}')|">연락하기</button>
           <button class="button">장바구니</button>
         </td>
       </tr>
