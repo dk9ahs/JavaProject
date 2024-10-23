@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     @Autowired
     UserRepository userRepository;
-
+    
+    // 아이디를 통해 닉네임 찾기
     public String findNickById(String id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다."));

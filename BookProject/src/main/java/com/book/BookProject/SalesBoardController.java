@@ -48,23 +48,7 @@ public class SalesBoardController {
     @Autowired
     RedisUtil redisUtil;
 
-    // 게시판 목록 조회
-//    @GetMapping
-//    public String list(Model model, HttpServletRequest request){
-//        List<SalesBoardDTO> salesBoardDTOS = salesBoardService.getAllSalesBoards();
-//        model.addAttribute("salesBoards", salesBoardDTOS);
-//
-//        String sId = SecurityContextHolder.getContext().getAuthentication().getName();
-//        if (sId.equals("anonymousUser")) {
-//            model.addAttribute("loginNick", "Guest");
-//        } else {
-//            String nick = memberService.findNickById(sId);
-//            model.addAttribute("loginNick", nick);
-//        }
-//
-//        return "/guest/salesboardlist";
-//    }
-
+    // 게시판 목록
     @GetMapping
     public String list(Model model,
                        HttpServletRequest request,
@@ -85,12 +69,6 @@ public class SalesBoardController {
         model.addAttribute("currentGroup", currentGroup);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("pageSize", pageSize);
-
-        System.out.println(totalCount);
-        System.out.println(totalPage);
-        System.out.println(page);
-        System.out.println(currentGroup);
-        System.out.println(pageSize);
 
         model.addAttribute("searchField", searchField); // 검색필드
         model.addAttribute("searchWord", searchWord); // 검색어
@@ -134,7 +112,7 @@ public class SalesBoardController {
         if (file != null && !file.isEmpty()) {
             String oImageName = file.getOriginalFilename();
             String uploadDir = new File("src/main/resources/static/images").getAbsolutePath(); // 이미지 저장 경로 지정
-//            String uploadDir = request.getSession().getServletContext().getRealPath("/");
+//            String uploadDir = request.getSession().getServletContext().getRealPath("/"); // webapp 저장
             System.out.println(uploadDir);
 
             File dir = new File(uploadDir);
@@ -174,33 +152,8 @@ public class SalesBoardController {
         salesBoardService.createSalesBoard(salesBoardDTO);
         return "redirect:/salesboard";
     }
-
-    // 게시글 상세 보기
-//    @GetMapping("/detail")
-//    public String detail(Long sidx, Model model) {
-//        salesBoardService.updateViewCount(sidx);
-//        model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sidx));
-//
-//        return "/guest/salesboarddetail";
-//    }
-
-//    @GetMapping("/detail")
-//    public String detail(Long sidx, Model model, HttpServletRequest req, HttpServletRequest res) {
-//        salesBoardService.updateViewCount(sidx, req);
-//
-//        String sId = SecurityContextHolder.getContext().getAuthentication().getName();
-//        if (sId.equals("anonymousUser")) {
-//            model.addAttribute("loginNick", "Guest");
-//        } else {
-//            String nick = memberService.findNickById(sId);
-//            model.addAttribute("loginNick", nick);
-//        }
-//
-//        model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sidx));
-//
-//        return "/guest/salesboarddetail";
-//    }
-
+    
+    // 글 상세보기
     @GetMapping("/detail")
     public String detail(Long sidx, Model model, HttpServletRequest req, HttpServletRequest res) {
         salesBoardService.updateViewCount(sidx, req);
@@ -221,28 +174,6 @@ public class SalesBoardController {
 
         return "/guest/salesboarddetail";
     }
-
-//    @GetMapping("/detail")
-//    public String detail(Long sidx, Model model, HttpServletRequest req) {
-//        salesBoardService.updateViewCount(sidx, req);
-//
-//        String sId = SecurityContextHolder.getContext().getAuthentication().getName();
-//        if (sId.equals("anonymousUser")) {
-//            model.addAttribute("loginNick", "Guest");
-//            model.addAttribute("liked", false); // 비로그인 상태에서 좋아요 여부
-//        } else {
-//            String nick = memberService.findNickById(sId);
-//            model.addAttribute("loginNick", nick);
-//
-//            // 사용자가 좋아요를 눌렀는지 확인
-//            String userId = sId; // 로그인한 사용자 ID
-//            boolean liked = redisUtil.getData("likeCount::" + sidx + "::" + userId) != null;
-//            model.addAttribute("liked", liked);
-//        }
-//
-//        model.addAttribute("salesBoard", salesBoardService.getSalesBoardById(sidx));
-//        return "/guest/salesboarddetail";
-//    }
 
     // 게시글 삭제 하기
     @GetMapping("/delete")
@@ -304,17 +235,8 @@ public class SalesBoardController {
         salesBoardService.updateSalesBored(salesBoardDTO.getSidx(), salesBoardDTO);
         return "redirect:/salesboard/detail?sidx=" + salesBoardDTO.getSidx();
     }
-
+    
     // 좋아요 기능
-//    @GetMapping("/like")
-//    public String like(Long sidx, HttpServletRequest request) {
-//        salesBoardService.updateLikeCount(sidx);
-//
-//        String referer = request.getHeader("Referer"); // 헤더에서 이전 페이지를 읽는다.
-//
-//        return "redirect:"+ referer;
-//    }
-
     @GetMapping("/like")
     public String like(Long sidx, HttpServletRequest request) {
         String sId = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -331,29 +253,7 @@ public class SalesBoardController {
         return "redirect:"+ referer;
     }
 
-//    @GetMapping("/download")
-//    public ResponseEntity<Object> download(String simage, Long sidx) {
-//
-//        salesBoardService.updateDownCount(sidx); // 다운로드 수 증가
-//
-//        String path = new File("src/main/resources/static/images").getAbsolutePath() +"/" + simage;
-//        System.out.println(path);
-//
-//        try {
-//            Path filePath = Paths.get(path);
-//            Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
-//
-//            File file = new File(path);
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
-//
-//            return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
-//        } catch(Exception e) {
-//            return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
-//        }
-//    }
-
+    // 다운로드
     @GetMapping("/download")
     public ResponseEntity<Object> download(String simage) {
         String path = new File("src/main/resources/static/images").getAbsolutePath() +"/" + simage;
@@ -374,6 +274,7 @@ public class SalesBoardController {
         }
     }
 
+    // 좋아요 취소
     @PostMapping("/updateDownloadCount")
     public ResponseEntity<Void> updateDownloadCount(@RequestParam("sidx") Long sidx) {
         salesBoardService.updateDownCount(sidx);

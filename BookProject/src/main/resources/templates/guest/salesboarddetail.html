@@ -61,6 +61,21 @@
             form.submit();
         }
       }
+
+    function openNewWindow(receiver){
+        let loginNick = [[${loginNick}]]
+
+        if(loginNick == 'Guest'){
+           var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
+           if(answer == true){
+                location.href="../guest/loginform";
+           }
+        }
+        else {
+            window.open("/messages/form?receiver=" + receiver, "popup",
+                   'width=600,height=500');
+        }
+    }
   </script>
 </head>
 <body>
@@ -144,8 +159,9 @@
           </tr>
           <tr>
             <td colspan="4" class="text-center">
-              <button class="button">바로구매</button>
-              <button class="button">장바구니</button>
+              <button th:unless="${salesBoard.price == 0}" class="button">바로구매</button>
+              <button th:if="${salesBoard.price == 0}" class="button" th:attr="onclick=|openNewWindow('${salesBoard.nick}')|">연락하기</button>
+              <button class="button" >장바구니</button>
             </td>
           </tr>
           </tbody>
@@ -156,7 +172,6 @@
           <button type="button" class="btn text-white" onclick="location.href='/salesboard';">리스트보기</button>
           &nbsp;&nbsp;
           <button type="button" class="btn text-white" onclick="location.href='/salesboard/write';">글쓰기</button>
-          &nbsp;&nbsp;
             <div th:if="${salesBoard.nick == loginNick} or ${#authentication.authorities.?[authority == 'ROLE_ADMIN'].size() > 0}">
                 <button type="button" class="btn text-white" th:onclick="|location.href='@{edit(sidx=${salesBoard.sidx})}'|">수정하기</button>
                 <button type="button" class="btn text-white" th:onclick="deletePost([[${salesBoard.sidx}]]);">삭제</button>

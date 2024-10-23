@@ -23,38 +23,13 @@ public class ChatService {
     public ChatService(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference;
     }
-	
-//    public CompletableFuture<List<String>> getChatRoomList() {
-//        CompletableFuture<List<String>> futureChatRooms = new CompletableFuture<>();
-//        List<String> chatRooms = new ArrayList<>();
-//        DatabaseReference chatRoomsRef = databaseReference.child("chatRooms");
-//
-//        chatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    chatRooms.add(snapshot.getKey());
-//                }
-//                futureChatRooms.complete(chatRooms);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            	System.err.println("Firebase error: " + databaseError.getMessage()); // 로그 추가
-//                System.err.println("채팅방 리스트를 읽어오던 중 오류 발생 : " + databaseError.getMessage());
-//                futureChatRooms.completeExceptionally(new RuntimeException("채팅방 리스트를 읽어오던 중 오류 발생"));
-//            }
-//        });
-//
-//        return futureChatRooms;
-//    }
 
+    // 채팅방 목록 가져오기
     public CompletableFuture<List<String>> getChatRoomList() {
         CompletableFuture<List<String>> futureChatRooms = new CompletableFuture<>();
         List<String> chatRooms = new ArrayList<>();
         DatabaseReference chatRoomsRef = databaseReference.child("chatRooms");
 
-        // 채팅방 목록 가져오기
         chatRoomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -102,9 +77,7 @@ public class ChatService {
         return futureChatRooms;
     }
 
-
-
-
+    // 채팅 보내기
     public void sendMessage(ChatDTO chatDTO) {
         String chatRoomId = chatDTO.getChatRoomId();
         DatabaseReference chatRoomRef = databaseReference.child("chatRooms").child(chatRoomId); // Firebase 경로 설정
@@ -119,6 +92,7 @@ public class ChatService {
         chatRoomRef.push().setValueAsync(messageMap);
     }
 
+    // 채팅방 들어가기
     public CompletableFuture<List<ChatDTO>> getMessagesByChatRoomId(String chatRoomId) {
         CompletableFuture<List<ChatDTO>> futureMessages = new CompletableFuture<>();
         List<ChatDTO> messages = new ArrayList<>();
@@ -144,21 +118,7 @@ public class ChatService {
         return futureMessages;
     }
 
-//    public void deleteChatRoom(String chatRoomId) {
-//        DatabaseReference chatRoomRef = databaseReference.child("chatRooms").child(chatRoomId);
-//
-//        // 비동기 작업 수행
-//        ApiFuture<Void> future = chatRoomRef.removeValueAsync();
-//
-//        // 비동기 작업 완료 대기
-//        try {
-//            future.get(); // 성공적으로 완료되면 아무것도 하지 않음
-//            System.out.println("Chat room deleted successfully.");
-//        } catch (Exception e) {
-//            System.err.println("Failed to delete chat room: " + e.getMessage());
-//        }
-//    }
-
+    // 삭제시 채팅방 viewStatus를 0으로 업데이트 ( 리스트에서 안보이게)
     public void updateViewStatus(String chatRoomId) {
         // chatRoomId에 해당하는 메시지의 경로를 찾기 위해 chatRooms의 messages 경로를 사용
         DatabaseReference messagesRef = databaseReference.child("chatRooms").child(chatRoomId);

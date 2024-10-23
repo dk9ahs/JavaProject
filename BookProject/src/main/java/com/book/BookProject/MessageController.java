@@ -38,6 +38,7 @@ public class MessageController {
         return "member/MessageForm";
     }
 
+    // 쪽지 읽기
     @GetMapping("/view")
     public String view(Model model, Long msidx) {
 
@@ -51,6 +52,7 @@ public class MessageController {
         return "member/MessageView";
     }
 
+    // 보낸 쪽지 읽기
     @GetMapping("/sendview")
     public String sendview(Model model, Long msidx) {
 
@@ -99,7 +101,7 @@ public class MessageController {
 
         return "member/MessageList";
     }
-
+    // 보낸 쪽지함
     @GetMapping("/sentlist")
     public String sentlist(Model model,
                        @RequestParam(defaultValue = "1") int page) {
@@ -130,6 +132,7 @@ public class MessageController {
         return "member/MessageSentList";
     }
 
+    // 쪽지 도착시 리스트 reload
     @GetMapping("/relist")
     public String relist(Model model,
                        @RequestParam(defaultValue = "1") int page) {
@@ -165,18 +168,20 @@ public class MessageController {
         return "member/MessageList :: #messageListTable";
     }
 
+    // 받은 메세지 list에서 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteMessages(@RequestBody List<Long> msidxList){
         messageService.hideMessages(msidxList);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    // 보낸 메세지 list에서 삭제
     @DeleteMapping("/senddelete")
     public ResponseEntity<Void> senddeleteMessages(@RequestBody List<Long> msidxList){
         messageService.sendHideMessages(msidxList);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // 회원 확인
     @GetMapping("/checkNick")
     public boolean checkNickExist(@RequestParam String nick) {
 

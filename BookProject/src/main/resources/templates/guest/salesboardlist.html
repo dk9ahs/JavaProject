@@ -245,8 +245,9 @@
                 </td>
                 <td class="remarks" style="vertical-align: middle;">
                     <div class="book-actions">
-                        <button class="button">바로구매</button>
-                        <button class="button">장바구니</button>
+                        <button th:unless="${post.price == 0}" class="button">바로구매</button>
+                        <button th:if="${post.price == 0}" class="button" th:attr="onclick=|openNewWindow('${post.nick}')|">연락하기</button>
+                        <button class="button" >장바구니</button>
                     </div>
                 </td>
             </tr>
