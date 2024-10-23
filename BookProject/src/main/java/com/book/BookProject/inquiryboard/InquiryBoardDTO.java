@@ -2,7 +2,6 @@ package com.book.BookProject.inquiryboard;
 
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
