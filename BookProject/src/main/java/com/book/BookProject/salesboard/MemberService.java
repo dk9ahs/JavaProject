@@ -7,11 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MemberService {
-    @Autowired
-    UserRepository userRepository;
-    
     // 아이디를 통해 닉네임 찾기
-
     private final UserRepository userRepository;
 
     public MemberService(UserRepository userRepository) {
