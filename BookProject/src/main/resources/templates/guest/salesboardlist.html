@@ -144,36 +144,6 @@
         const orderUrl = `/order/create?limage=${encodeURIComponent(limage)}&sidx=${sidx}&title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&publisher=${encodeURIComponent(publisher)}&price=${encodeURIComponent(price)}`;
         window.location.href = orderUrl;
     }
-
-    function checkWritePermission(){
-
-        let loginNick = [[${loginNick}]]
-
-        if(loginNick == 'Guest'){
-           var answer = window.confirm("비회원은 글쓰기가 불가능합니다. 로그인 하시겠습니까?");
-           if(answer == true){
-                location.href="../guest/loginform";
-           }
-        }
-        else {
-            location.href="/salesboard/write";
-        }
-    }
-
-    function openNewWindow(receiver){
-        let loginNick = [[${loginNick}]]
-
-        if(loginNick == 'Guest'){
-           var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
-           if(answer == true){
-                location.href="../guest/loginform";
-           }
-        }
-        else {
-            window.open("/messages/form?receiver=" + receiver, "popup",
-                   'width=600,height=500');
-        }
-    }
 </script>
 
 <body>
@@ -219,44 +189,66 @@
                             <a th:case="wanted" th:text="'[구해요] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
                             <a th:case="*" th:text="'[거래완료] ' + ${post.title}" th:href="@{salesboard/detail(sidx=${post.sidx})}"></a>
                         </th:block>
-                        <th:block th:unless="${loginNick == 'Guest'}">
-                            <a th:href="@{salesboard/like(sidx=${post.sidx})}"><i class="bi bi-hand-thumbs-up text-danger" th:if="${likedList[postStat.index]}"></i><i class="bi bi-hand-thumbs-up" th:unless="${likedList[postStat.index]}"></i></a>
-                        </th:block>
-                        <span th:text="${post.likeCount}"></span>&nbsp;
-                    </div>
-                </td>
-                <td style="text-align:center; vertical-align: middle;">
-                    <span th:text="${post.nick}">판매자 닉네임</span> <a th:attr="onclick=|openNewWindow('${post.nick}')|"><i class="bi bi-chat-dots-fill"></i></a>
-                </td>
-                <td  style="text-align:center; vertical-align: middle;" >
-                    <span th:if="${post.updateDate == null}" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
-                    <span th:unless="${post.updateDate == null}" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"></span>
-                </td>
-                <td class="remarks" style="vertical-align: middle;">
-                    <div class="book-actions">
-                        <button th:unless="${post.price == 0}" class="button"
-                                th:data-limage="${post.limage}"
-                                th:data-sidx="${post.sidx}"
-                                th:data-title="${post.booktitle}"
-                                th:data-author="${post.author}"
-                                th:data-publisher="${post.publisher}"
-                                th:data-price="${post.price}"
-                                onclick="redirectToOrder(
+                    </strong>
+                    <p style="white-space: nowrap;">
+                        <span style="font-weight: bold;" th:text="${post.booktitle}"></span> <br/>
+                        지은이 : <span th:text="${post.author}"></span> <br/>
+                        출판사 : <span th:text="${post.publisher}"></span>
+                    </p>
+                    <!-- 지역 -->
+                    <span th:if="${#strings.contains(post.region, '선택')}">지역 미설정</span>
+                    <span th:unless="${#strings.contains(post.region, '선택')}" th:text="${post.region}"></span>
+                    <!--가격 -->
+                    <br/>
+                    <span class="price" th:if="${post.price == 0}">가격 정보 없음</span>
+                    <span class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'"></span>
+                </div>
+            </div>
+
+            <!--조회수, 좋아요-->
+            <div style="text-align:right; font-size:20px;">
+                <i class="bi bi-eye"></i> <span th:text="${post.viewCount}"></span>
+                <th:block th:if="${loginNick == 'Guest'}">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                </th:block>
+                <th:block th:unless="${loginNick == 'Guest'}">
+                    <a th:href="@{salesboard/like(sidx=${post.sidx})}"><i class="bi bi-hand-thumbs-up text-danger" th:if="${likedList[postStat.index]}"></i><i class="bi bi-hand-thumbs-up" th:unless="${likedList[postStat.index]}"></i></a>
+                </th:block>
+                <span th:text="${post.likeCount}"></span>&nbsp;
+            </div>
+        </td>
+        <td style="text-align:center; vertical-align: middle;">
+            <span th:text="${post.nick}">판매자 닉네임</span> <a th:attr="onclick=|openNewWindow('${post.nick}')|"><i class="bi bi-chat-dots-fill"></i></a>
+        </td>
+        <td style="text-align:center; vertical-align: middle;" >
+            <span th:if="${post.updateDate == null}" th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></span>
+            <span th:unless="${post.updateDate == null}" th:text="${#temporals.format(post.updateDate, 'yyyy-MM-dd')}"></span>
+        </td>
+        <td class="remarks" style="vertical-align: middle;">
+            <div class="book-actions">
+                <button th:unless="${post.price == 0}" class="button"
+                        th:data-limage="${post.limage}"
+                        th:data-sidx="${post.sidx}"
+                        th:data-title="${post.booktitle}"
+                        th:data-author="${post.author}"
+                        th:data-publisher="${post.publisher}"
+                        th:data-price="${post.price}"
+                        onclick="redirectToOrder(
                         this.getAttribute('data-limage'),
                         this.getAttribute('data-sidx'),
                         this.getAttribute('data-title'),
                         this.getAttribute('data-author'),
                         this.getAttribute('data-publisher'),
                         this.getAttribute('data-price'))">
-                            바로구매
-                        </button>
-                        <button th:if="${post.price == 0}" class="button" th:attr="onclick=|openNewWindow('${post.nick}')|">연락하기</button>
-                        <button class="button" >장바구니</button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-    </table>
+                    바로구매
+                </button>
+                <button th:if="${post.price == 0}" class="button" th:attr="onclick=|openNewWindow('${post.nick}')|">연락하기</button>
+                <button class="button" >장바구니</button>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 <div class="write-btn-wrapper mt-1">
     <a href="javascript:checkWritePermission();" class="btn">글쓰기</a>
