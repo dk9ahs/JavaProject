@@ -197,6 +197,18 @@
                     </p>
                 </div>
             </div>
+
+            <!--조회수, 좋아요-->
+            <div style="text-align:right; font-size:20px;">
+                <i class="bi bi-eye"></i> <span th:text="${post.viewCount}"></span>
+                <th:block th:if="${loginNick == 'Guest'}">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                </th:block>
+                <th:block th:unless="${loginNick == 'Guest'}">
+                    <a th:href="@{salesboard/like(sidx=${post.sidx})}"><i class="bi bi-hand-thumbs-up text-danger" th:if="${likedList[postStat.index]}"></i><i class="bi bi-hand-thumbs-up" th:unless="${likedList[postStat.index]}"></i></a>
+                </th:block>
+                <span th:text="${post.likeCount}"></span>&nbsp;
+            </div>
         </td>
         <td style="text-align:center; vertical-align: middle;">
             <span th:text="${post.nick}">판매자 닉네임</span> <a th:attr="onclick=|openNewWindow('${post.nick}')|"><i class="bi bi-chat-dots-fill"></i></a>
