@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -67,6 +68,21 @@
         // 인코딩 후 결제 페이지로 전달
         const orderUrl = `/order/create?limage=${encodeURIComponent(limage)}&sidx=${sidx}&title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&publisher=${encodeURIComponent(publisher)}&price=${encodeURIComponent(price)}`;
         window.location.href = orderUrl;
+    }
+
+    function openNewWindow(receiver){
+        let loginNick = [[${loginNick}]]
+
+        if(loginNick == 'Guest'){
+           var answer = window.confirm("비회원은 쪽지 기능이 불가능합니다. 로그인 하시겠습니까?");
+           if(answer == true){
+                location.href="../guest/loginform";
+           }
+        }
+        else {
+            window.open("/messages/form?receiver=" + receiver, "popup",
+                   'width=600,height=500');
+        }
     }
   </script>
 </head>
@@ -151,7 +167,7 @@
       </tr>
       <tr>
         <td colspan="4" class="text-center">
-          <button class="button"
+          <button class="button" th:unless="${salesBoard.price == 0}"
                   th:data-limage="${salesBoard.limage}"
                   th:data-sidx="${salesBoard.sidx}"
                   th:data-title="${salesBoard.booktitle}"
@@ -167,6 +183,7 @@
                       this.getAttribute('data-price'))">
             바로구매
           </button>
+          <button th:if="${salesBoard.price == 0}" class="button" th:attr="onclick=|openNewWindow('${salesBoard.nick}')|">연락하기</button>
           <button class="button">장바구니</button>
         </td>
       </tr>
