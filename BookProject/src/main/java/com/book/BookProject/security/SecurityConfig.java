@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
                         .requestMatchers("/salesboard/**", "/inquiryboard/**", "/librarymap/**").permitAll()
                         .requestMatchers("/order/**").authenticated()
-                        .requestMatchers("/","/api/sms/send", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/","/api/sms/send", "/register", "/signup", "/login", "/find/**", "/IdCheck", "/NickCheck").permitAll()  // 추가
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
