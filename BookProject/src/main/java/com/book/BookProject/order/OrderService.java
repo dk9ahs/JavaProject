@@ -28,6 +28,11 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    // 사용자별 주문 조회 메서드
+    public List<Order> getOrdersByUser(String userId) {
+        return orderRepository.findByMemberId(userId);
+    }
+
     // 주문 삭제 메서드
     public void deleteOrder(Long orderId) {
         orderRepository.deleteById(orderId);
