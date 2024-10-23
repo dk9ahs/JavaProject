@@ -195,6 +195,13 @@
                         지은이 : <span th:text="${post.author}"></span> <br/>
                         출판사 : <span th:text="${post.publisher}"></span>
                     </p>
+                    <!-- 지역 -->
+                    <span th:if="${#strings.contains(post.region, '선택')}">지역 미설정</span>
+                    <span th:unless="${#strings.contains(post.region, '선택')}" th:text="${post.region}"></span>
+                    <!--가격 -->
+                    <br/>
+                    <span class="price" th:if="${post.price == 0}">가격 정보 없음</span>
+                    <span class="price" th:unless="${post.price == 0}" th:text="${post.price} + ' 원'"></span>
                 </div>
             </div>
 
@@ -219,7 +226,7 @@
         </td>
         <td class="remarks" style="vertical-align: middle;">
             <div class="book-actions">
-                <button class="button"
+                <button th:unless="${post.price == 0}" class="button"
                         th:data-limage="${post.limage}"
                         th:data-sidx="${post.sidx}"
                         th:data-title="${post.booktitle}"
@@ -233,8 +240,10 @@
                         this.getAttribute('data-author'),
                         this.getAttribute('data-publisher'),
                         this.getAttribute('data-price'))">
-                    바로구매
+                        바로구매
                 </button>
+                <button th:if="${post.price == 0}" class="button" th:attr="onclick=|openNewWindow('${post.nick}')|">연락하기</button>
+                <button class="button" >장바구니</button>
             </div>
         </td>
     </tr>
