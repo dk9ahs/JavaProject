@@ -71,4 +71,7 @@ public class Order {
 
     @Builder.Default
     private LocalDateTime updateDate = LocalDateTime.now();
+
+    @Transient
+    private String formattedTotalAmount; // 포맷팅된 가격을 저장할 임시 필드
 }

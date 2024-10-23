@@ -5,6 +5,7 @@ import com.book.BookProject.order.OrderService;
 import com.book.BookProject.salesboard.MemberService;
 import com.book.BookProject.salesboard.SalesBoardService;
 import com.book.BookProject.user.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +36,7 @@ public class OrderController {
 
     // 주문 생성 페이지로 이동 (로그인된 회원 정보를 전달)
     @GetMapping("/create")
-    public String showCreateOrderPage(Model model) {
+    public String showCreateOrderPage(Model model, HttpServletRequest request) {
         // SecurityContextHolder를 사용해 로그인된 사용자 ID를 가져옴
         String sId = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = memberService.findUserById(sId);  // `UserEntity` 객체를 반환
@@ -48,10 +49,7 @@ public class OrderController {
 
     // 주문 저장
     @PostMapping("/saveOrder")
-    public ResponseEntity<Map<String, Object>> saveOrder(@RequestBody Map<String, String> orderData, @AuthenticationPrincipal UserDetails userDetails) {
-
-        System.out.println("saveOrder 메서드 호출됨");  // 로그 추가
-        System.out.println("orderData: " + orderData);  // 전달된 데이터 출력
+    public ResponseEntity<Map<String, Object>> saveOrder(@RequestBody Map<String, String> orderData, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
 
         try {
             // SecurityContextHolder를 사용해 로그인된 사용자 ID를 가져옴
@@ -105,7 +103,6 @@ public class OrderController {
         model.addAttribute("orders", orderService.getAllOrders());
         return "member/order/orderList";
     }
-
 
     // 특정 주문 조회
     @GetMapping("/{orderId}")

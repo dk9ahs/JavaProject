@@ -18,6 +18,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 public class SecurityConfig {
     private final UserServiceImpl userServiceImpl;
@@ -40,6 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())  // CSRF 보호 비활성화
+                .cors(withDefaults())  // CORS 설정 활성화
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/guest/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/static/**").permitAll()
                         .requestMatchers("/guest/unlock").permitAll()  // 계정 잠김 해제 페이지 접근 허용
@@ -100,7 +103,7 @@ public class SecurityConfig {
         return firewall;
     }
 
-    //     CORS 설정 추가
+    // CORS 설정 추가
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -112,4 +115,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
