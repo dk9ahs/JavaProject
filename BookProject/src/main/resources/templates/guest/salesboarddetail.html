@@ -111,7 +111,8 @@
               </div>
             </div>
           </div>
-          <button th:if="${salesBoard.oimage != ''} and ${salesBoard.oimage != null}" class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage}, sidx=${salesBoard.sidx})}'|">다운로드</button>
+<!--          <button th:if="${salesBoard.oimage != ''} and ${salesBoard.oimage != null}" class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage}, sidx=${salesBoard.sidx})}'|">다운로드</button>-->
+          <button th:if="${salesBoard.oimage != ''} and ${salesBoard.oimage != null}" class="button" th:onclick="|location.href='@{download(simage=${salesBoard.simage})}'|">다운로드</button>
         </td>
         <td colspan="4">
           <th:block th:switch="${salesBoard.classification}">
