@@ -33,6 +33,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query(value = "update MESSAGE set viewstatus = 0 where msidx=:msidx", nativeQuery = true)
     int updateViewstatus(@Param("msidx") Long msidx);
 
+    // 보낸 쪽지 list에서 삭제
     @Modifying
     @Query(value = "update MESSAGE set sendviewstatus = 0 where msidx=:msidx", nativeQuery = true)
     int updateSendViewstatus(@Param("msidx") Long msidx);

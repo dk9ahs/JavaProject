@@ -18,6 +18,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 public class SecurityConfig {
     private final UserServiceImpl userServiceImpl;
@@ -47,7 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/bestseller", "/bookdetail/**", "/mypage/**").permitAll()
                         .requestMatchers("/salesboard/**", "/inquiryboard/**", "/librarymap/**").permitAll()
                         .requestMatchers("/order/**").authenticated()
-                        .requestMatchers("/","/api/sms/send", "/register", "/signup", "/login", "/findId", "/findPassword", "/IdCheck", "/NickCheck").permitAll()  // 추가
+                        .requestMatchers("/","/api/sms/send", "/register", "/signup", "/login","/find/**", "/IdCheck", "/NickCheck").permitAll()  // 추가
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/guest/SocialSignup").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
@@ -100,7 +102,7 @@ public class SecurityConfig {
         return firewall;
     }
 
-//     CORS 설정 추가
+    // CORS 설정 추가
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -112,4 +114,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }

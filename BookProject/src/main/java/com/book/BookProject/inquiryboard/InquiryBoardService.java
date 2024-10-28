@@ -89,6 +89,7 @@ public class InquiryBoardService {
             InquiryBoard updateBoard = inquiryBoardMapper.toEntity(saveDTO);
             inquiryBoardRepository.save(updateBoard); // 2차 저장
         }
+
     }
 
     //문의게시판 글 수정
@@ -106,7 +107,6 @@ public class InquiryBoardService {
         } else {
             originalDTO.setPass(inquiryBoardDTO.getPass());
         }
-
         originalDTO.setTitle(inquiryBoardDTO.getTitle());
         originalDTO.setContent(inquiryBoardDTO.getContent());
         originalDTO.setUpdateDate(inquiryBoardDTO.getCreateDate());

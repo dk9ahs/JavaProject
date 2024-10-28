@@ -11,10 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SalesBoardRepository extends JpaRepository<SalesBoard, Long> {
 
-    // 최신 게시물 순으로 불러오기
-//    @Query(value = "select * from SALESBOARD order by sidx desc", nativeQuery = true)
-//    List<SalesBoard> findSalesBoardPost();
-
     @Modifying
     @Query(value = "update SALESBOARD set sview_count=sview_count+1 where sidx=:sidx", nativeQuery = true)
     int viewCount(@Param("sidx") Long sidx); // 조회수 증가
@@ -42,9 +38,5 @@ public interface SalesBoardRepository extends JpaRepository<SalesBoard, Long> {
     Page<SalesBoard> findByAuthorContaining(String author, Pageable pageable);
 
     Page<SalesBoard> findByPublisherContaining(String publisher, Pageable pageable);
-
-
-
-
 }
 

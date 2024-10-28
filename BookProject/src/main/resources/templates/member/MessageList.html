@@ -83,6 +83,7 @@
                 });
             });
 
+
             function openNewWindow(){
                 window.open("/messages/form", "popup",
                        'width=600,height=500');
@@ -159,7 +160,7 @@
                             </tr>
                             <tr th:each="list : ${messageList}">
                                 <td>
-                                    <input id="CheckMessage" type="checkbox" th:value="${list.msidx}">
+                                    <input id="CheckMessage" type="checkbox" name="CheckMessage" th:value="${list.msidx}">
                                 </td>
                                 <td class="text-center" th:text="${totalCount - ((currentPage -1) * pageSize) - listStat.index}">1</td>
                                 <td class="text-center" th:text="${list.sender}"></td>
