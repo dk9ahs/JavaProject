@@ -65,13 +65,11 @@
             // 입력 필드 초기화
 
             if(receiver == null){
-               document.getElementById("receiverNick").value = "";
+                document.getElementById("receiverNick").value = "";
             } else {
                 document.getElementById("receiverNick").value = receiver;
             }
 
-            var receiverNickInput = document.getElementById("receiverNick");
-            receiverNickInput.readOnly = false;
             document.getElementById("title").value = "";
             document.getElementById("content").value = "";
         }

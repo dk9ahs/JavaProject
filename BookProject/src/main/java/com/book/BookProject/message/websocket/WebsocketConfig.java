@@ -18,6 +18,14 @@ public class WebsocketConfig implements WebSocketConfigurer {
         this.websocketHandler = websocketHandler;
     }
 
+    // 웹소켓 핸들러를 등록하는 메소드를 오버라이드  ws://loaclhost:8080/ws/test 로 연결을 해야한다.
+//    @Override
+//    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+//        registry.addHandler(websocketHandler, "/test")
+//                .addInterceptors(new WebsocketHandshakeInterceptor())
+//                .setAllowedOrigins("*");
+//    }
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(websocketHandler, "/test")

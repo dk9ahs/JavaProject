@@ -1,6 +1,5 @@
 package com.book.BookProject;
 
-import com.book.BookProject.inquiryboard.InquiryBoard;
 import com.book.BookProject.inquiryboard.InquiryBoardDTO;
 import com.book.BookProject.inquiryboard.InquiryBoardService;
 import com.book.BookProject.salesboard.Redis.RedisUtil;
@@ -8,9 +7,6 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("/inquiryboard")
@@ -58,6 +53,7 @@ public class InquiryBoardController
         int totalPage = listPage.getTotalPages();
         int currentGroup = (page - 1) / 5; // 현재 그룹 (0부터 시작)
         int pageSize = listPage.getSize();
+
         // 리스트
         model.addAttribute("list", listPage.getContent());
         // 페이지
@@ -239,7 +235,7 @@ public class InquiryBoardController
         if(file != null && !file.isEmpty())
         {
             String oFileName = file.getOriginalFilename();
-            String uploadDir = request.getSession().getServletContext().getRealPath("/"); // src/main/webapp에 저장
+            String uploadDir = request.getSession().getServletContext().getRealPath("/");
 
             File dir = new File(uploadDir);
             if(!dir.exists())

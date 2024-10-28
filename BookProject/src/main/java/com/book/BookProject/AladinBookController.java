@@ -17,8 +17,8 @@ public class AladinBookController {
     private final String SEARCH_URL = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
     private final String LOOKUP_URL = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 
-//    private final String TTB_KEY = "ttbtle651621001"; // 지훈형님 키
-    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
+    private final String TTB_KEY = "ttbtle651621001"; // 지훈형님 키
+//    private final String TTB_KEY = "ttbooo00110134001"; // 다빈님 키
 //    private final String TTB_KEY = "ttblckdrbs1419006"; // 창균 키
 
     // 베스트셀러 리스트 가져오기

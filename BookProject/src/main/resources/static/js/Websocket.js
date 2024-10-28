@@ -8,7 +8,7 @@
 
         // WebSocket 연결이 열리면
         socket.onopen = function() {
-//            console.log("WebSocket 연결 성공");
+            console.log("WebSocket 연결 성공");
             ViewCount();
         };
 
@@ -36,22 +36,22 @@
                 }
 
             } catch (e) {
-//                console.error("메시지 파싱 실패:", e);
+                console.error("메시지 파싱 실패:", e);
             }
 
         };
 
         // WebSocket 오류 발생 시
         socket.onerror = function(error) {
-//            console.error("WebSocket 오류:", error);
+            console.error("WebSocket 오류:", error);
         };
 
         // WebSocket 연결이 닫히면
         socket.onclose = function(event) {
             if (event.wasClean) {
-//                console.log("WebSocket 연결 종료 (정상 종료)");
+                console.log("WebSocket 연결 종료 (정상 종료)");
             } else {
-//                console.error("WebSocket 연결 종료 (비정상 종료)");
+                console.error("WebSocket 연결 종료 (비정상 종료)");
             }
         };
     };
@@ -72,7 +72,7 @@
                 table.html(data);
             },
             error: function(xhr, status, error) {
-//                console.error('메시지 목록을 가져오는 중 오류 발생: ' + error);
+                console.error('메시지 목록을 가져오는 중 오류 발생: ' + error);
             }
         });
     }

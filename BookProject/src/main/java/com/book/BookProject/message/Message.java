@@ -21,9 +21,13 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long msidx;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "sender_nick", referencedColumnName = "NICK")
     @Column(name = "sender_nick")
     private String sender; // 보낸 사람
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "receiver_nick", referencedColumnName = "NICK")
     @Column(name = "receiver_nick")
     private String receiver; // 받는 사람
 

@@ -35,6 +35,8 @@ public class WebsocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String userId = (String) session.getAttributes().get("userId");
+        System.out.println("연결된 사용자 ID: " + userId);
+
         CLIENTS.put(userId, session);
 
         super.afterConnectionEstablished(session);
@@ -44,6 +46,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
+        System.out.println("Received message: " + payload); // 메시지 내용 확인
 
         JSONObject jsonMessage = new JSONObject(payload);
         String action = jsonMessage.getString("action"); // 액션 가져오기
@@ -64,6 +67,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
             // 읽지 않은 쪽지 개수 조회
             long unreadCount = countReadStatus(receiverNick);
+            System.out.println("읽지 않는 메세지 : " + unreadCount);
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("unreadCount", unreadCount);
 
@@ -76,7 +80,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
         } else if("send".equals(action)){
 
-//            System.out.println("메세지 보냄!!!!");
+            System.out.println("메세지 보냄!!!!");
 
             String senderNick = (String) session.getAttributes().get("userId"); // ID 보낸 사람 현재 세션의 사용자
             String receiverNick = jsonMessage.getString("receiverNick"); // 받는 사람
@@ -108,10 +112,13 @@ public class WebsocketHandler extends TextWebSocketHandler {
                 // 클라이언트에게 알림 메시지 전송
                 receiverSession.sendMessage(new TextMessage(jsonResponse.toString()));
 
-//                System.out.println("세션 목록: " + CLIENTS.keySet()); // 현재 저장된 세션 ID 목록
+                //
+                System.out.println("수신자 닉네임: " + receiverNick);
+                System.out.println("세션 목록: " + CLIENTS.keySet()); // 현재 저장된 세션 ID 목록
+                System.out.println("읽지 않은 쪽지 개수: " + unreadCount);
 
             } else {
-//                System.out.println("전송 실패: " + receiverNick);
+                System.out.println("전송 실패: " + receiverNick);
             }
         } else {
 
@@ -134,12 +141,11 @@ public class WebsocketHandler extends TextWebSocketHandler {
         }
     }
 
-    // 안읽은 메시지 갯수 
+
     public Long countReadStatus(String receiver) {
         return messageRepository.countByReceiverAndReadstatusAndViewstatus(receiver, 0,1);
     }
 
-    // 메세지 읽음 처리
     public void markMessagesAsRead(Long msidx, String receiver) throws Exception {
         messageService.updateReadStatus(msidx);
 
@@ -151,6 +157,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
             receiverSession.sendMessage(new TextMessage(jsonResponse.toString()));
         }
     }
+
 
     // 연결이 끊어지면 실행되는 메소드 !!!!!!!!!!!!!!
     @Override

@@ -38,7 +38,7 @@
 
                 var $checked = $('input#CheckMessage:checked');
 
-<!--                console.log( $checked.length );-->
+                console.log( $checked.length );
 
                 if ( $checked.length < 1){
                     alert('삭제할 쪽지를 선택해주세요.');
@@ -50,7 +50,7 @@
                 $.each( $checked, function(k,v) {
                     msidxDeleteList.push( $(this).val());
                 });
-<!--                console.log( msidxDeleteList );-->
+                console.log( msidxDeleteList );
 
                  var deleteYesOrNo = confirm('보낸 쪽지는 회수되지 않습니다. 삭제하시겠습니까?');
                 if (!deleteYesOrNo) {

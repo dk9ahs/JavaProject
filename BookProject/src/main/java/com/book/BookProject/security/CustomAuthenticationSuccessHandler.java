@@ -36,12 +36,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String referer = request.getHeader("Referer");
 
         if (redirectUrl != null && !redirectUrl.isEmpty()) {
-            if (redirectUrl.contains("/signup")) {  // redirectUrl이 "/signup" 경로를 포함하는지 체크
-                response.sendRedirect("/");  // 기본 경로로 리다이렉트
-            } else {
-                request.getSession().removeAttribute("redirectUrl");
-                response.sendRedirect(redirectUrl);  // 세션에 저장된 URL로 리다이렉트
-            }
+            request.getSession().removeAttribute("redirectUrl");
+            response.sendRedirect(redirectUrl);  // 세션에 저장된 URL로 리다이렉트
         } else if (referer != null && !referer.contains("/login")) {
             response.sendRedirect(referer);  // Referer가 로그인 페이지가 아니면 Referer로 리다이렉트
         } else {

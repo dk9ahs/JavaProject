@@ -22,6 +22,10 @@ public class SalesBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sidx;
 
+//    @ManyToOne
+//    @JoinColumn(name = "nick")  // 외래키 설정
+//    private UserEntity Nick;  // 회원 정보 (닉네임을 포함하는 Member 테이블 연관)
+
     private String nick;
 
     @Column(name = "stitle", nullable = false, columnDefinition = "VARCHAR(100)")
