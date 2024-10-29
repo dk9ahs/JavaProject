@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 모든 경로에 대해 CORS 설정
-                .allowedOrigins("http://localhost:8501") // Streamlit 앱의 주소
+                .allowedOrigins("http://localhost:8083", "http://localhost:8501") // Streamlit 앱의 주소
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS"); // 허용할 HTTP 메소드
     }
 }
